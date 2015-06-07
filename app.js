@@ -41,9 +41,6 @@ middleware.init = function(app, callback) {
         //console.log('mongo and es is initialized');
         callback();
     });
-
-
-
 };
 
 
@@ -54,93 +51,42 @@ app.use(function (req, res, next) {
     next();
 });
 
-
-app.use(function (req, res, next) {
-    console.log('Time:', Date.now());
-    next();
-});
-
-
-app.get('/', function (req, res) {
-    res.send('Hello World!')
-})
-
-app.get('/project/add', function (req, res) {
-
-    var project = {name: 'projekt', created_at: new Date()};
-
-    var collection = db.collection('projects');
-    collection.insert(project, function(err, result) {
-        console.log("Inserted project");
-        console.log(result);
-        res.send('add')
-        //callback(result);
-    });
-
-    console.log('bombowo');
-})
-
-app.get('/project/list', function (req, res) {
-
-    var collection = db.collection('projects');
-    collection.find({}).toArray(function(err, docs) {
-        console.log("Found the following records");
-        console.dir(docs)
-        //callback(docs);
-        res.send(docs)
-    });
-})
-
-/**
- * input: name, array of columns
+/*
+ * create new elastic item
  */
-app.get('/table/add', function (req, res) {
-    res.send('list')
+app.post('/item/song', function addItem(req, res, next) {
 })
 
-/**
- * input: column with configuration
+/*
+ * update elastic item
  */
-app.get('/table/field/add', function (req, res) {
-    res.send('list')
+app.put('/item/song/:id', function addItem(req, res, next) {
+})
+
+/*
+ * find item with intelligent searching 
+ */
+app.get('/item/song/find', function findItems(req, res, next) {
 })
 
 /**
- * Intelligent search through table
+ * autocomplete for specific collection
  * input: query, custom fields
  */
-app.get('/table/search', function (req, res) {
-    res.send('list')
+app.get('/item/song/autocomplete', function autocomplete(req, res) {
 })
 
 /**
- * input: id
+ * find similar items to provided one
  */
-app.get('/table/similar', function (req, res) {
-    res.send('similar')
+app.get('/item/song/similar', function similarItems(req, res) {
 })
 
 /**
- * input: ids
+ * find nearest items to provided current gps
  */
-app.get('/table/comparison', function (req, res) {
-    res.send('similar')
+app.get('/item/song/near/:key/:gps', function findNearestItems(req, res) {
 })
-
-/**
- * input: geo, distance
- */
-app.get('/table/near', function (req, res) {
-    res.send('similar')
-})
-
-/**
- * input: query, fields
- */
-app.get('/table/suggester', function (req, res) {
-    res.send('similar')
-})
-
 
 initialize(app, function(err) {
   if (err)
@@ -149,13 +95,3 @@ initialize(app, function(err) {
   // the middleware is initialized now, so start the server
   app.listen(3000);
 });
-
-
-/*var server = app.listen(3000, function () {
-
-    var host = server.address().address
-    var port = server.address().port
-
-    console.log('Example app listening at http://%s:%s', host, port)
-
-})*/
