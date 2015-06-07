@@ -1,0 +1,27 @@
+{
+  "name": "itemsapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mateusz Rzepa",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^0.9.0",
+    "elastic.js": "^1.2.0",
+    "elasticsearch": "^3.1.1",
+    "express": "^4.11.1",
+    "express-init": "0.0.1",
+    "lodash": "^3.1.0",
+    "mocha": "^2.1.0",
+    "mongodb": "^1.4.29",
+    "nconf": "^0.7.1",
+    "request": "^2.53.0",
+    "should": "^4.6.3",
+    "sinon": "^1.12.2",
+    "validate.js": "^0.4.0",
+    "winston": "^0.8.3"
+  }
+}
