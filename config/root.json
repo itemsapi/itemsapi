@@ -1,5 +1,24 @@
 {
-    "mongo": {
-        "url": "mongodb://localhost:27017/filmy"
+  "mongo": {
+    "url": "mongodb://localhost:27017/filmy"
+  },
+  "server": {
+    "port": 3000
+  },
+  "filesystem": {
+    "local": {},
+    "s3": {}
+  },
+  "collections": {
+    "movies": {
+      "name": {"type": "string", "store": true },
+      "year": {"type": "integer", "store": true },
+      "rating": {"type": "string", "store": true }
+    },
+    "songs": {
+      "name": {"type": "string", "store": true },
+      "year": {"type": "integer", "store": true },
+      "rating": {"type": "string", "store": true }
     }
+  }
 }
