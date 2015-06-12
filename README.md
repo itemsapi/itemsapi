@@ -5,7 +5,8 @@ Restful backend for angular.js, android, ios, node.js and symfony2 with powerful
 - autocomplete
 - geo searching
 - custom types
-Inspired by symfony2 and node.js
+
+ItemsAPI is inspired mostly by symfony2 and node.js
 
 ## Requirement
 ## Installation
