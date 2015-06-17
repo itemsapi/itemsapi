@@ -10,7 +10,7 @@ var validate = require('validate.js');
 
   module.addDocumentValidate = function(data) {
     var constraints = {
-      id: {presence: true},
+      id: {presence: false},
       index: {presence: true},
       body: {presence: true},
       refresh: {presence: false},
@@ -21,10 +21,7 @@ var validate = require('validate.js');
 
   /**
    * add data to elastic
-   * @param {String} index
-   * @param {String} type
-   * @param {String} id
-   * @param {Obj|Array} body document
+   * @param {Obj} data document
    */
   module.addDocument = function(data, callback) {
 
@@ -36,7 +33,7 @@ var validate = require('validate.js');
     elastic.index({
       index: data.index,
       type: data.type,
-      id: data.id,
+      //id: data.id,
       //replication: 'async',
       //refresh: true,
       body: data.body

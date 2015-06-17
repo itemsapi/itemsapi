@@ -3,13 +3,15 @@
 var request = require('request');
 var winston = require('winston');
 var nconf = require('nconf');
-var collections = require('../connections/collections');
 var elastic = require('../connections/elastic').getElastic();
 var _ = require('lodash');
 var validate = require('validate.js');
 
 module.exports = {
 
+  /**
+   * validation for adding index
+   */
   addIndexValidate: function(data) {
     var constraints = {
       index: {presence: true},
@@ -17,6 +19,9 @@ module.exports = {
     return validate(data, constraints);
   },
 
+  /**
+   * add index
+   */
   addIndex: function(data, callback) {
     var v = this.addIndexValidate(data);
     if (v) {
@@ -30,9 +35,11 @@ module.exports = {
       }
       callback(null, res)
     })
-
   },
 
+  /**
+   * validation for adding mapping
+   */
   addMappingValidate: function(data) {
     var constraints = {
       index: {presence: true},
@@ -41,6 +48,10 @@ module.exports = {
     };
     return validate(data, constraints);
   },
+
+  /**
+   * add mapping
+   */
   addMapping: function(data, callback) {
     var v = this.addMappingValidate(data);
     if (v) {
@@ -54,8 +65,11 @@ module.exports = {
       }
       callback(null, res)
     })
-
   },
+
+  /**
+   * get mapping for type
+   */
   getMappingForType: function(data, callback) {
 
     elastic.indices.getMapping(data, function(err, res, status) {
@@ -69,7 +83,5 @@ module.exports = {
 
       callback(null, res[data.index].mappings[data.type].properties);
     })
-
   }
-
 }

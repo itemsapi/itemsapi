@@ -37,7 +37,10 @@ var server;
       before(function before(done) {
         server.start(function serverStart(serverInstance) {
           module.setServer(serverInstance);
-          done();
+          var elasticClient = require('./../../src/connections/elastic');
+          elasticClient.flushdb({}, function(err, res) {
+            done();
+          });
         });
       });
 
