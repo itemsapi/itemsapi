@@ -20,6 +20,8 @@ app.use(gzip({treshold: 512}));
 app.use(bodyParser.json());
 app.use('/api/item', router); // api routes
 
+var elastic = require('./src/connections/elastic');
+elastic.init();
 
 var configHelper = require('./src/helpers/config')(nconf.get());
 var collectionsNames = configHelper.collectionsNames();
