@@ -88,29 +88,10 @@ function(err, results) {
         console.log(res);
     });
 
-    //importFromPackage('yopler2', function(err, res) {
-        //console.log(err);
-        //console.log(res);
-    //});
-
-    importFromPackage('filmaster', function(err, res) {
+    importFromPackage('film', function(err, res) {
         console.log(err);
         console.log(res);
     });
-
-    /*importFromPackage('movies', function(err, res) {
-        console.log(err);
-        console.log(res);
-    });*/
-
-
-    /*importFromPackage('movies2', function(err, res) {
-        console.log(err);
-        console.log(res);
-    });*/
-
-
-
 });
 
 
