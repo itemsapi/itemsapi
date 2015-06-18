@@ -94,6 +94,19 @@ module.exports = {
   },
 
   /**
+   * delete mapping
+   */
+  deleteMapping: function(data, callback) {
+    elastic.indices.deleteMapping(data, function(err, res, status) {
+      if (err) {
+        winston.error(err);
+        return callback(err);
+      }
+      callback(null, res)
+    })
+  },
+
+  /**
    * get mapping for type
    */
   getMappingForType: function(data, callback) {
