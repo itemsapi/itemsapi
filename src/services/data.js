@@ -10,6 +10,25 @@ var _ = require('lodash');
 (function(module) {
 
   /**
+   * add multiple documents elastic
+   * @param {Array} data documents
+   * @param {String} projectName
+   * @param {String} collectionName
+   */
+  module.addDocuments = function(data, callback) {
+    elastic.addDocuments({
+      index: data.projectName,
+      type: data.collectionName,
+      body: data.body
+    }, function(err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    })
+  }
+
+  /**
    * add all documents to elastic
    * @param {Array} documents full data
    * @param {String} projectName
@@ -19,7 +38,7 @@ var _ = require('lodash');
    */
   module.addAllDocuments = function(data, callback) {
 
-    var documents = data.documents;
+    var documents = data.body;
     var limit = documents.length;
     var length = documents.length;
 
@@ -39,7 +58,7 @@ var _ = require('lodash');
         module.addDocuments({
           projectName: projectName,
           collectionName: collectionName,
-          data: removed
+          body: removed
         }, function(err, res) {
           if (err) {
             console.log(err);
