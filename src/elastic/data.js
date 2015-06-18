@@ -33,7 +33,7 @@ var validate = require('validate.js');
     elastic.index({
       index: data.index,
       type: data.type,
-      //id: data.id,
+      id: data.id,
       //replication: 'async',
       //refresh: true,
       body: data.body
@@ -80,6 +80,60 @@ var validate = require('validate.js');
       refresh: false,
       consistency: "one",
       body: body
+    }, function (err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    });
+  }
+
+  /**
+   * get item by id
+   * @param {Obj} data document
+   */
+  module.getDocument = function(data, callback) {
+
+    elastic.get({
+      index: data.index,
+      type: data.type,
+      id: data.id
+    }, function (err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    });
+  }
+
+  /**
+   * delete item by id
+   * @param {Obj} data document
+   */
+  module.deleteDocument = function(data, callback) {
+    elastic.delete({
+      index: data.index,
+      type: data.type,
+      id: data.id
+    }, function (err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    });
+  }
+
+  /**
+   * partial update item by id
+   * @param {Obj} data document
+   */
+  module.updateDocument = function(data, callback) {
+    elastic.update({
+      index: data.index,
+      type: data.type,
+      id: data.id,
+      //refresh: true,
+      body: {doc: data.body}
     }, function (err, res) {
       if (err) {
         return callback(err);
