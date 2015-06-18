@@ -1,7 +1,4 @@
 {
-  "mongo": {
-    "url": "mongodb://localhost:3131/movies"
-  },
   "elasticsearch": {
     "url": "localhost:9200"
   },
@@ -12,11 +9,20 @@
     "local": {},
     "s3": {}
   },
+  "project": {
+    "name": "itemsapi"
+  },
   "collections": {
     "movie": {
       "schema": {
         "name": {"type": "string", "store": true },
         "year": {"type": "integer", "store": true },
+        "rating": {"type": "string", "store": true }
+      }
+    },
+    "city": {
+      "schema": {
+        "country": {"type": "string", "store": true },
         "rating": {"type": "string", "store": true }
       }
     }
