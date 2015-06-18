@@ -21,12 +21,59 @@ setup.makeSuite('elastic mapping', function() {
       });
     });
 
-    it('should create index in elastic successfully', function(done) {
-      var mapping = {
+    it('should not exists', function(done) {
+      model.existsIndex({
         index: 'project'
-      }
+      }, function(err, res) {
+        should.not.exist(err, null);
+        should.equal(false, res);
+        done();
+      });
+    });
 
-      model.addIndex(mapping, function(err, res) {
+    it('should create index in elastic successfully', function(done) {
+      model.addIndex({
+        index: 'project'
+      }, function(err, res) {
+        assert.equal(err, null);
+        done();
+      });
+    });
+
+    it('should exists', function(done) {
+      model.existsIndex({
+        index: 'project'
+      }, function(err, res) {
+        should.not.exist(err, null);
+        should.equal(true, res);
+        done();
+      });
+    });
+
+    it('should delete index in elastic successfully', function(done) {
+      model.deleteIndex({
+        index: 'project'
+      }, function(err, res) {
+        should.not.exist(err, null);
+        res.should.have.property('acknowledged', true);
+        done();
+      });
+    });
+
+    it('should not exists', function(done) {
+      model.existsIndex({
+        index: 'project'
+      }, function(err, res) {
+        should.not.exist(err, null);
+        should.equal(false, res);
+        done();
+      });
+    });
+
+    it('should create index in elastic successfully', function(done) {
+      model.addIndex({
+        index: 'project'
+      }, function(err, res) {
         assert.equal(err, null);
         done();
       });

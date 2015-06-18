@@ -20,7 +20,7 @@ module.exports = {
   },
 
   /**
-   * add index
+   * add index (project)
    */
   addIndex: function(data, callback) {
     var v = this.addIndexValidate(data);
@@ -38,7 +38,33 @@ module.exports = {
   },
 
   /**
-   * validation for adding mapping
+   * check index exists
+   */
+  existsIndex: function(data, callback) {
+    elastic.indices.exists(data, function(err, res) {
+      if (err) {
+        winston.error(err);
+        return callback(err);
+      }
+      callback(null, res)
+    })
+  },
+
+  /**
+   * delete index exists
+   */
+  deleteIndex: function(data, callback) {
+    elastic.indices.delete(data, function(err, res) {
+      if (err) {
+        winston.error(err);
+        return callback(err);
+      }
+      callback(null, res)
+    })
+  },
+
+  /**
+   * validation for adding mapping (collection schema)
    */
   addMappingValidate: function(data) {
     var constraints = {
