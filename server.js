@@ -30,81 +30,95 @@ var dataModel = require('./src/elastic/data');
 for (var i = 0 ; i < collectionsNames.length ; ++i) {
   var name = collectionsNames[i];
 
-  /*
-   * create specific item
-   */
-  router.post('/' + name, function postItem(req, res, next) {
-    // todo: move to service
-    dataModel.addDocument({
-      index: 'project',
-      type: name,
-      body: req.body
-    }, function afterSave(error, result) {
-      if (error) {
-        return next(err);
-        //return res.json({msg: 'error occured'});
-      }
-      return res.json(result);
+  // Immediately-invoked function expression
+  (function(name) {
+
+    /*
+     * create specific item
+     */
+    router.post('/' + name, function postItem(req, res, next) {
+      // todo: move to service
+      dataModel.addDocument({
+        index: 'project',
+        type: name,
+        body: req.body
+      }, function afterSave(error, result) {
+        if (error) {
+          return next(err);
+        }
+        return res.json(result);
+      });
     });
-  });
 
-  /*
-   * get specific item
-   */
-  router.get('/' + name + '/:id', function getItem(req, res, next) {
-    var id = req.params.id;
+    /*
+     * get specific item
+     */
+    router.get('/' + name + '/:id', function getItem(req, res, next) {
+      var id = req.params.id;
 
-    if (!id) {
-      return res.status(httpNotFound).json({});
-    }
-    res.json({});
-  });
+      if (!id) {
+        return res.status(httpNotFound).json({});
+      }
 
-  /*
-   * update specific item
-   */
-  router.put('/' + name + '/:id', function updateItem(req, res, next) {
-    var id = req.params.id;
+      // todo: move to service
+      dataModel.getDocument({
+        index: 'project',
+        type: name,
+        id: id
+      }, function afterGet(error, result) {
+        if (error) {
+          return next(error);
+        }
+        return res.json(result);
+      });
+    });
 
-    if (!id) {
-      return res.status(httpNotFound).json({});
-    }
-    res.json({});
-  });
+    /*
+     * update specific item
+     */
+    router.put('/' + name + '/:id', function updateItem(req, res, next) {
+      var id = req.params.id;
 
-  /*
-   * get items
-   */
-  router.get('/' + name + '/find', function getItems(req, res, next) {
-    res.json({});
-  });
+      if (!id) {
+        return res.status(httpNotFound).json({});
+      }
+      res.json({});
+    });
 
-  /*
-   * get similar items
-   */
-  router.get('/' + name + '/:id/similar', function getSimilarItems(req, res, next) {
-    var id = req.params.id;
+    /*
+     * get items
+     */
+    router.get('/' + name + '/find', function getItems(req, res, next) {
+      res.json({});
+    });
 
-    if (!id) {
-      return res.status(httpNotFound).json({});
-    }
-    res.json({});
-  });
+    /*
+     * get similar items
+     */
+    router.get('/' + name + '/:id/similar', function getSimilarItems(req, res, next) {
+      var id = req.params.id;
 
-  /*
-   * item autocomplete
-   */
-  router.get('/' + name + '/autocomplete', function autocomplete(req, res, next) {
-    res.json({});
-  });
+      if (!id) {
+        return res.status(httpNotFound).json({});
+      }
+      res.json({});
+    });
 
-  /**
-   * find nearest items to provided current gps
-   */
-  router.get('/' + name + '/near/:key/:gps', function autocomplete(req, res, next) {
-    res.json({});
-  });
+    /*
+     * item autocomplete
+     */
+    router.get('/' + name + '/autocomplete', function autocomplete(req, res, next) {
+      res.json({});
+    });
 
+    /**
+     * find nearest items to provided current gps
+     */
+    router.get('/' + name + '/near/:key/:gps', function autocomplete(req, res, next) {
+      res.json({});
+    });
+
+  })(name);
 }
 
 

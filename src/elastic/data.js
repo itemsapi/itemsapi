@@ -33,7 +33,7 @@ var validate = require('validate.js');
     elastic.index({
       index: data.index,
       type: data.type,
-      id: data.id,
+      id: data.body.id,
       //replication: 'async',
       //refresh: true,
       body: data.body

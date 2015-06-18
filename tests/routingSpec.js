@@ -21,9 +21,8 @@ setup.makeSuite('routing', function addSuite() {
   it('should be able to post movie', function test(done) {
     request(setup.getServer())
       .post('/api/item/movie')
-      .send({})
       .end(function afterRequest(err, res) {
-        res.should.have.property('status', 200);
+        res.status.should.not.equal(404);
         done();
       });
   });
@@ -32,7 +31,16 @@ setup.makeSuite('routing', function addSuite() {
     request(setup.getServer())
       .get('/api/item/movie/5')
       .end(function afterRequest(err, res) {
-        res.should.have.property('status', 200);
+        res.status.should.not.equal(404);
+        done();
+      });
+  });
+
+  it('should be able to get city by id', function test(done) {
+    request(setup.getServer())
+      .get('/api/item/city/5')
+      .end(function afterRequest(err, res) {
+        res.status.should.not.equal(404);
         done();
       });
   });
@@ -42,7 +50,7 @@ setup.makeSuite('routing', function addSuite() {
       .put('/api/item/movie/5')
       .send({})
       .end(function afterRequest(err, res) {
-        res.should.have.property('status', 200);
+        res.status.should.not.equal(404);
         done();
       });
   });
@@ -51,7 +59,7 @@ setup.makeSuite('routing', function addSuite() {
     request(setup.getServer())
       .get('/api/item/movie/find')
       .end(function afterRequest(err, res) {
-        res.should.have.property('status', 200);
+        res.status.should.not.equal(404);
         done();
       });
   });
@@ -60,7 +68,7 @@ setup.makeSuite('routing', function addSuite() {
     request(setup.getServer())
       .get('/api/item/movie/5/similar')
       .end(function afterRequest(err, res) {
-        res.should.have.property('status', 200);
+        res.status.should.not.equal(404);
         done();
       });
   });
@@ -69,7 +77,7 @@ setup.makeSuite('routing', function addSuite() {
     request(setup.getServer())
       .get('/api/item/movie/autocomplete')
       .end(function afterRequest(err, res) {
-        res.should.have.property('status', 200);
+        res.status.should.not.equal(404);
         done();
       });
   });
@@ -78,7 +86,7 @@ setup.makeSuite('routing', function addSuite() {
     request(setup.getServer())
       .get('/api/item/movie/near/address/52.512973,13.452529')
       .end(function afterRequest(err, res) {
-        res.should.have.property('status', 200);
+        res.status.should.not.equal(404);
         done();
       });
   });
