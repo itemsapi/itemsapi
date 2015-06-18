@@ -5,6 +5,8 @@ var winston = require('winston');
 var nconf = require('nconf');
 var elastic = require('../elastic/mapping');
 var async = require('async');
+var projectService = require('./../../src/services/project');
+var dataService = require('./../../src/services/data');
 
 (function(module) {
 
@@ -16,17 +18,12 @@ var async = require('async');
    * show statistics
    */
   module.import = function(data, callback) {
-
-    projectService.ensureCollection(data.mapping, function(err, res) {
+    projectService.ensureCollection(data, function(err, res) {
       if (err) {
         return callback(err);
       }
 
-      dataService.addAllDocuments({
-        projectName: mapping.project_name,
-        collectionName: mapping.table_name,
-        documents: documents
-      }, function(err, res) {
+      dataService.addAllDocuments(data, function(err, res) {
         if (err) {
           return callback(err);
         }

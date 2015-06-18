@@ -14,7 +14,7 @@ nconf
   .file('defaults', {file: './config/root.json'});
 
 var server = require('./server');
-
+var importService = require('./src/services/import');
 
 var cli = require('cli'); 
 
@@ -25,13 +25,15 @@ cli.parse({
 });
 
 cli.main(function(args, options) {
-  console.log(args);
-  console.log(options);
-
   if (options.import === true) {
     importService.import({
+      projectName: 'project',
       collectionName: options.collection,
-      documents: JSON.parse(fs.readFileSync(options.file, 'utf8'))
+      body: JSON.parse(fs.readFileSync('./data/movies.json', 'utf8'))
+    }, function(err, res) {
+      console.log('data has been imported');
+      console.log(res);
+      return;
     })
   }
 });
