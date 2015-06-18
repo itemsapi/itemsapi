@@ -20,10 +20,18 @@ var cli = require('cli');
 
 cli.parse({
   import: ['import', 'Import external data'],
-  collection: ['collection', 'Collection name', 'string']
+  collection: ['collection', 'Collection name', 'string'],
+  file: ['import', 'Path to file', 'string'],
 });
 
 cli.main(function(args, options) {
   console.log(args);
   console.log(options);
+
+  if (options.import === true) {
+    importService.import({
+      collectionName: options.collection,
+      documents: JSON.parse(fs.readFileSync(options.file, 'utf8'))
+    })
+  }
 });
