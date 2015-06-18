@@ -43,7 +43,7 @@ setup.makeSuite('elastic data', function() {
       var data = {
         index: 'project',
         type: 'country',
-        id: 1,
+        id: 1000,
         body: {
           name: "Germany",
           lang: "german",
@@ -53,7 +53,19 @@ setup.makeSuite('elastic data', function() {
 
       dataModel.addDocument(data, function(err, res) {
         assert.equal(err, null);
-        done();
+        should.exist(res._id);
+        should.exist(res._type);
+        res.should.have.property('_id', '1000');
+        should.exist(res._index);
+        dataModel.getDocument({
+          type: res._type, 
+          index: res._index, 
+          id: res._id
+        }, function(err, res) {
+          assert.equal(err, null);
+          res._source.should.have.property('rating', 5);
+          done();
+        });
       });
     });
   });

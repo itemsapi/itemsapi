@@ -21,12 +21,59 @@ setup.makeSuite('elastic mapping', function() {
       });
     });
 
-    it('should create index in elastic successfully', function(done) {
-      var mapping = {
+    it('should not exists', function(done) {
+      model.existsIndex({
         index: 'project'
-      }
+      }, function(err, res) {
+        should.not.exist(err, null);
+        should.equal(false, res);
+        done();
+      });
+    });
 
-      model.addIndex(mapping, function(err, res) {
+    it('should create index in elastic successfully', function(done) {
+      model.addIndex({
+        index: 'project'
+      }, function(err, res) {
+        assert.equal(err, null);
+        done();
+      });
+    });
+
+    it('should exists', function(done) {
+      model.existsIndex({
+        index: 'project'
+      }, function(err, res) {
+        should.not.exist(err, null);
+        should.equal(true, res);
+        done();
+      });
+    });
+
+    it('should delete index in elastic successfully', function(done) {
+      model.deleteIndex({
+        index: 'project'
+      }, function(err, res) {
+        should.not.exist(err, null);
+        res.should.have.property('acknowledged', true);
+        done();
+      });
+    });
+
+    it('should not exists', function(done) {
+      model.existsIndex({
+        index: 'project'
+      }, function(err, res) {
+        should.not.exist(err, null);
+        should.equal(false, res);
+        done();
+      });
+    });
+
+    it('should create index in elastic successfully', function(done) {
+      model.addIndex({
+        index: 'project'
+      }, function(err, res) {
         assert.equal(err, null);
         done();
       });
@@ -58,10 +105,10 @@ setup.makeSuite('elastic mapping', function() {
       }
 
       model.addMapping(mapping, function(err, res) {
-        assert.equal(err, null);
+        should.not.exist(err, null);
         mapping.type = 'image';
         model.addMapping(mapping, function(err, res) {
-          assert.equal(err, null);
+          should.not.exist(err, null);
           done();
         });
       });
@@ -70,13 +117,10 @@ setup.makeSuite('elastic mapping', function() {
 
   describe('get data', function() {
     it('should get elastic mapping successfully', function(done) {
-
-      var mapping = {
+      model.getMappingForType({
         index: 'project',
         type: 'city'
-      }
-
-      model.getMappingForType(mapping, function(err, res) {
+      }, function(err, res) {
         assert.equal(err, null);
         res.should.have.property('message');
         res.should.have.property('name');
@@ -86,20 +130,17 @@ setup.makeSuite('elastic mapping', function() {
     });
 
     it('should validate get mapping', function(done) {
-
-      var mapping = {
+      model.getMappingForType({
         index: 'project',
         type: 'cityy'
-      }
-      model.getMappingForType(mapping, function(err, res) {
+      }, function(err, res) {
         should(err).be.ok;
         done();
       });
     });
 
     it('should update mapping in elastic successfully', function(done) {
-
-      var mapping = {
+      model.addMapping({
         index: 'project',
         type: 'city',
         body: {
@@ -109,22 +150,17 @@ setup.makeSuite('elastic mapping', function() {
             rating: {type: "integer", store: true }
           }
         }
-      }
-
-      model.addMapping(mapping, function(err, res) {
+      }, function(err, res) {
         assert.equal(err, null);
         done();
       });
     });
 
     it('should get updated elastic mapping successfully', function(done) {
-
-      var mapping = {
+      model.getMappingForType({
         index: 'project',
         type: 'city'
-      }
-
-      model.getMappingForType(mapping, function(err, res) {
+      }, function(err, res) {
         assert.equal(err, null);
         res.should.have.property('message');
         res.should.have.property('name');
@@ -132,5 +168,29 @@ setup.makeSuite('elastic mapping', function() {
         done();
       });
     });
+
+    it('should delete mapping successfully', function(done) {
+      model.deleteMapping({
+        index: 'project',
+        type: 'city'
+      }, function(err, res) {
+        should.not.exist(err);
+        res.should.have.property('acknowledged', true);
+        done();
+      });
+    });
+
+    it('should not find mapping', function(done) {
+      model.getMappingForType({
+        index: 'project',
+        type: 'city'
+      }, function(err, res) {
+        should.exist(err);
+        should.not.exist(res);
+        done();
+      });
+    });
+
+
   });
 });
