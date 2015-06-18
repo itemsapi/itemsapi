@@ -4,6 +4,7 @@ var request = require('request');
 var winston = require('winston');
 var nconf = require('nconf');
 var elastic = require('../elastic/mapping');
+var configHelper = require('./../helpers/config')(nconf.get());
 
 (function(module) {
 
@@ -11,11 +12,32 @@ var elastic = require('../elastic/mapping');
    * add project (index)
    */
   module.addProject = function(data, callback) {
-    elastic.addIndex({index: data.project_name}, function(err, res) {
+    elastic.addIndex({index: data.projectName}, function(err, res) {
       if (err) {
         return callback(err);
       }
       callback(null, res);
+    })
+  },
+
+  /**
+   * ensure if project exist
+   */
+  module.ensureProject = function(data, callback) {
+    elastic.existsIndex({index: data.projectName}, function(err, res) {
+      if (err) {
+        return callback(err);
+      }
+      if (res === false) {
+        elastic.addIndex({index: data.projectName}, function(err, res) {
+          if (err) {
+            return callback(err);
+          }
+          callback(null, res);
+        })
+      } else {
+        callback(null, res);
+      }
     })
   },
 
@@ -25,9 +47,9 @@ var elastic = require('../elastic/mapping');
   module.addCollection = function(data, callback) {
     elastic.addMapping({
       index: data.projectName,
-      type: data.tableName,
+      type: data.collectionName,
       body: {
-        properties: data.properties
+        properties: configHelper.getSchema(data.collectionName)
       }
     }, function(err, res, status) {
       if (err) {
@@ -38,10 +60,10 @@ var elastic = require('../elastic/mapping');
   },
 
   /**
-   * add project and collection together 
+   * ensure collection exists 
    */
-  module.addTogether = function(data, callback) {
-    this.addProject(data, function(err, res) {
+  module.ensureCollection = function(data, callback) {
+    this.ensureProject(data, function(err, res) {
       if (err) {
         return callback(err);
       }

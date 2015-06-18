@@ -22,6 +22,7 @@
     },
     "city": {
       "schema": {
+        "name": {"type": "string", "store": true },
         "country": {"type": "string", "store": true },
         "rating": {"type": "string", "store": true }
       }

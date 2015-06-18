@@ -7,8 +7,13 @@ module.exports = function(data) {
     return _.keys(data.collections);
   }
 
+  var getSchema = function(collectionName) {
+    return data.collections[collectionName].schema;
+  }
+
   return {
-    collectionsNames: collectionsNames
+    collectionsNames: collectionsNames,
+    getSchema: getSchema
   }
 };
 
