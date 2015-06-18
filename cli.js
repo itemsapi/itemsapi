@@ -26,10 +26,12 @@ cli.parse({
 
 cli.main(function(args, options) {
   if (options.import === true) {
+    var filename = options.file || './data/movies.json';
     importService.import({
       projectName: 'project',
       collectionName: options.collection,
-      body: JSON.parse(fs.readFileSync('./data/movies.json', 'utf8'))
+      bulkSize: 200,
+      body: JSON.parse(fs.readFileSync(filename, 'utf8'))
     }, function(err, res) {
       console.log('data has been imported');
       console.log(res);

@@ -71,13 +71,13 @@ var validate = require('validate.js');
     for (var i = 0 ; i < data.body.length ; ++i) {
       var o = { create: { _id: data.body[i].id } };
       body.push(o);
-      body.push(data.body[i].data);
+      body.push(data.body[i]);
     }
 
     elastic.bulk({
       index: data.index,
       type: data.type,
-      refresh: false,
+      refresh: true,
       consistency: "one",
       body: body
     }, function (err, res) {

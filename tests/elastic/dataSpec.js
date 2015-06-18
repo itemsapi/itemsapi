@@ -40,7 +40,8 @@ setup.makeSuite('elastic data', function() {
   describe('add data', function() {
 
     it('should add document to elastic successfully', function(done) {
-      var data = {
+
+      dataModel.addDocument({
         index: 'project',
         type: 'country',
         id: 1000,
@@ -49,9 +50,7 @@ setup.makeSuite('elastic data', function() {
           lang: "german",
           rating: 5
         }
-      };
-
-      dataModel.addDocument(data, function(err, res) {
+      }, function(err, res) {
         assert.equal(err, null);
         should.exist(res._id);
         should.exist(res._type);

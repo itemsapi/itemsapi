@@ -5,7 +5,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var gzip = require('compression');
 var nconf = require('nconf');
-var port = nconf.get('port');
+var port = nconf.get('server').port;
 var _ = require('underscore');
 var router = express.Router();
 var server;
@@ -25,6 +25,7 @@ elastic.init();
 
 var configHelper = require('./src/helpers/config')(nconf.get());
 var collectionsNames = configHelper.collectionsNames();
+var dataModel = require('./src/elastic/data');
 
 for (var i = 0 ; i < collectionsNames.length ; ++i) {
   var name = collectionsNames[i];
@@ -33,7 +34,18 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
    * create specific item
    */
   router.post('/' + name, function postItem(req, res, next) {
-    res.json({});
+    // todo: move to service
+    dataModel.addDocument({
+      index: 'project',
+      type: name,
+      body: req.body
+    }, function afterSave(error, result) {
+      if (error) {
+        return next(err);
+        //return res.json({msg: 'error occured'});
+      }
+      return res.json(result);
+    });
   });
 
   /*
