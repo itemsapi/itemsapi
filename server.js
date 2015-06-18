@@ -82,7 +82,19 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
       if (!id) {
         return res.status(httpNotFound).json({});
       }
-      res.json({});
+
+      // todo: move to service
+      dataModel.updateDocument({
+        index: 'project',
+        type: name,
+        id: id,
+        body: req.body
+      }, function afterUpdate(error, result) {
+        if (error) {
+          return next(error);
+        }
+        return res.json(result);
+      });
     });
 
     /*

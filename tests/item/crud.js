@@ -33,6 +33,7 @@ setup.makeSuite('item crud request', function() {
       .get('/api/item/movie/100')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
+        res.body.should.have.property('rating', 5);
         done();
       });
   });
