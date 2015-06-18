@@ -10,6 +10,72 @@ var _ = require('lodash');
 (function(module) {
 
   /**
+   * get document
+   */
+  module.addDocument = function(data, callback) {
+    elastic.addDocument({
+      index: 'project',
+      type: data.collectionName,
+      body: data.body,
+      id: data.body.id
+    }, function(err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    })
+  }
+
+  /**
+   * update document
+   */
+  module.updateDocument = function(data, callback) {
+    elastic.updateDocument({
+      index: 'project',
+      type: data.collectionName,
+      body: data.body,
+      id: data.id
+    }, function(err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    })
+  }
+
+  /**
+   * delete document
+   */
+  module.deleteDocument = function(data, callback) {
+    elastic.deleteDocument({
+      index: 'project',
+      type: data.collectionName,
+      id: data.id
+    }, function(err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res._source);
+    })
+  }
+
+  /**
+   * get document
+   */
+  module.getDocument = function(data, callback) {
+    elastic.getDocument({
+      index: 'project',
+      type: data.collectionName,
+      id: data.id
+    }, function(err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res._source);
+    })
+  }
+
+  /**
    * add multiple documents elastic
    * @param {Array} data documents
    * @param {String} projectName
@@ -73,4 +139,3 @@ var _ = require('lodash');
     );
   }
 }(exports));
-

@@ -25,7 +25,7 @@ elastic.init();
 
 var configHelper = require('./src/helpers/config')(nconf.get());
 var collectionsNames = configHelper.collectionsNames();
-var dataModel = require('./src/elastic/data');
+var dataService = require('./src/services/data');
 
 for (var i = 0 ; i < collectionsNames.length ; ++i) {
   var name = collectionsNames[i];
@@ -37,14 +37,12 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
      * create specific item
      */
     router.post('/' + name, function postItem(req, res, next) {
-      // todo: move to service
-      dataModel.addDocument({
-        index: 'project',
-        type: name,
+      dataService.addDocument({
+        collectionName: name,
         body: req.body
       }, function afterSave(error, result) {
         if (error) {
-          return next(err);
+          return next(error);
         }
         return res.json(result);
       });
@@ -56,16 +54,28 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     router.get('/' + name + '/:id', function getItem(req, res, next) {
       var id = req.params.id;
 
-      if (!id) {
-        return res.status(httpNotFound).json({});
-      }
-
-      // todo: move to service
-      dataModel.getDocument({
-        index: 'project',
-        type: name,
+      dataService.getDocument({
+        collectionName: name,
         id: id
       }, function afterGet(error, result) {
+        if (error) {
+          return res.status(httpNotFound).json(error);
+          //return next(error);
+        }
+        return res.json(result);
+      });
+    });
+
+    /*
+     * delete specific item
+     */
+    router.delete('/' + name + '/:id', function deleteItem(req, res, next) {
+      var id = req.params.id;
+
+      dataService.deleteDocument({
+        collectionName: name,
+        id: id
+      }, function afterDelete(error, result) {
         if (error) {
           return next(error);
         }
@@ -79,14 +89,8 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     router.put('/' + name + '/:id', function updateItem(req, res, next) {
       var id = req.params.id;
 
-      if (!id) {
-        return res.status(httpNotFound).json({});
-      }
-
-      // todo: move to service
-      dataModel.updateDocument({
-        index: 'project',
-        type: name,
+      dataService.updateDocument({
+        collectionName: name,
         id: id,
         body: req.body
       }, function afterUpdate(error, result) {

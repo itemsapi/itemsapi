@@ -33,7 +33,7 @@ var validate = require('validate.js');
     elastic.index({
       index: data.index,
       type: data.type,
-      id: data.body.id,
+      id: data.id,
       //replication: 'async',
       //refresh: true,
       body: data.body
@@ -93,7 +93,6 @@ var validate = require('validate.js');
    * @param {Obj} data document
    */
   module.getDocument = function(data, callback) {
-
     elastic.get({
       index: data.index,
       type: data.type,

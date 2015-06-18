@@ -87,4 +87,41 @@ setup.makeSuite('add data service', function() {
       done();
     });
   });
+
+  it('should add document successfully', function(done) {
+
+    var spy = sinon.spy(elasticData, 'addDocument');
+    dataService.addDocument({
+      projectName: 'project',
+      collectionName: 'city',
+      body: {rating: 5, name: 'Berlin', id: 5},
+    }, function(err, res) {
+      assert.equal(err, null);
+      assert.equal(spy.callCount, 1);
+      assert(spy.firstCall.calledWithMatch({index: 'project'}));
+      assert(spy.firstCall.calledWithMatch({type: 'city'}));
+      assert(spy.firstCall.calledWithMatch({id: 5}));
+      assert(spy.firstCall.calledWith(sinon.match({type: 'city'})));
+      elasticData.addDocument.restore();
+      done();
+    });
+  });
+
+  it('should get document successfully', function(done) {
+
+    var spy = sinon.spy(elasticData, 'getDocument');
+    dataService.getDocument({
+      projectName: 'project',
+      collectionName: 'city',
+      id: 5
+    }, function(err, res) {
+      assert.equal(err, null);
+      assert.equal(spy.callCount, 1);
+      assert(spy.firstCall.calledWithMatch({index: 'project'}));
+      assert(spy.firstCall.calledWithMatch({type: 'city'}));
+      assert(spy.firstCall.calledWithMatch({id: 5}));
+      elasticData.getDocument.restore();
+      done();
+    });
+  });
 });

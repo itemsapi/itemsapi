@@ -34,8 +34,48 @@ setup.makeSuite('item crud request', function() {
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
         res.body.should.have.property('rating', 5);
+        res.body.should.have.property('name', 'Godfather');
         done();
       });
   });
 
+  it('should make successfull update request', function(done) {
+    request(setup.getServer())
+      .put('/api/item/movie/100')
+      .send({rating: 6})
+      .end(function afterRequest(err, res) {
+        res.should.have.property('status', 200);
+        done();
+      });
+  });
+
+  it('should make successfull get request', function(done) {
+    request(setup.getServer())
+      .get('/api/item/movie/100')
+      .end(function afterRequest(err, res) {
+        res.should.have.property('status', 200);
+        res.body.should.have.property('rating', 6);
+        res.body.should.have.property('name', 'Godfather');
+        done();
+      });
+  });
+
+
+  it('should make successfull delete request', function(done) {
+    request(setup.getServer())
+      .delete('/api/item/movie/100')
+      .end(function afterRequest(err, res) {
+        res.should.have.property('status', 200);
+        done();
+      });
+  });
+
+  it('should get not found response', function(done) {
+    request(setup.getServer())
+      .get('/api/item/movie/100')
+      .end(function afterRequest(err, res) {
+        res.should.have.property('status', 404);
+        done();
+      });
+  });
 });
