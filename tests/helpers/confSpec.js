@@ -13,7 +13,7 @@ describe('conf tool', function addSuite() {
     }
   };
 
-  var configHelper = require('../src/helpers/config')(data);
+  var configHelper = require('./../../src/helpers/config')(data);
 
   var configFile = './config/test.json';
   if (fs.existsSync(configFile) === false) {

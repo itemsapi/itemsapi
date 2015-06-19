@@ -26,6 +26,7 @@ elastic.init();
 var configHelper = require('./src/helpers/config')(nconf.get());
 var collectionsNames = configHelper.collectionsNames();
 var dataService = require('./src/services/data');
+var searchService = require('./src/services/search');
 
 for (var i = 0 ; i < collectionsNames.length ; ++i) {
   var name = collectionsNames[i];
@@ -51,7 +52,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     /*
      * get specific item
      */
-    router.get('/' + name + '/:id', function getItem(req, res, next) {
+    router.get('/' + name + '/id/:id', function getItem(req, res, next) {
       var id = req.params.id;
 
       dataService.getDocument({
@@ -59,8 +60,8 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
         id: id
       }, function afterGet(error, result) {
         if (error) {
-          return res.status(httpNotFound).json(error);
-          //return next(error);
+          //return res.status(httpNotFound).json(error);
+          return next(error);
         }
         return res.json(result);
       });
@@ -69,7 +70,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     /*
      * delete specific item
      */
-    router.delete('/' + name + '/:id', function deleteItem(req, res, next) {
+    router.delete('/' + name + '/id/:id', function deleteItem(req, res, next) {
       var id = req.params.id;
 
       dataService.deleteDocument({
@@ -86,7 +87,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     /*
      * update specific item
      */
-    router.put('/' + name + '/:id', function updateItem(req, res, next) {
+    router.put('/' + name + '/id/:id', function updateItem(req, res, next) {
       var id = req.params.id;
 
       dataService.updateDocument({
@@ -102,10 +103,17 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     });
 
     /*
-     * get items
+     * search items
      */
     router.get('/' + name + '/find', function getItems(req, res, next) {
-      res.json({});
+      searchService.search({
+        collectionName: name
+      }, function afterSearch(error, result) {
+        if (error) {
+          return next(error);
+        }
+        return res.json(result);
+      });
     });
 
     /*
