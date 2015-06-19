@@ -12,7 +12,12 @@ module.exports = function() {
         total: data.hits.total
       },
       data: {
-        items: data.hits.hits,
+        items: _.map(data.hits.hits, function(data) {
+          return _.extend(
+            {id: data._id, score: data._score},
+            data._source 
+          );
+        }),
         groups: [],
         filters: {}
       }
