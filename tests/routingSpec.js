@@ -29,7 +29,7 @@ setup.makeSuite('routing', function addSuite() {
 
   it('should be able to get movie by id', function test(done) {
     request(setup.getServer())
-      .get('/api/item/movie/5')
+      .get('/api/item/movie/id/5')
       .end(function afterRequest(err, res) {
         res.status.should.not.equal(404);
         done();
@@ -38,7 +38,7 @@ setup.makeSuite('routing', function addSuite() {
 
   it('should be able to get city by id', function test(done) {
     request(setup.getServer())
-      .get('/api/item/city/5')
+      .get('/api/item/city/id/5')
       .end(function afterRequest(err, res) {
         res.status.should.not.equal(404);
         done();
@@ -47,7 +47,7 @@ setup.makeSuite('routing', function addSuite() {
 
   it('should be able to update movie by id', function test(done) {
     request(setup.getServer())
-      .put('/api/item/movie/5')
+      .put('/api/item/movie/id/5')
       .send({})
       .end(function afterRequest(err, res) {
         res.status.should.not.equal(404);
@@ -59,7 +59,8 @@ setup.makeSuite('routing', function addSuite() {
     request(setup.getServer())
       .get('/api/item/movie/find')
       .end(function afterRequest(err, res) {
-        res.status.should.not.equal(404);
+        //res.status.should.not.equal(404);
+        res.status.should.equal(200);
         done();
       });
   });
