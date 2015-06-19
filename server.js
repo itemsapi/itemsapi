@@ -106,8 +106,17 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
      * search items
      */
     router.get('/' + name + '/find', function getItems(req, res, next) {
+      var fields = req.query.fields;
+      if (fields !== undefined) {
+        fields = fields.split(",");
+      }
+      // @todo filtering params
       searchService.search({
-        collectionName: name
+        collectionName: name,
+        page: req.query.page || 1,
+        per_page: req.query.per_page || 10,
+        query: req.query.query || '',
+        fields: fields
       }, function afterSearch(error, result) {
         if (error) {
           return next(error);

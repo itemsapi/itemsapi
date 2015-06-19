@@ -14,13 +14,13 @@ var searchHelper = require('../helpers/search');
    * search documents
    */
   module.search = function(data, callback) {
-    elastic.search({
-      projectName: 'project'
-    }, function (err, res) {
+    data.projectName = 'project';
+    elastic.search(data, function (err, res) {
       if (err) {
         return callback(err);
       }
-      callback(null, searchHelper().searchConverter(res));
+      //callback(null, res);
+      callback(null, searchHelper().searchConverter(data, res));
     });
   }
   

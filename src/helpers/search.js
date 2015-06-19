@@ -2,20 +2,22 @@
 var _ = require('underscore');
 
 module.exports = function() {
-  var searchConverter = function(data) {
+  var searchConverter = function(input, data) {
     return {
       meta: {
+        query: input.query
       },
       pagination: {
-        page: 1,
-        per_page: 10,
+        page: input.page,
+        per_page: input.per_page,
         total: data.hits.total
       },
       data: {
-        items: _.map(data.hits.hits, function(data) {
+        items: _.map(data.hits.hits, function(doc) {
+          var source = doc.fields || doc._source
           return _.extend(
-            {id: data._id, score: data._score},
-            data._source 
+            {id: doc._id, score: doc._score},
+            source 
           );
         }),
         groups: [],
