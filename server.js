@@ -110,6 +110,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
       if (fields !== undefined) {
         fields = fields.split(",");
       }
+
       // @todo filtering params
       searchService.search({
         collectionName: name,
@@ -141,7 +142,16 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
      * item autocomplete
      */
     router.get('/' + name + '/autocomplete', function autocomplete(req, res, next) {
-      res.json({});
+      // @todo filtering params
+      searchService.suggest({
+        collectionName: name,
+        query: req.query.query || ''
+      }, function afterSuggest(error, result) {
+        if (error) {
+          return next(error);
+        }
+        return res.json(result);
+      });
     });
 
     /**

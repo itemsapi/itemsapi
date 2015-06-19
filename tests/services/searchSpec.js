@@ -29,7 +29,7 @@ setup.makeSuite('search service', function() {
       res.should.have.property('data')
       res.data.should.have.property('items');
       res.should.have.property('pagination');
-      res.pagination.should.have.property('page', 1);
+      res.pagination.should.have.property('page');
       res.pagination.should.have.property('total');
       res.pagination.should.have.property('per_page');
       res.should.have.property('meta');
@@ -37,4 +37,13 @@ setup.makeSuite('search service', function() {
     });
   });
 
+  it('should suggest items', function(done) {
+    searchService.suggest({
+      collectionName: 'movie',
+      query: 'bat'
+    }, function(err, res) {
+      should.not.exist(err);
+      done();
+    });
+  });
 });

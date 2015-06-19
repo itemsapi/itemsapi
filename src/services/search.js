@@ -23,5 +23,17 @@ var searchHelper = require('../helpers/search');
       callback(null, searchHelper().searchConverter(data, res));
     });
   }
-  
+
+  /**
+   * suggest documents
+   */
+  module.suggest = function(data, callback) {
+    data.projectName = 'project';
+    elastic.suggest(data, function (err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    });
+  }
 }(exports));

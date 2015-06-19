@@ -2,6 +2,7 @@
 
 var nconf = require('nconf');
 var fs = require('fs');
+var winston = require('winston');
 var server;
 
 
@@ -32,6 +33,9 @@ var server;
     nconf.use('memory');
     nconf.file('overrides', {file: configFile});
     server  = require(__dirname + '/../../server.js');
+
+    //winston
+      //.remove(winston.transports.Console);
 
     describe(name, function describe() {
       before(function before(done) {
