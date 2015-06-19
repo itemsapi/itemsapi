@@ -12,7 +12,9 @@ module.exports = function() {
         total: data.hits.total
       },
       data: {
-        items: data.hits.hits
+        items: data.hits.hits,
+        groups: [],
+        filters: {}
       }
     }
   }
