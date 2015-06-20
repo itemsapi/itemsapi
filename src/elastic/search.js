@@ -17,13 +17,16 @@ var logger = winston.loggers.get('query');
     var page = data.page || 1;
     var per_page = data.per_page || 10;
     var offset = (page - 1) * per_page;
-    var query = data.query || '';
 
     var body = ejs.Request()
       .size(per_page)
-      .from(offset)
-      .query(ejs.QueryStringQuery(query))
-      ;
+      //.sort('votes', 'desc')
+      .sort(ejs.Sort('votes').order('desc'))
+      .from(offset);
+
+    if (data.query) {
+      body.query(ejs.QueryStringQuery(data.query));
+    }
 
     logger.info(body.toJSON());
 

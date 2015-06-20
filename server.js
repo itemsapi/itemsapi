@@ -8,6 +8,7 @@ var nconf = require('nconf');
 var port = nconf.get('server').port;
 var _ = require('underscore');
 var router = express.Router();
+var cors = require('cors');
 var server;
 var httpNotFound = 404;
 var httpBadRequest = 400;
@@ -18,7 +19,8 @@ app.disable('etag');
 app.disable('x-powered-by');
 app.use(gzip({treshold: 512}));
 app.use(bodyParser.json());
-app.use('/api/item', router); // api routes
+app.use(cors());
+app.use('/api/item', router);
 
 var elastic = require('./src/connections/elastic');
 elastic.init();

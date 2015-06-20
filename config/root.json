@@ -18,7 +18,8 @@
         "name": {"type": "string", "store": true },
         "year": {"type": "integer", "store": true },
         "rating": {"type": "string", "store": true }
-      }
+      },
+      "sorting": ["popularity", "rating", "name"]
     },
     "city": {
       "schema": {
