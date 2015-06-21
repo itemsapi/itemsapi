@@ -1,5 +1,5 @@
 # ItemsAPI 
-The goal of this project is creating advanced search application without spending a lot of time for backend. You just provide configuration and data and your backend is ready to go. You don't need to be node.js developer to use it.
+The goal of this project is creating advanced search application without spending time for backend. You just provide configuration and data and your backend is ready to go. You don't need to be node.js developer to use it.
 
 With ItemsAPI you can create very easily:
 - various catalogs (restaurants, gyms, doctors, foods)
