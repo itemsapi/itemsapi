@@ -21,7 +21,7 @@ var logger = winston.loggers.get('query');
     var body = ejs.Request()
       .size(per_page)
       //.sort('votes', 'desc')
-      .sort(ejs.Sort('votes').order('desc'))
+      //.sort(ejs.Sort('votes').order('desc'))
       .from(offset);
 
     if (data.query) {
@@ -32,6 +32,7 @@ var logger = winston.loggers.get('query');
 
     elastic.search({
       index: data.projectName,
+      type: data.collectionName,
       _source: data.fields || true,
       body: body
     }, function (err, res) {
