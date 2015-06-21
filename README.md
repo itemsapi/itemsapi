@@ -22,6 +22,7 @@ This backend will offer powerful functionality like:
 - node.js, npm
 - java8
 - elasticsearch > 1.4
+
 ## CLI
 You can import huge json collection within one command. i.e.
 
@@ -39,6 +40,7 @@ You can import huge json collection within one command. i.e.
 - Add "geo" field type in schema which will allow for sorting documents by geolocalisation.
 
 ## Contributions
-If you have idea how to make this API better of fix some issues, feel free to join!
+If you have idea how to make this ItemsAPI better, feel free to join!
+
 ## Testing
-`mocha tests/*`
+`grunt test`
