@@ -29,7 +29,7 @@ You can import huge json collection within one command. i.e.
 ## Installation
 `npm install`
 ## Plans
-- Improve searching especially make sorting more flexible.
+- Improve searching especially make sorting more flexible and add filters.
 - Improve schema configuration. Make it simplier and higher level than elastic search.
 - Autocomplete
 - Create simple documentation
