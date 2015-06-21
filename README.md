@@ -38,6 +38,9 @@ You can import huge json collection within one command. i.e.
 - Add "image" field type in schema which allows for adding images out of the box.
 - Add "geo" field type in schema which will allow for sorting documents by geolocalisation.
 
+## Long term plans
+- people who like this also like (elasticsearch or neo4j) 
+
 ## Contributions
 If you have idea how to make this ItemsAPI better, feel free to join!
 
