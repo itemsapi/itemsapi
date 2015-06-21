@@ -21,6 +21,7 @@ You can import huge json collection within one command. i.e.
 - Improve searching especially make sorting more flexible.
 - Improve schema configuration. Make it simplier and higher level than elastic search.
 - Autocomplete
+- Create simple documentation
 - Add "facets" https://en.wikipedia.org/wiki/Faceted_search functionality. This is what makes it better than any other databases. 
 - Add "similar to" functionality.
 - Add "image" field type in schema which allows for adding images out of the box.
