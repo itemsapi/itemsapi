@@ -1,16 +1,27 @@
 # ItemsAPI 
 ## Description
-Restful backend for angular.js, android, ios, node.js and symfony2 with powerful functionality like:
+The goal of this project is creating advanced search application without spending a lot of time for backend. You just provide configuration and data and your backend is ready to go. You don't need to be node.js developer to use it.
+
+With ItemsAPI you can create very easily:
+- various catalogs (restaurants, gyms, doctors, foods)
+- autocomplete and simple recommendation system for ecommerce
+- songs and movies recommendation
+
+ItemsAPI is restful backend best for:
+- javascript frameworks (angular.js, meteor.js, react.js)
+- mobile (ios, android)
+ 
+This backend will offer powerful functionality like:
 - full text searching
 - autocomplete
+- simple recommendation
 - geo searching
-- custom types
-
-ItemsAPI is inspired mostly by symfony2 and node.js
+- field types like standard (int, string, etc) and custom (image, rating, geo)
 
 ## Requirement
-`node.js installed`
-`java7 or java8, elasticsearch > 1.4`
+- node.js, npm
+- java8
+- elasticsearch > 1.4
 ## CLI
 You can import huge json collection within one command. i.e.
 
