@@ -17,9 +17,8 @@ This backend will offer powerful functionality like:
 - geo searching
 - field types like standard (int, string, etc) and custom (image, rating, geo)
 
-
 ## Getting started
-To find out more information about ItemsAPI please go to the official documentation - [go there](https://www.itemsapi.com/docs/start/overview.html).
+To find out more information about ItemsAPI please go to the official documentation - <a href="https://www.itemsapi.com/docs/start/overview.html" target="_blank">Go there</a>.
 
 ## Requirement
 - node.js, npm
