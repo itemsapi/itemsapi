@@ -18,7 +18,7 @@ This backend will offer powerful functionality like:
 - field types like standard (int, string, etc) and custom (image, rating, geo)
 
 ## Getting started
-To find out more information about ItemsAPI please go to the official documentation - <a href="https://www.itemsapi.com/docs/start/overview.html" target="_blank">Go there</a>.
+To find out more information about ItemsAPI please go to the official page - <a href="https://www.itemsapi.com/" target="_blank">Go there</a>.
 
 ## Requirement
 - node.js, npm
