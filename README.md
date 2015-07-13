@@ -30,6 +30,9 @@ You can import huge json collection within one command. i.e.
 
 `node cli.js --import --collection=movie --file ./data/documents.json`
 
+## Demo
+- http://movies.itemsapi.com/ - it was done in one day. when itemsapi will be ready with all functionality - you can do simplier version of youtube, yelp, imdb etc in easily way.
+
 ## Plans
 - Improve searching especially make sorting more flexible and add filters.
 - Improve schema configuration. Make it simplier and higher level than elastic search.
