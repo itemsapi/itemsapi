@@ -3,6 +3,7 @@
     "url": "localhost:9200"
   },
   "server": {
+    "host": "http://127.0.0.1",
     "port": 3000
   },
   "filesystem": {
@@ -16,8 +17,14 @@
     "movie": {
       "schema": {
         "name": {"type": "string", "store": true },
+        "image": {"type": "string", "display": "image" },
         "year": {"type": "integer", "store": true },
-          "rating": {"type": "string", "store": true }
+        "actors": {"type": "array", "display": "array", "store": true },
+        "tags": {"type": "array", "display": "array", "store": true },
+        "rating": {"type": "string", "store": true }
+      },
+      "table": {
+        "fields": ["image", "name", "director", "rating", "year", "votes", "tags", "actors"]
       },
       "sorting": ["popularity", "rating", "name"]
     },
@@ -25,14 +32,78 @@
       "schema": {
         "name": {"type": "string", "store": true },
         "year": {"type": "integer", "store": true },
+        "image": {"type": "string", "store": true },
+        "tags": {"type": "array", "store": true },
         "rating": {"type": "string", "store": true }
+      },
+      "table": {
+        "fields": ["name", "tags", "artist"]
       }
     },
     "city": {
       "schema": {
+        "city": {"type": "string", "store": true},
+        "province": {"type": "string", "store": true},
+        "province_icon": {"type": "string", "display": "image"},
+        "country": {"type": "string", "store": true},
+        "country_icon": {"type": "string", "display": "image"},
+        "country": {"type": "string", "store": true},
+        "geo": {"type": "geo_point"}
+      },
+      "table": {
+        "fields": ["country_icon", "country", "province_icon", "province", "city", "geo"]
+      }
+    },
+    "quote": {
+      "schema": {
+        "author": {"type": "string", "store": true },
+        "book": {"type": "string", "store": true },
+        "tags": {"type": "array", "display": "array", "store": true },
+        "image": {"type": "string", "display": "image" },
+        "text": {"type": "string", "store": true }
+      },
+      "table": {
+        "fields": ["image", "author", "text", "tags", "likes"]
+      }
+    },
+    "car": {
+      "schema": {
+        "model": {"type": "string", "store": true },
+        "brand": {"type": "string", "store": true }
+      },
+      "table": {
+        "fields": ["model", "brand"]
+      }
+    },
+    "programmer": {
+      "schema": {
+        "name": {"type": "string", "store": true },
+        "skills": {"type": "string", "store": true },
+        "countries_of_experience": {"type": "string", "store": true },
+        "place": {"type": "string", "store": true }
+      }
+    },
+    "restaurant": {
+      "schema": {
+        "name": {"type": "string", "store": true },
+        "place": {"type": "string", "store": true }
+      }
+    },
+    "famous_people": {
+      "schema": {
         "name": {"type": "string", "store": true },
         "country": {"type": "string", "store": true },
-        "rating": {"type": "string", "store": true }
+        "birthday": {"type": "string", "store": true }
+      }
+    },
+    "herb": {
+      "schema": {
+        "name": {"type": "string", "store": true }
+      }
+    },
+    "vitamin": {
+      "schema": {
+        "name": {"type": "string", "store": true }
       }
     }
   }

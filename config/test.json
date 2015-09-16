@@ -18,6 +18,9 @@
         "name": {"type": "string", "store": true },
         "year": {"type": "integer", "store": true },
         "rating": {"type": "string", "store": true }
+      },
+      "table": {
+        "fields": ["image", "name", "director", "rating", "year", "votes"]
       }
     },
     "city": {

@@ -6,22 +6,14 @@ var fs = require('fs');
 
 describe('conf tool', function addSuite() {
 
-  var data = {
-    collections: {
-      song: {},
-      movie: {}
-    }
-  };
-
-  var configHelper = require('./../../src/helpers/config')(data);
-
   var configFile = './config/test.json';
   if (fs.existsSync(configFile) === false) {
     throw Error('Couldnt find ' + configFile);
   }
   nconf.file('overrides', {file: configFile});
 
-
+  var data = {collections: nconf.get('collections')}
+  var configHelper = require('./../../src/helpers/config')(data);
 
   before(function before(done) {
     done();
@@ -40,8 +32,20 @@ describe('conf tool', function addSuite() {
   it('should return collections names', function test(done) {
     var names = configHelper.collectionsNames();
     names.should.be.instanceof(Array).and.have.lengthOf(2);
-    should.deepEqual(names, ['song', 'movie'])
+    should.deepEqual(names, ['movie', 'city'])
     done();
   });
 
+  it('should return processed metadata', function test(done) {
+    var metadata = configHelper.getMetadata('movie');
+    metadata.should.have.property('table');
+    metadata.table.should.have.property('fields');
+    var fields = metadata.table.fields;
+    fields.should.have.property('image');
+    fields.image.should.have.property('type', 'string');
+    //names.should.be.instanceof(Array).and.have.lengthOf(2);
+    //names.should.be.instanceof(Array).and.have.lengthOf(2);
+    //should.deepEqual(names, ['song', 'movie'])
+    done();
+  });
 });

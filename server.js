@@ -12,6 +12,7 @@ var cors = require('cors');
 var server;
 var httpNotFound = 404;
 var httpBadRequest = 400;
+var Promise = require('bluebird');
 
 
 app.locals.environment = process.env.NODE_ENV || 'development'; // set env var
@@ -29,6 +30,36 @@ var configHelper = require('./src/helpers/config')(nconf.get());
 var collectionsNames = configHelper.collectionsNames();
 var dataService = require('./src/services/data');
 var searchService = require('./src/services/search');
+
+/*
+ * get collections
+ */
+router.get('/collections', function getCollections(req, res, next) {
+
+  var current = Promise.resolve();
+  return Promise.map(collectionsNames, function(name) {
+    return new Promise(function(resolve, reject) {
+      searchService.search({
+        collectionName: name
+      }, function afterSearch(error, result) {
+        return resolve({name: name, count: result.pagination.total});
+      });
+    })
+  }).then(function(result){
+    return res.json({
+      meta: {},
+      pagination: {
+        page: 1,
+        per_page: 10,
+        total: collectionsNames.length
+      },
+      data: {
+        items: result
+      }
+    });
+  });
+
+});
 
 for (var i = 0 ; i < collectionsNames.length ; ++i) {
   var name = collectionsNames[i];
@@ -125,6 +156,15 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
           return next(error);
         }
         return res.json(result);
+      });
+    });
+
+    /*
+     * collection info (schema, table, etc)
+     */
+    router.get('/' + name + '/metadata', function getCollectionInfo(req, res, next) {
+      return res.json({
+        metadata: configHelper.getMetadata(name)
       });
     });
 
