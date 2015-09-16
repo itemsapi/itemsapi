@@ -17,6 +17,9 @@ This backend will offer powerful functionality like:
 - geo searching
 - field types like standard (int, string, etc) and custom (image, rating, geo)
 
+## Getting started
+To find out more information about ItemsAPI please go to the official page - <a href="https://www.itemsapi.com/" target="_blank">Go there</a>.
+
 ## Requirement
 - node.js, npm
 - java8
@@ -26,8 +29,10 @@ This backend will offer powerful functionality like:
 You can import huge json collection within one command. i.e.
 
 `node cli.js --import --collection=movie --file ./data/documents.json`
-## Installation
-`npm install`
+
+## Demo
+- http://movies.itemsapi.com/ - it was done in one day. when itemsapi will be ready with all functionality - you can do simplier version of youtube, yelp, imdb etc in easily way.
+
 ## Plans
 - Improve searching especially make sorting more flexible and add filters.
 - Improve schema configuration. Make it simplier and higher level than elastic search.
