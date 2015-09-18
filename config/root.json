@@ -19,8 +19,8 @@
         "name": {"type": "string", "store": true },
         "image": {"type": "string", "display": "image" },
         "year": {"type": "integer", "store": true },
-        "actors": {"type": "array", "display": "array", "store": true },
-        "tags": {"type": "array", "display": "array", "store": true },
+        "actors": {"type": "string", "display": "array", "store": true },
+        "tags": {"type": "string", "display": "array", "store": true },
         "rating": {"type": "string", "store": true }
       },
       "table": {
@@ -33,7 +33,7 @@
         "name": {"type": "string", "store": true },
         "year": {"type": "integer", "store": true },
         "image": {"type": "string", "store": true },
-        "tags": {"type": "array", "store": true },
+        "tags": {"type": "string", "store": true },
         "rating": {"type": "string", "store": true }
       },
       "table": {
@@ -58,7 +58,7 @@
       "schema": {
         "author": {"type": "string", "store": true },
         "book": {"type": "string", "store": true },
-        "tags": {"type": "array", "display": "array", "store": true },
+        "tags": {"type": "string", "display": "array", "store": true },
         "image": {"type": "string", "display": "image" },
         "text": {"type": "string", "store": true }
       },
