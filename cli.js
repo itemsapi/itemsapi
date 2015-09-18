@@ -16,7 +16,7 @@ nconf
 var server = require('./server');
 var importService = require('./src/services/import');
 
-var cli = require('cli'); 
+var cli = require('cli');
 
 cli.parse({
   import: ['import', 'Import external data'],
@@ -35,7 +35,7 @@ cli.main(function(args, options) {
     }, function(err, res) {
       console.log('data has been imported');
       console.log(res);
-      return;
+      process.exit();
     })
   }
 });
