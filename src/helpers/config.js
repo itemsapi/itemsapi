@@ -10,6 +10,11 @@ module.exports = function(data) {
     return data.collections[collectionName].schema;
   }
 
+  var getMapping = function(collectionName) {
+    var collection = data.collections[collectionName];
+    return collection;
+  }
+
   var getMetadata = function(collectionName) {
     var collection = data.collections[collectionName];
     return _.extend(_.clone(collection),
@@ -30,6 +35,7 @@ module.exports = function(data) {
   return {
     collectionsNames: collectionsNames,
     getSchema: getSchema,
+    getMapping: getMapping,
     getMetadata: getMetadata
   }
 };

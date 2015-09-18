@@ -169,6 +169,15 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     });
 
     /*
+     * mapping
+     */
+    router.get('/' + name + '/mapping', function getMapping(req, res, next) {
+      return res.json({
+        mapping: configHelper.getMapping(name)
+      });
+    });
+
+    /*
      * get similar items
      */
     router.get('/' + name + '/:id/similar', function getSimilarItems(req, res, next) {
