@@ -7,6 +7,8 @@ var elastic = require('../connections/elastic').getElastic();
 var validate = require('validate.js');
 var ejs = require('elastic.js');
 var logger = winston.loggers.get('query');
+var mappingHelper = require('./../helpers/mapping');
+var _ = require('underscore');
 
 (function(module) {
 
@@ -24,6 +26,36 @@ var logger = winston.loggers.get('query');
       //.sort(ejs.Sort('votes').order('desc'))
       .from(offset);
 
+    _.each(mappingHelper.getAggregations(data.collectionName), function(value, key) {
+      if (value.type === 'terms') {
+        var aggregation = ejs.TermsAggregation(key)
+          .field(value.field)
+          .size(value.size);
+
+        if (value.exclude) {
+          aggregation.exclude(value.exclude);
+        }
+        body.aggregation(aggregation);
+      } else if (value.type === 'range') {
+        var aggregation = ejs.RangeAggregation(key).field(value.field);
+        _.each(value.ranges, function(v, k) {
+          aggregation.range(v[0], v[1]);
+        });
+        body.aggregation(aggregation);
+      } else if (value.type === 'geo_distance') {
+        var aggregation = ejs.GeoDistanceAggregation(key)
+          .field(value.field)
+          .point(ejs.GeoPoint(value.point))
+          .unit(value.unit)
+
+        _.each(value.ranges, function(v, k) {
+          aggregation.range(v[0], v[1]);
+        });
+
+        body.aggregation(aggregation);
+      }
+    });
+
     if (data.query) {
       body.query(ejs.QueryStringQuery(data.query));
     }
@@ -39,6 +71,7 @@ var logger = winston.loggers.get('query');
       if (err) {
         return callback(err);
       }
+      //console.log(res);
       callback(null, res);
     });
   }

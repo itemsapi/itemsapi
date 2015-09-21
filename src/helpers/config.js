@@ -10,6 +10,10 @@ module.exports = function(data) {
     return data.collections[collectionName].schema;
   }
 
+  var getAggregations = function(collectionName) {
+    return data.collections[collectionName].aggregations;
+  }
+
   var getMapping = function(collectionName) {
     var collection = data.collections[collectionName];
     return collection;
@@ -35,6 +39,7 @@ module.exports = function(data) {
   return {
     collectionsNames: collectionsNames,
     getSchema: getSchema,
+    getAggregations: getAggregations,
     getMapping: getMapping,
     getMetadata: getMetadata
   }

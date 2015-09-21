@@ -17,11 +17,11 @@ module.exports = function() {
           var source = doc.fields || doc._source
           return _.extend(
             {id: doc._id, score: doc._score},
-            source 
+            source
           );
         }),
         groups: [],
-        filters: {}
+        aggregations: data.aggregations
       }
     }
   }
