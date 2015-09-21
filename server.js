@@ -217,6 +217,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
 
 
 app.use(function errorRoute(err, req, res, next) {
+  console.log(err);
   res.status(httpBadRequest).json(err);
   next();
 });
