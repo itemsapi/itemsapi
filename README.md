@@ -15,7 +15,7 @@ This backend will offer powerful functionality like:
 - autocomplete
 - simple recommendation
 - geo searching
-- field types like standard (int, string, etc) and custom (image, rating, geo)
+- field types like standard (int, string, etc) and custom (image, rating, geo, tags)
 
 ## Getting started
 To find out more information about ItemsAPI please go to the official page - <a href="https://www.itemsapi.com/" target="_blank">Go there</a>.
@@ -31,17 +31,19 @@ You can import huge json collection within one command. i.e.
 `node cli.js --import --collection=movie --file ./data/documents.json`
 
 ## Demo
-- http://movies.itemsapi.com/ - it was done in one day. when itemsapi will be ready with all functionality - you can do simplier version of youtube, yelp, imdb etc in easily way.
+- it is in progress
 
-## Plans
-- Improve searching especially make sorting more flexible and add filters.
-- Improve schema configuration. Make it simplier and higher level than elastic search.
+
+## Plan of 21 September 2015
+- Importing big json files and make internal indexing (finished)
+- Full text searching with pagination (finished)
+- Create simple documentation (finished but requires update https://www.itemsapi.com/docs/start/overview.html)
+- Make aggregations i.e. tags count, categories count, distance calculations, date range (in progress)
+- Sorting by field and by scores
+- Make schema configuration higher level than elasticsearch and easy for integration with external systems like angular.js
+- "Similar to" functionality. Simple recommendation system.
+- Authentication and user privileges
 - Autocomplete
-- Create simple documentation
-- Add "facets" https://en.wikipedia.org/wiki/Faceted_search functionality. This is what makes it better than any other databases. 
-- Add "similar to" functionality.
-- Add "image" field type in schema which allows for adding images out of the box.
-- Add "geo" field type in schema which will allow for sorting documents by geolocalisation.
 
 ## Long term plans
 - people who like this also like (elasticsearch or neo4j) 
