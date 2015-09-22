@@ -27,6 +27,7 @@ var elastic = require('./src/connections/elastic');
 elastic.init();
 
 var configHelper = require('./src/helpers/config')(nconf.get());
+var mappingHelper = require('./src/helpers/mapping');
 var collectionsNames = configHelper.collectionsNames();
 var dataService = require('./src/services/data');
 var searchService = require('./src/services/search');
@@ -35,14 +36,18 @@ var searchService = require('./src/services/search');
  * get collections
  */
 router.get('/collections', function getCollections(req, res, next) {
-
   var current = Promise.resolve();
   return Promise.map(collectionsNames, function(name) {
     return new Promise(function(resolve, reject) {
       searchService.search({
         collectionName: name
       }, function afterSearch(error, result) {
-        return resolve({name: name, count: result.pagination.total});
+        var mapping = mappingHelper.getMapping(name);
+        var display_name = name;
+        if (mapping.meta && mapping.meta.title) {
+          display_name = mapping.meta.title;
+        }
+        return resolve({name: name, display_name: display_name, count: result.pagination.total});
       });
     })
   }).then(function(result){

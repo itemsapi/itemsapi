@@ -1,5 +1,6 @@
 'use strict';
 var _ = require('underscore');
+var mappingHelper = require('./mapping');
 
 module.exports = function() {
   var searchConverter = function(input, data) {
@@ -21,7 +22,10 @@ module.exports = function() {
           );
         }),
         groups: [],
-        aggregations: data.aggregations
+        aggregations: _.extend(_.clone(data.aggregations), _.mapObject(data.aggregations, function(v, k) {
+          var aggregation = mappingHelper.getAggregations(input.collectionName);
+          return _.extend(v, {title: aggregation[k].title || k });
+        }))
       }
     }
   }
