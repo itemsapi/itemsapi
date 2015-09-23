@@ -11,7 +11,11 @@ module.exports = function(data) {
   }
 
   var getAggregations = function(collectionName) {
-    return data.collections[collectionName].aggregations;
+    return data.collections[collectionName].aggregations || {};
+  }
+
+  var getSortings = function(collectionName) {
+    return data.collections[collectionName].sortings || {};
   }
 
   var getMapping = function(collectionName) {
@@ -40,6 +44,7 @@ module.exports = function(data) {
     collectionsNames: collectionsNames,
     getSchema: getSchema,
     getAggregations: getAggregations,
+    getSortings: getSortings,
     getMapping: getMapping,
     getMetadata: getMetadata
   }

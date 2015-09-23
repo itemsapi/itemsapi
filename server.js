@@ -155,6 +155,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
         page: req.query.page || 1,
         per_page: req.query.per_page || 10,
         query: req.query.query || '',
+        sort: req.query.sort || '',
         fields: fields
       }, function afterSearch(error, result) {
         if (error) {

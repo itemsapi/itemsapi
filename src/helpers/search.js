@@ -6,7 +6,8 @@ module.exports = function() {
   var searchConverter = function(input, data) {
     return {
       meta: {
-        query: input.query
+        query: input.query,
+        sort: input.sort
       },
       pagination: {
         page: input.page,
@@ -25,11 +26,17 @@ module.exports = function() {
         aggregations: _.extend(_.clone(data.aggregations), _.mapObject(data.aggregations, function(v, k) {
           var aggregation = mappingHelper.getAggregations(input.collectionName);
           return _.extend(v, {title: aggregation[k].title || k });
-        }))
+        })),
+        sortings: _.mapObject(mappingHelper.getSortings(input.collectionName), function(v, k) {
+          return {
+            name: k,
+            order: v.order,
+            title: v.title
+          };
+        })
       }
     }
   }
-
   return {
     searchConverter: searchConverter
   }

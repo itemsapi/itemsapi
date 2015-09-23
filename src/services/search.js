@@ -19,7 +19,6 @@ var searchHelper = require('../helpers/search');
       if (err) {
         return callback(err);
       }
-      //callback(null, res);
       callback(null, searchHelper().searchConverter(data, res));
     });
   }

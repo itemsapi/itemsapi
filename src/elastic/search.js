@@ -22,9 +22,22 @@ var _ = require('underscore');
 
     var body = ejs.Request()
       .size(per_page)
-      //.sort('votes', 'desc')
-      //.sort(ejs.Sort('votes').order('desc'))
       .from(offset);
+
+    var sortOptions = mappingHelper.getSortings(data.collectionName)[data.sort];
+
+    if (sortOptions) {
+      if (!sortOptions.type || sortOptions.type === 'normal') {
+        //.sort('played', 'desc')
+        //.sort('geo', 'asc').geoDistance(ejs.GeoPoint([50.0646500, 19.9449800]))
+        //.sort('geo').geoDistance(ejs.GeoPoint([50.0646500, 19.9449800])).unit('km').asc()
+        var sort = ejs.Sort(sortOptions.field)
+        if (sortOptions.order) {
+          sort.order(sortOptions.order);
+        }
+        body.sort(sort);
+      }
+    }
 
     _.each(mappingHelper.getAggregations(data.collectionName), function(value, key) {
       if (value.type === 'terms') {
@@ -39,7 +52,7 @@ var _ = require('underscore');
       } else if (value.type === 'range') {
         var aggregation = ejs.RangeAggregation(key).field(value.field);
         _.each(value.ranges, function(v, k) {
-          aggregation.range(v[0], v[1]);
+          aggregation.range(v[0], v[1], v[2]);
         });
         body.aggregation(aggregation);
       } else if (value.type === 'geo_distance') {
@@ -49,7 +62,7 @@ var _ = require('underscore');
           .unit(value.unit)
 
         _.each(value.ranges, function(v, k) {
-          aggregation.range(v[0], v[1]);
+          aggregation.range(v[0], v[1], v[2]);
         });
 
         body.aggregation(aggregation);
