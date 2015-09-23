@@ -23,6 +23,11 @@ module.exports = function(data) {
     return collection;
   }
 
+  var getDefaults = function(collectionName) {
+    var collection = data.collections[collectionName].defaults || {};
+    return collection;
+  }
+
   var getMetadata = function(collectionName) {
     var collection = data.collections[collectionName];
     return _.extend(_.clone(collection),
@@ -46,6 +51,7 @@ module.exports = function(data) {
     getAggregations: getAggregations,
     getSortings: getSortings,
     getMapping: getMapping,
+    getDefaults: getDefaults,
     getMetadata: getMetadata
   }
 };

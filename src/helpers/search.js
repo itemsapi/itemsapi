@@ -16,11 +16,16 @@ module.exports = function() {
       },
       data: {
         items: _.map(data.hits.hits, function(doc) {
-          var source = doc.fields || doc._source
+          return _.extend(
+            {id: doc._id, score: doc._score},
+            doc._source, doc.fields
+          );
+
+          /*var source = doc.fields ||
           return _.extend(
             {id: doc._id, score: doc._score},
             source
-          );
+          );*/
         }),
         groups: [],
         aggregations: _.extend(_.clone(data.aggregations), _.mapObject(data.aggregations, function(v, k) {

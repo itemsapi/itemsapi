@@ -16,7 +16,11 @@
   "collections": {
     "movie": {
       "meta": {
-        "title": "Movies"
+        "title": "Movies",
+        "created": "spring 2015"
+      },
+      "defaults": {
+        "sort": "most_votes"
       },
       "schema": {
         "name": {"type": "string", "store": true },
@@ -100,6 +104,9 @@
       "meta": {
         "title": "Songs"
       },
+      "defaults": {
+        "sort": "favorites"
+      },
       "schema": {
         "name": {"type": "string", "store": true },
         "artist": {"type": "string", "store": true, "index": "not_analyzed" },
@@ -147,8 +154,11 @@
       "meta": {
         "title": "Cities"
       },
+      "defaults": {
+        "sort": "city"
+      },
       "schema": {
-        "city": {"type": "string", "store": true},
+        "city": {"type": "string", "store": true, "index": "not_analyzed"},
         "province": {"type": "string", "store": true},
         "province_icon": {"type": "string", "display": "image"},
         "country": {"type": "string", "store": true},
@@ -156,8 +166,28 @@
         "country": {"type": "string", "index": "not_analyzed", "store": true},
         "geo": {"type": "geo_point"}
       },
+      "sortings": {
+        "country": {
+          "title": "Country",
+          "type": "normal",
+          "order": "asc",
+          "field": "country"
+        },
+        "distance": {
+          "title": "Distance",
+          "type": "geo",
+          "order": "asc",
+          "field": "geo"
+        },
+        "city": {
+          "title": "City",
+          "type": "normal",
+          "order": "asc",
+          "field": "city"
+        }
+      },
       "table": {
-        "fields": ["country_icon", "country", "province_icon", "province", "city", "geo", "distance"]
+        "fields": ["country_icon", "country", "city", "province_icon", "province", "geo", "distance"]
       },
       "aggregations": {
         "country": {"type": "terms", "field": "country", "size": 10, "title": "Country"},

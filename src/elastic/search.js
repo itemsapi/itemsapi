@@ -24,16 +24,34 @@ var _ = require('underscore');
       .size(per_page)
       .from(offset);
 
+    /*var scriptField = ejs.ScriptField('distance').script("doc[\u0027geo\u0027].arcDistanceInKm(lat,lon)");
+    scriptField.params({
+      lat: 50.0646500,
+      lon: 19.9449800
+    }).lang('groovy');
+    body.scriptField(scriptField);
+    body.fields('_source');*/
+
     var sortOptions = mappingHelper.getSortings(data.collectionName)[data.sort];
+    var mappingDefaults = mappingHelper.getDefaults(data.collectionName);
+    var defaultSort = mappingHelper.getSortings(data.collectionName)[mappingDefaults.sort];
 
     if (sortOptions) {
+      var sort = ejs.Sort(sortOptions.field)
       if (!sortOptions.type || sortOptions.type === 'normal') {
-        //.sort('played', 'desc')
-        //.sort('geo', 'asc').geoDistance(ejs.GeoPoint([50.0646500, 19.9449800]))
-        //.sort('geo').geoDistance(ejs.GeoPoint([50.0646500, 19.9449800])).unit('km').asc()
-        var sort = ejs.Sort(sortOptions.field)
-        if (sortOptions.order) {
-          sort.order(sortOptions.order);
+      } else if (sortOptions.type === 'geo') {
+          sort.geoDistance(ejs.GeoPoint([50.0646500, 19.9449800])).unit('km')
+      }
+
+      if (sortOptions.order) {
+        sort.order(sortOptions.order);
+      }
+      body.sort(sort);
+    } else if (defaultSort) {
+      if (!defaultSort.type || defaultSort.type === 'normal') {
+        var sort = ejs.Sort(defaultSort.field)
+        if (defaultSort.order) {
+          sort.order(defaultSort.order);
         }
         body.sort(sort);
       }
@@ -78,13 +96,12 @@ var _ = require('underscore');
     elastic.search({
       index: data.projectName,
       type: data.collectionName,
-      _source: data.fields || true,
-      body: body
+      body: body,
+      _source: data.fields || true
     }, function (err, res) {
       if (err) {
         return callback(err);
       }
-      //console.log(res);
       callback(null, res);
     });
   }
