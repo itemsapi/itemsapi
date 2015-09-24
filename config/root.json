@@ -27,6 +27,7 @@
         "image": {"type": "string", "display": "image" },
         "year": {"type": "integer", "store": true },
         "votes": {"type": "integer", "store": true },
+        "director": {"type": "string", "index": "not_analyzed", "store": true },
         "actors": {"type": "string", "index": "not_analyzed", "display": "array", "store": true },
         "tags": {"type": "string", "display": "array", "store": true },
         "rating": {"type": "float", "store": true }
@@ -59,6 +60,7 @@
       },
       "aggregations": {
         "actors_terms": {"type": "terms", "field": "actors", "size": 10, "title": "Actors"},
+        "director_terms": {"type": "terms", "field": "director", "size": 5, "title": "Directors"},
         "tags_terms": {"type": "terms", "field": "tags", "size": 10, "title": "Tags"},
         "votes_range": {"type": "range", "field": "votes", "ranges": [
           [null, 300, "< 300"],

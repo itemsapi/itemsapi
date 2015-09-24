@@ -56,25 +56,60 @@ var _ = require('underscore');
         body.sort(sort);
       }
     }
+    var aggregations = mappingHelper.getAggregations(data.collectionName);
 
-    _.each(mappingHelper.getAggregations(data.collectionName), function(value, key) {
+    console.log(data.aggs);
+    var aggregation_filters = {};
+    _.each(data.aggs, function(value, key) {
+      if (value.length) {
+
+        if (aggregations[key].type === 'terms') {
+          aggregation_filters[key] = ejs.TermsFilter(aggregations[key].field, value);
+        } else if (aggregations[key].type === 'range') {
+          aggregation_filters[key] = ejs.RangeFilter(aggregations[key].field, value);
+        }
+      }
+    });
+
+    //console.log(aggregation_filters.toJSON());
+
+    /*var aggregation_filters = {
+      director_terms: ejs.TermsFilter('director', ['David Fincher', 'Woody Allen']),
+      tags_terms: ejs.TermsFilter('tags', ['dramat', 'komedia']),
+      rating_range: ejs.RangeFilter('rating').gte(7),
+      votes_range: ejs.RangeFilter('votes').gte(20),
+      year_range: ejs.RangeFilter('year').gte(1970).lt(1975)
+    }*/
+
+    // each aggregation will have its own filter
+    // we will assign all filters to aggregations except the aggregation filter
+    body.filter(ejs.AndFilter(_.values(aggregation_filters)));
+
+    _.each(aggregations, function(value, key) {
+
+      var faggregation = ejs.FilterAggregation(key)
+        .filter(ejs.AndFilter(_.values(_.omit(aggregation_filters, key))));
+
+      var aggregation = null;
       if (value.type === 'terms') {
-        var aggregation = ejs.TermsAggregation(key)
+        aggregation = ejs.TermsAggregation(key)
           .field(value.field)
           .size(value.size);
+
+        if (value.field === 'tags') {
+          //aggregation.include('drama');
+        }
 
         if (value.exclude) {
           aggregation.exclude(value.exclude);
         }
-        body.aggregation(aggregation);
       } else if (value.type === 'range') {
-        var aggregation = ejs.RangeAggregation(key).field(value.field);
+        aggregation = ejs.RangeAggregation(key).field(value.field);
         _.each(value.ranges, function(v, k) {
           aggregation.range(v[0], v[1], v[2]);
         });
-        body.aggregation(aggregation);
       } else if (value.type === 'geo_distance') {
-        var aggregation = ejs.GeoDistanceAggregation(key)
+        aggregation = ejs.GeoDistanceAggregation(key)
           .field(value.field)
           .point(ejs.GeoPoint(value.point))
           .unit(value.unit)
@@ -82,9 +117,11 @@ var _ = require('underscore');
         _.each(value.ranges, function(v, k) {
           aggregation.range(v[0], v[1], v[2]);
         });
-
-        body.aggregation(aggregation);
       }
+      // filter aggregation
+      faggregation.agg(aggregation);
+      // add aggregation to request body
+      body.aggregation(faggregation);
     });
 
     if (data.query) {

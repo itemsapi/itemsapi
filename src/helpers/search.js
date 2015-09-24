@@ -30,7 +30,13 @@ module.exports = function() {
         groups: [],
         aggregations: _.extend(_.clone(data.aggregations), _.mapObject(data.aggregations, function(v, k) {
           var aggregation = mappingHelper.getAggregations(input.collectionName);
-          return _.extend(v, {title: aggregation[k].title || k });
+
+          // supports filters in aggregations
+          if (!v.buckets && v[k]) {
+            _.extend(v, v[k]);
+            delete v[k];
+          }
+          return _.extend(v, {title: aggregation[k].title || k, name: k, type: aggregation[k].type });
         })),
         sortings: _.mapObject(mappingHelper.getSortings(input.collectionName), function(v, k) {
           return {

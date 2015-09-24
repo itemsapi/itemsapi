@@ -144,6 +144,16 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
      * search items
      */
     router.get('/' + name + '/find', function getItems(req, res, next) {
+      console.log('queries');
+
+
+      var aggs = {};
+      if (req.query.aggs) {
+        aggs = JSON.parse(req.query.aggs);
+      }
+      //console.log(req.query.aggs);
+      //console.log(aggs);
+
       var fields = req.query.fields;
       if (fields !== undefined) {
         fields = fields.split(",");
@@ -156,6 +166,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
         per_page: req.query.per_page || 10,
         query: req.query.query || '',
         sort: req.query.sort || '',
+        aggs: aggs,
         fields: fields
       }, function afterSearch(error, result) {
         if (error) {
