@@ -69,7 +69,7 @@ var validate = require('validate.js');
 
     var body = [];
     for (var i = 0 ; i < data.body.length ; ++i) {
-      var o = { create: { _id: data.body[i].id } };
+      var o = { create: { _id: data.body[i] ? data.body[i].id : undefined } };
       body.push(o);
       body.push(data.body[i]);
     }
