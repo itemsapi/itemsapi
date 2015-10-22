@@ -32,6 +32,23 @@ var collectionsNames = configHelper.collectionsNames();
 var dataService = require('./src/services/data');
 var searchService = require('./src/services/search');
 
+var client = require('redis').createClient()
+var limiter = require('express-limiter')(router, client)
+
+// this is only temporary - finally it should goes to load balancer
+limiter({
+  path: '*',
+  method: 'get',
+  //lookup: 'connection.remoteAddress',
+  lookup: 'headers.x-forwarded-for',
+  total: 2,
+  expire: 1000 * 30,
+  //expire: 1000 * 60 * 60,
+  onRateLimited: function (req, res, next) {
+    next({ message: 'Rate limit exceeded', status: 429 })
+  }
+})
+
 /*
  * get collections
  */
