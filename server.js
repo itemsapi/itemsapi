@@ -47,6 +47,8 @@ router.get('/collections', function getCollections(req, res, next) {
         if (mapping.meta && mapping.meta.title) {
           display_name = mapping.meta.title;
         }
+        console.log(name);
+        console.log(result);
         return resolve({name: name, display_name: display_name, count: result.pagination.total});
       });
     })
@@ -159,11 +161,23 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
         fields = fields.split(",");
       }
 
+      // it should goes to configuration files
+      var per_page = req.query.per_page || 10;
+      if (per_page > 20) {
+        per_page = 20;
+      }
+
+      // it should goes to configuration files
+      var page = req.query.page || 1;
+      if (page > 10) {
+        page = 10;
+      }
+
       // @todo filtering params
       searchService.search({
         collectionName: name,
-        page: req.query.page || 1,
-        per_page: req.query.per_page || 10,
+        page: page,
+        per_page: per_page,
         query: req.query.query || '',
         sort: req.query.sort || '',
         aggs: aggs,
