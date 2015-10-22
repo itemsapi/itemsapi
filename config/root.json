@@ -33,30 +33,6 @@
         "rating": {"type": "float", "store": true }
       },
       "sortings": {
-        "rating": {
-          "title": "Best rating",
-          "type": "normal",
-          "order": "desc",
-          "field": "rating"
-        },
-        "most_votes": {
-          "title": "Most votes",
-          "type": "normal",
-          "order": "desc",
-          "field": "votes"
-        },
-        "year_newest": {
-          "title": "Newest movies",
-          "type": "normal",
-          "order": "desc",
-          "field": "year"
-        },
-        "year_oldest": {
-          "title": "Oldest movies",
-          "type": "normal",
-          "order": "asc",
-          "field": "year"
-        }
       },
       "aggregations": {
         "actors_terms": {"type": "terms", "field": "actors", "size": 10, "title": "Actors"},
@@ -152,41 +128,6 @@
           "title": "Played count [mln]"}
       }
     },
-    "nobel": {
-      "meta": {
-        "title": "Nobel laureates"
-      },
-      "defaults": {
-        "sort": "newest"
-      },
-      "schema": {
-        "city": {"type": "string", "store": true},
-        "image": {"type": "string", "display": "image"},
-        "laureate": {"type": "string", "store": true, "index": "not_analyzed"},
-        "country": {"type": "string", "index": "not_analyzed", "store": true},
-        "rationale": {"type": "string", "store": true}
-      },
-      "sortings": {
-        "oldest": {
-          "title": "Oldest",
-          "type": "normal",
-          "order": "asc",
-          "field": "year"
-        },
-        "newest": {
-          "title": "Newest",
-          "type": "normal",
-          "order": "desc",
-          "field": "year"
-        }
-      },
-      "table": {
-        "fields": ["year", "image", "laureate", "country", "rationale"]
-      },
-      "aggregations": {
-        "country": {"type": "terms", "field": "country", "size": 25, "title": "Country"}
-      }
-    },
     "city": {
       "meta": {
         "title": "Cities"
@@ -195,7 +136,7 @@
         "sort": "city"
       },
       "schema": {
-        "year": {"type": "integer", "store": true},
+        "city": {"type": "string", "store": true, "index": "not_analyzed"},
         "province": {"type": "string", "store": true},
         "province_icon": {"type": "string", "display": "image"},
         "country": {"type": "string", "store": true},
@@ -259,7 +200,6 @@
     },
     "doctor": {
       "schema": {
-        "id": {"type": "integer" },
         "title": {"type": "string", "store": true },
         "age": {"type": "integer", "store": true },
         "verified": {"type": "string" },
@@ -276,6 +216,7 @@
           [200, 300],
           [300, null]]},
         "city_terms": {"type": "terms", "field": "city", "size": 10},
+        "verified_terms": {"type": "terms", "field": "verified", "size": 2},
         "title_terms": {"type": "terms", "field": "title", "size": 20, "exclude": "w|i|z"}
       },
       "table": {
@@ -312,14 +253,112 @@
         "birthday": {"type": "string", "store": true }
       }
     },
-    "herb": {
+    "dotacje": {
       "schema": {
-        "name": {"type": "string", "store": true }
+        "name": {"type": "string", "store": true, "index": "not_analyzed" },
+        "receiver": {"type": "string", "store": true, "index": "not_analyzed" },
+        "voivodeship": {"type": "string", "store": true, "index": "not_analyzed" },
+        "region": {"type": "string", "display": "array", "store": true },
+        "investment": {"type": "integer", "store": false },
+        "value": {"type": "integer", "store": false },
+        "percent": {"type": "integer", "store": false },
+        "start": {"type": "integer", "store": false },
+        "end": {"type": "integer", "store": false }
+      },
+      "defaults": {
+      },
+      "aggregations": {
+        "voivodeship_terms": {"type": "terms", "field": "voivodeship", "size": 15, "title": "Voivodeships"},
+        "region_terms": {"type": "terms", "field": "region", "size": 15, "title": "Regions"},
+        "receiver_terms": {"type": "terms", "field": "receiver", "size": 15, "title": "Receivers"}
+      },
+      "sortings": {
+        "biggest_investment": {
+          "title": "Biggest investment",
+          "type": "normal",
+          "order": "desc",
+          "field": "investment"
+        },
+        "biggest_percent": {
+          "title": "Biggest percent of investment",
+          "type": "normal",
+          "order": "desc",
+          "field": "percent"
+        }
+      },
+      "table": {
+        "fields": ["name", "receiver", "voivodeship", "region", "investment", "value", "percent", "start", "end"]
       }
     },
-    "vitamin": {
+    "npm": {
       "schema": {
-        "name": {"type": "string", "store": true }
+        "name": {"type": "string", "store": true, "index": "not_analyzed" },
+        "short_description": {"type": "string", "store": true, "index": "not_analyzed" },
+        "license": {"type": "string", "store": true, "index": "not_analyzed" },
+        "tags": {"type": "string", "display": "array", "store": true },
+        "collaborators": {"type": "string", "display": "array", "store": true },
+        "downloads_last_day": {"type": "integer", "store": false },
+        "releases": {"type": "integer", "store": false },
+        "author": {"type": "string", "store": true, "index": "not_analyzed" }
+      },
+      "defaults": {
+      },
+      "aggregations": {
+        "authors_terms": {"type": "terms", "field": "author", "size": 30, "title": "Authors"},
+        "tags_terms": {"type": "terms", "field": "tags", "size": 15, "title": "Tags"},
+        "collaborators_terms": {"type": "terms", "field": "collaborators", "size": 15, "title": "Collaborators"},
+        "license_terms": {"type": "terms", "field": "license", "size": 10, "title": "Licenses"}
+      },
+      "sortings": {
+        "most_overviews": {
+          "title": "Most downloads last day",
+          "type": "normal",
+          "order": "desc",
+          "field": "downloads_last_day"
+        }
+      },
+      "table": {
+        "fields": ["name", "short_description", "author", "license", "tags", "releases", "downloads_last_day"]
+      }
+    },
+    "herb": {
+      "schema": {
+        "name": {"type": "string", "store": true, "index": "not_analyzed" },
+        "brand": {"type": "string", "store": true, "index": "not_analyzed" },
+        "breadcrumbs_mini": {"type": "string", "store": true, "index": "not_analyzed" },
+        "rating": {"type": "integer", "store": true },
+        "price": {"type": "float", "store": false },
+        "overviews_count": {"type": "integer", "store": true },
+        "image": {"type": "string", "display": "image" }
+      },
+      "defaults": {
+      },
+      "aggregations": {
+        "categories_terms": {"type": "terms", "field": "breadcrumbs_mini", "size": 15, "title": "Categories"},
+        "brands_terms": {"type": "terms", "field": "brand", "size": 10, "title": "Brands"}
+      },
+      "sortings": {
+        "most_overviews": {
+          "title": "Most overviews",
+          "type": "normal",
+          "order": "desc",
+          "field": "overviews_count"
+        },
+        "price": {
+          "title": "The cheapest",
+          "type": "normal",
+          "order": "asc",
+          "field": "price"
+        },
+        "price2": {
+          "title": "Most expensive",
+          "type": "normal",
+          "order": "desc",
+          "field": "price"
+        }
+      },
+      "table": {
+        "fields": ["name", "image", "brand", "price", "rating", "overviews_count", "url"]
       }
     }
   }
