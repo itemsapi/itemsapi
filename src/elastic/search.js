@@ -130,8 +130,6 @@ var _ = require('underscore');
 
     logger.info(body.toJSON());
 
-    console.log(data);
-
     elastic.search({
       index: data.projectName,
       type: data.collectionName,

@@ -47,8 +47,6 @@ router.get('/collections', function getCollections(req, res, next) {
         if (mapping.meta && mapping.meta.title) {
           display_name = mapping.meta.title;
         }
-        console.log(name);
-        console.log(result);
         return resolve({name: name, display_name: display_name, count: result.pagination.total});
       });
     })
