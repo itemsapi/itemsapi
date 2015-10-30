@@ -34,15 +34,12 @@ var server;
     nconf.file('overrides', {file: configFile});
     server  = require(__dirname + '/../../server.js');
 
-    //winston
-      //.remove(winston.transports.Console);
-
     describe(name, function describe() {
       before(function before(done) {
         server.start(function serverStart(serverInstance) {
           module.setServer(serverInstance);
           var elasticClient = require('./../../src/connections/elastic');
-          elasticClient.flushdb({}, function(err, res) {
+          elasticClient.flushdb({index: 'test'}, function(err, res) {
             done();
           });
         });

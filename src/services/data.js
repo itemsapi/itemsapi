@@ -3,26 +3,28 @@
 var request = require('request');
 var winston = require('winston');
 var nconf = require('nconf');
-var elastic = require('../elastic/data');
+var Promise = require('bluebird');
+var elastic = Promise.promisifyAll(require('../elastic/data'));
 var async = require('async');
 var _ = require('lodash');
-
+//Promise.promisifyAll(elastic);
 (function(module) {
 
   /**
    * get document
    */
-  module.addDocument = function(data, callback) {
-    elastic.addDocument({
-      index: 'project',
+  module.addDocumentAsync = function(data) {
+    return elastic.addDocumentAsync({
+      index: data.projectName,
       type: data.collectionName,
       body: data.body,
       id: data.body.id
-    }, function(err, res) {
-      if (err) {
-        return callback(err);
+    }).then(function(res) {
+      return {
+        id: res._id,
+        collection: res._type,
+        project: res._index
       }
-      callback(null, res);
     })
   }
 
@@ -31,7 +33,7 @@ var _ = require('lodash');
    */
   module.updateDocument = function(data, callback) {
     elastic.updateDocument({
-      index: 'project',
+      index: data.projectName,
       type: data.collectionName,
       body: data.body,
       id: data.id
@@ -44,11 +46,21 @@ var _ = require('lodash');
   }
 
   /**
+   * clean documents
+   */
+  module.cleanDocumentsAsync = function(data, callback) {
+    return elastic.cleanDocumentsAsync({
+      index: data.projectName,
+      type: data.collectionName,
+    });
+  }
+
+  /**
    * delete document
    */
   module.deleteDocument = function(data, callback) {
     elastic.deleteDocument({
-      index: 'project',
+      index: data.projectName,
       type: data.collectionName,
       id: data.id
     }, function(err, res) {
@@ -64,7 +76,7 @@ var _ = require('lodash');
    */
   module.getDocument = function(data, callback) {
     elastic.getDocument({
-      index: 'project',
+      index: data.projectName,
       type: data.collectionName,
       id: data.id
     }, function(err, res) {
@@ -82,6 +94,12 @@ var _ = require('lodash');
    * @param {String} collectionName
    */
   module.addDocuments = function(data, callback) {
+    /*return elastic.addDocumentsAsync({
+      index: data.projectName,
+      type: data.collectionName,
+      body: data.body
+    });*/
+
     elastic.addDocuments({
       index: data.projectName,
       type: data.collectionName,
@@ -90,7 +108,14 @@ var _ = require('lodash');
       if (err) {
         return callback(err);
       }
-      callback(null, res);
+
+      callback(null, _.pick(_.extend(res, {
+        ids: _.map(res.items, function(val) {
+          return val.create._id;
+        }),
+        project: data.projectName,
+        collection: data.collectionName
+      }), 'took', 'errors', 'ids', 'project', 'collection'));
     })
   }
 

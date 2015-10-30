@@ -3,7 +3,8 @@
 var request = require('request');
 var winston = require('winston');
 var nconf = require('nconf');
-var elastic = require('../connections/elastic').getElastic();
+var Promise = require('bluebird');
+var elastic = Promise.promisifyAll(require('../connections/elastic').getElastic());
 var validate = require('validate.js');
 
 (function(module) {
@@ -74,6 +75,7 @@ var validate = require('validate.js');
       body.push(data.body[i]);
     }
 
+
     elastic.bulk({
       index: data.index,
       type: data.type,
@@ -119,6 +121,24 @@ var validate = require('validate.js');
         return callback(err);
       }
       callback(null, res);
+    });
+  }
+
+  /**
+   * clean documents
+   * @param {Obj} data document
+   */
+  module.cleanDocumentsAsync = function(data, callback) {
+    return elastic.deleteByQueryAsync({
+      index: data.index,
+      type: data.type,
+      body: {
+        query: {
+          match_all: {}
+        }
+      }
+    }).then(function(res) {
+      return res;
     });
   }
 
