@@ -14,7 +14,7 @@ setup.makeSuite('import', function() {
 
     var spy = sinon.spy(dataService, 'addAllDocuments');
     importService.import({
-      projectName: 'project',
+      projectName: 'test',
       collectionName: 'movie',
       body: [{
         rating: '9.2',
@@ -29,7 +29,7 @@ setup.makeSuite('import', function() {
       assert.equal(err, null);
       assert.notEqual(res, null);
       assert(spy.calledOnce);
-      assert(spy.calledWithMatch({projectName: 'project'}));
+      assert(spy.calledWithMatch({projectName: 'test'}));
       assert(spy.calledWithMatch({collectionName: 'movie'}));
       done();
     });

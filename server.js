@@ -29,7 +29,7 @@ elastic.init();
 var configHelper = require('./src/helpers/config')(nconf.get());
 var mappingHelper = require('./src/helpers/mapping');
 var collectionsNames = configHelper.collectionsNames();
-var dataService = require('./src/services/data');
+var dataService = Promise.promisifyAll(require('./src/services/data'));
 var searchService = require('./src/services/search');
 
 var client = require('redis').createClient()
@@ -57,6 +57,7 @@ router.get('/collections', function getCollections(req, res, next) {
   return Promise.map(collectionsNames, function(name) {
     return new Promise(function(resolve, reject) {
       searchService.search({
+        projectName: 'project',
         collectionName: name
       }, function afterSearch(error, result) {
         var mapping = mappingHelper.getMapping(name);
@@ -93,15 +94,27 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
      * create specific item
      */
     router.post('/' + name, function postItem(req, res, next) {
-      dataService.addDocument({
-        collectionName: name,
-        body: req.body
-      }, function afterSave(error, result) {
-        if (error) {
-          return next(error);
-        }
+      var processAsync;
+
+      if (_.isArray(req.body.body)) {
+        processAsync = dataService.addDocumentsAsync({
+          projectName: 'project',
+          collectionName: name,
+          body: req.body.body
+        });
+      } else {
+        processAsync = dataService.addDocumentAsync({
+          projectName: 'project',
+          collectionName: name,
+          body: req.body
+        });
+      }
+
+      return processAsync.then(function(result) {
         return res.json(result);
-      });
+      }).catch(function(result) {
+        return next(result);
+      })
     });
 
     /*
@@ -111,6 +124,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
       var id = req.params.id;
 
       dataService.getDocument({
+        projectName: 'project',
         collectionName: name,
         id: id
       }, function afterGet(error, result) {
@@ -123,12 +137,29 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     });
 
     /*
+     * clean items
+     */
+    router.delete('/' + name, function deleteItem(req, res, next) {
+      var id = req.params.id;
+
+      dataService.cleanDocumentsAsync({
+        projectName: 'project',
+        collectionName: name
+      }).then(function(result) {
+        return res.json({});
+      }).catch(function(result) {
+        return next(result);
+      })
+    });
+
+    /*
      * delete specific item
      */
     router.delete('/' + name + '/id/:id', function deleteItem(req, res, next) {
       var id = req.params.id;
 
       dataService.deleteDocument({
+        projectName: 'project',
         collectionName: name,
         id: id
       }, function afterDelete(error, result) {
@@ -146,6 +177,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
       var id = req.params.id;
 
       dataService.updateDocument({
+        projectName: 'project',
         collectionName: name,
         id: id,
         body: req.body
@@ -190,6 +222,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
 
       // @todo filtering params
       searchService.search({
+        projectName: 'project',
         collectionName: name,
         page: page,
         per_page: per_page,
@@ -241,6 +274,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     router.get('/' + name + '/autocomplete', function autocomplete(req, res, next) {
       // @todo filtering params
       searchService.suggest({
+        projectName: 'project',
         collectionName: name,
         query: req.query.query || ''
       }, function afterSuggest(error, result) {

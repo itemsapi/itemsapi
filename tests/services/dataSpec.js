@@ -11,7 +11,7 @@ setup.makeSuite('add data service', function() {
 
   beforeEach(function(done) {
     projectService.ensureCollection({
-      projectName: 'project',
+      projectName: 'test',
       collectionName: 'city'
     }, function(err, res) {
       assert.equal(err, null);
@@ -26,17 +26,17 @@ setup.makeSuite('add data service', function() {
     };
 
     var spy = sinon.spy(elasticData, 'addDocuments');
-    dataService.addDocuments({
-      projectName: 'project',
+    dataService.addDocumentsAsync({
+      projectName: 'test',
       collectionName: 'city',
       body: [doc, doc, doc, doc],
-    }, function(err, res) {
-      assert.equal(err, null);
+    })
+    .then(function(res) {
+      //assert.equal(err, null);
       assert.equal(res.items.length, 4);
       assert(spy.calledOnce);
-      assert(spy.calledWithMatch({index: 'project'}));
+      assert(spy.calledWithMatch({index: 'test'}));
       assert(spy.calledWithMatch({type: 'city'}));
-
       done();
     });
   });
@@ -49,13 +49,13 @@ setup.makeSuite('add data service', function() {
 
     var spy = sinon.spy(dataService, 'addDocuments');
     dataService.addAllDocuments({
-      projectName: 'project',
+      projectName: 'test',
       collectionName: 'city',
       body: [doc, doc],
     }, function(err, res) {
       assert.equal(err, null);
       assert(spy.calledOnce);
-      assert(spy.firstCall.calledWithMatch({projectName: 'project'}));
+      assert(spy.firstCall.calledWithMatch({projectName: 'test'}));
       assert(spy.firstCall.calledWithMatch({collectionName: 'city'}));
 
       dataService.addDocuments.restore();
@@ -70,7 +70,7 @@ setup.makeSuite('add data service', function() {
     };
 
     var data = {
-      projectName: 'project',
+      projectName: 'test',
       collectionName: 'city',
       batchSize: 4,
       body: [doc, doc, doc, doc, doc, doc, doc, doc, doc, doc],
@@ -80,25 +80,25 @@ setup.makeSuite('add data service', function() {
     dataService.addAllDocuments(data, function(err, res) {
       assert.equal(err, null);
       assert.equal(spy.callCount, 3);
-      assert(spy.firstCall.calledWithMatch({projectName: 'project'}));
+      assert(spy.firstCall.calledWithMatch({projectName: 'test'}));
       assert(spy.firstCall.calledWithMatch({collectionName: 'city'}));
       assert(spy.firstCall.calledWith(sinon.match({collectionName: 'city'})));
       dataService.addDocuments.restore();
       done();
-    });
+    })
   });
 
   it('should add document successfully', function(done) {
 
     var spy = sinon.spy(elasticData, 'addDocument');
-    dataService.addDocument({
-      projectName: 'project',
+    dataService.addDocumentAsync({
+      projectName: 'test',
       collectionName: 'city',
       body: {rating: 5, name: 'Berlin', id: 5},
-    }, function(err, res) {
-      assert.equal(err, null);
+    }).then(function(res) {
+      //assert.equal(err, null);
       assert.equal(spy.callCount, 1);
-      assert(spy.firstCall.calledWithMatch({index: 'project'}));
+      assert(spy.firstCall.calledWithMatch({index: 'test'}));
       assert(spy.firstCall.calledWithMatch({type: 'city'}));
       assert(spy.firstCall.calledWithMatch({id: 5}));
       assert(spy.firstCall.calledWith(sinon.match({type: 'city'})));
@@ -111,13 +111,13 @@ setup.makeSuite('add data service', function() {
 
     var spy = sinon.spy(elasticData, 'getDocument');
     dataService.getDocument({
-      projectName: 'project',
+      projectName: 'test',
       collectionName: 'city',
       id: 5
     }, function(err, res) {
       assert.equal(err, null);
       assert.equal(spy.callCount, 1);
-      assert(spy.firstCall.calledWithMatch({index: 'project'}));
+      assert(spy.firstCall.calledWithMatch({index: 'test'}));
       assert(spy.firstCall.calledWithMatch({type: 'city'}));
       assert(spy.firstCall.calledWithMatch({id: 5}));
       elasticData.getDocument.restore();

@@ -9,7 +9,7 @@ setup.makeSuite('project service', function() {
 
   it('should create project successfully', function(done) {
     projectService.addProject({
-      projectName: 'project'
+      projectName: 'test'
     }, function(err, res) {
       should.not.exist(err);
       done();
@@ -18,7 +18,7 @@ setup.makeSuite('project service', function() {
 
   it('should create collection with configuration', function(done) {
     var data = {
-      projectName: 'project',
+      projectName: 'test',
       collectionName: 'city'
     }
 
@@ -30,7 +30,7 @@ setup.makeSuite('project service', function() {
 
   it('should create collection with configuration once again', function(done) {
     var data = {
-      projectName: 'project',
+      projectName: 'test',
       collectionName: 'city'
     }
 

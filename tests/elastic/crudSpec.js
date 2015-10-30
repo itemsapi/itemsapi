@@ -16,7 +16,7 @@ setup.makeSuite('elastic crud', function() {
 
   it('should add document to elastic successfully', function(done) {
     var data = {
-      index: 'project',
+      index: 'test',
       type: 'country',
       id: 100,
       body: {
@@ -38,8 +38,8 @@ setup.makeSuite('elastic crud', function() {
 
   it('should find document', function(done) {
     dataModel.getDocument({
-      index: 'project', 
-      type: 'country', 
+      index: 'test',
+      type: 'country',
       id: '100'
     }, function(err, res) {
       should.not.exist(err);
@@ -51,15 +51,15 @@ setup.makeSuite('elastic crud', function() {
 
   it('should partially update document', function(done) {
     dataModel.updateDocument({
-      index: 'project', 
-      type: 'country', 
+      index: 'test',
+      type: 'country',
       id: '100',
       body: {rating: 4}
     }, function(err, res) {
       should.not.exist(err);
       res.should.have.property('_id', '100');
       res.should.have.property('_type', 'country');
-      res.should.have.property('_index', 'project');
+      res.should.have.property('_index', 'test');
       res.should.have.property('_version', 2);
       done();
     });
@@ -67,8 +67,8 @@ setup.makeSuite('elastic crud', function() {
 
   it('should find updated document', function(done) {
     dataModel.getDocument({
-      index: 'project', 
-      type: 'country', 
+      index: 'test',
+      type: 'country',
       id: '100'
     }, function(err, res) {
       should.not.exist(err);
@@ -83,8 +83,8 @@ setup.makeSuite('elastic crud', function() {
 
   it('should delete document', function(done) {
     dataModel.deleteDocument({
-      index: 'project', 
-      type: 'country', 
+      index: 'test',
+      type: 'country',
       id: '100'
     }, function(err, res) {
       should.not.exist(err);
@@ -97,8 +97,8 @@ setup.makeSuite('elastic crud', function() {
 
   it('should not find updated document after delete', function(done) {
     dataModel.getDocument({
-      index: 'project', 
-      type: 'country', 
+      index: 'test',
+      type: 'country',
       id: '100'
     }, function(err, res) {
       should.exist(err);

@@ -41,11 +41,9 @@ describe('conf tool', function addSuite() {
     metadata.should.have.property('table');
     metadata.table.should.have.property('fields');
     var fields = metadata.table.fields;
-    fields.should.have.property('image');
-    fields.image.should.have.property('type', 'string');
-    //names.should.be.instanceof(Array).and.have.lengthOf(2);
-    //names.should.be.instanceof(Array).and.have.lengthOf(2);
-    //should.deepEqual(names, ['song', 'movie'])
+    //console.log(fields);
+    fields.should.have.property('name');
+    //fields.name.should.have.property('type', 'string');
     done();
   });
 });

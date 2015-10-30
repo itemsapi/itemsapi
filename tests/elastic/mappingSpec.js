@@ -23,7 +23,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should not exists', function(done) {
       model.existsIndex({
-        index: 'project'
+        index: 'test'
       }, function(err, res) {
         should.not.exist(err, null);
         should.equal(false, res);
@@ -33,7 +33,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should create index in elastic successfully', function(done) {
       model.addIndex({
-        index: 'project'
+        index: 'test'
       }, function(err, res) {
         assert.equal(err, null);
         done();
@@ -42,7 +42,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should exists', function(done) {
       model.existsIndex({
-        index: 'project'
+        index: 'test'
       }, function(err, res) {
         should.not.exist(err, null);
         should.equal(true, res);
@@ -52,7 +52,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should delete index in elastic successfully', function(done) {
       model.deleteIndex({
-        index: 'project'
+        index: 'test'
       }, function(err, res) {
         should.not.exist(err, null);
         res.should.have.property('acknowledged', true);
@@ -62,7 +62,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should not exists', function(done) {
       model.existsIndex({
-        index: 'project'
+        index: 'test'
       }, function(err, res) {
         should.not.exist(err, null);
         should.equal(false, res);
@@ -72,7 +72,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should create index in elastic successfully', function(done) {
       model.addIndex({
-        index: 'project'
+        index: 'test'
       }, function(err, res) {
         assert.equal(err, null);
         done();
@@ -94,7 +94,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should create mapping in elastic successfully', function(done) {
       var mapping = {
-        index: 'project',
+        index: 'test',
         type: 'city',
         body: {
           properties: {
@@ -118,7 +118,7 @@ setup.makeSuite('elastic mapping', function() {
   describe('get data', function() {
     it('should get elastic mapping successfully', function(done) {
       model.getMappingForType({
-        index: 'project',
+        index: 'test',
         type: 'city'
       }, function(err, res) {
         assert.equal(err, null);
@@ -131,7 +131,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should validate get mapping', function(done) {
       model.getMappingForType({
-        index: 'project',
+        index: 'test',
         type: 'cityy'
       }, function(err, res) {
         should(err).be.ok;
@@ -141,7 +141,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should update mapping in elastic successfully', function(done) {
       model.addMapping({
-        index: 'project',
+        index: 'test',
         type: 'city',
         body: {
           properties: {
@@ -158,7 +158,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should get updated elastic mapping successfully', function(done) {
       model.getMappingForType({
-        index: 'project',
+        index: 'test',
         type: 'city'
       }, function(err, res) {
         assert.equal(err, null);
@@ -171,7 +171,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should delete mapping successfully', function(done) {
       model.deleteMapping({
-        index: 'project',
+        index: 'test',
         type: 'city'
       }, function(err, res) {
         should.not.exist(err);
@@ -182,7 +182,7 @@ setup.makeSuite('elastic mapping', function() {
 
     it('should not find mapping', function(done) {
       model.getMappingForType({
-        index: 'project',
+        index: 'test',
         type: 'city'
       }, function(err, res) {
         should.exist(err);

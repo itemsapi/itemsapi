@@ -11,7 +11,7 @@ setup.makeSuite('elastic data', function() {
 
   before(function(done) {
     var data = {
-      projectName: 'project',
+      projectName: 'test',
       tableName: 'country',
       properties: {
         name: {type: "string", store: true },
@@ -42,7 +42,7 @@ setup.makeSuite('elastic data', function() {
     it('should add document to elastic successfully', function(done) {
 
       dataModel.addDocument({
-        index: 'project',
+        index: 'test',
         type: 'country',
         id: 1000,
         body: {
@@ -57,8 +57,8 @@ setup.makeSuite('elastic data', function() {
         res.should.have.property('_id', '1000');
         should.exist(res._index);
         dataModel.getDocument({
-          type: res._type, 
-          index: res._index, 
+          type: res._type,
+          index: res._index,
           id: res._id
         }, function(err, res) {
           assert.equal(err, null);
@@ -83,7 +83,7 @@ setup.makeSuite('elastic data', function() {
       }];
 
       var data = {
-        index: 'project',
+        index: 'test',
         type: 'country',
         body: docs
       };

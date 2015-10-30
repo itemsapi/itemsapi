@@ -10,7 +10,7 @@ setup.makeSuite('item crud request', function() {
 
   before(function(done) {
     projectService.ensureCollection({
-      projectName: 'project',
+      projectName: 'test',
       collectionName: 'movie'
     }, function(err, res) {
       assert.equal(err, null);
