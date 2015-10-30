@@ -290,6 +290,35 @@
         "fields": ["name", "receiver", "voivodeship", "region", "investment", "value", "percent", "start", "end"]
       }
     },
+    "lyrics": {
+      "schema": {
+        "title": {"type": "string", "store": true, "index": "not_analyzed" },
+        "visits": {"type": "integer", "store": true },
+        "likes": {"type": "integer", "store": true },
+        "yt_id": {"type": "string", "store": true }
+      },
+      "defaults": {
+      },
+      "aggregations": {
+      },
+      "sortings": {
+        "most_likes": {
+          "title": "Most likes",
+          "type": "normal",
+          "order": "desc",
+          "field": "likes"
+        },
+        "most_visits": {
+          "title": "Most visits",
+          "type": "normal",
+          "order": "desc",
+          "field": "visits"
+        }
+      },
+      "table": {
+        "fields": ["title", "visits", "likes", "yt_id"]
+      }
+    },
     "npm": {
       "schema": {
         "name": {"type": "string", "store": true, "index": "not_analyzed" },
