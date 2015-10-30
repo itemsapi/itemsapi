@@ -33,7 +33,8 @@ setup.makeSuite('add data service', function() {
     })
     .then(function(res) {
       //assert.equal(err, null);
-      assert.equal(res.items.length, 4);
+      //assert.equal(res.items.length, 4);
+      assert.equal(res.ids.length, 4);
       assert(spy.calledOnce);
       assert(spy.calledWithMatch({index: 'test'}));
       assert(spy.calledWithMatch({type: 'city'}));
