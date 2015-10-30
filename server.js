@@ -19,7 +19,9 @@ app.locals.environment = process.env.NODE_ENV || 'development'; // set env var
 app.disable('etag');
 app.disable('x-powered-by');
 app.use(gzip({treshold: 512}));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  limit: '4mb'
+}));
 app.use(cors());
 app.use('/api/item', router);
 
@@ -96,11 +98,11 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     router.post('/' + name, function postItem(req, res, next) {
       var processAsync;
 
-      if (_.isArray(req.body.body)) {
+      if (_.isArray(req.body)) {
         processAsync = dataService.addDocumentsAsync({
           projectName: 'project',
           collectionName: name,
-          body: req.body.body
+          body: req.body
         });
       } else {
         processAsync = dataService.addDocumentAsync({

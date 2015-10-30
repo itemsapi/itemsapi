@@ -45,9 +45,7 @@ setup.makeSuite('creating items', function addSuite() {
   it('should be able to post many movies', function test(done) {
     request(setup.getServer())
       .post('/api/item/movie')
-      .send({
-        body: [{name: 'god father 1'}, {name: 'god father 2'}]
-      })
+      .send([{name: 'god father 1'}, {name: 'god father 2'}])
       .end(function afterRequest(err, res) {
         res.body.ids.should.be.lengthOf(2);
         should.exists(res.body.project);
