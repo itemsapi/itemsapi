@@ -2,10 +2,11 @@ var	assert = require('assert');
 var winston = require('winston');
 var should = require('should');
 var setup = require('./../mocks/setup');
+var Promise = require('bluebird');
 
 setup.makeSuite('elastic mapping', function() {
 
-  var model = require('./../../src/elastic/mapping');
+  var model = Promise.promisifyAll(require('./../../src/elastic/mapping'));
 
   before(function(done) {
     done();
@@ -169,15 +170,46 @@ setup.makeSuite('elastic mapping', function() {
       });
     });
 
-    it('should delete mapping successfully', function(done) {
-      model.deleteMapping({
+    it('should check if mapping exists successfully', function(done) {
+      model.existsMappingAsync({
         index: 'test',
         type: 'city'
-      }, function(err, res) {
-        should.not.exist(err);
+      }).then(function (res) {
+        should.equal(res, true);
+        done();
+      })
+    });
+
+    it('should delete mapping successfully', function(done) {
+      model.deleteMappingAsync({
+        index: 'test',
+        type: 'city',
+        masterTimeout: 1
+      }).then(function (res) {
         res.should.have.property('acknowledged', true);
         done();
-      });
+      })
+    });
+
+    it('should check if mapping exists successfully', function(done) {
+      model.existsMappingAsync({
+        index: 'test',
+        type: 'city'
+      }).then(function (res) {
+        should.equal(res, false);
+        done();
+      })
+    });
+
+    it('should delete mapping successfully twice', function(done) {
+      model.deleteMappingAsync({
+        index: 'test',
+        type: 'city'
+      }).then(function (res) {
+        res.should.have.property('acknowledged', true);
+        res.should.have.property('notExisted', true);
+        done();
+      })
     });
 
     it('should not find mapping', function(done) {

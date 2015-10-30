@@ -292,7 +292,8 @@
     },
     "lyrics": {
       "schema": {
-        "title": {"type": "string", "store": true, "index": "not_analyzed" },
+        "artist": {"type": "string", "store": true, "index": "not_analyzed" },
+        "song": {"type": "string", "store": true, "index": "not_analyzed" },
         "visits": {"type": "integer", "store": true },
         "likes": {"type": "integer", "store": true },
         "yt_id": {"type": "string", "store": true }
@@ -300,6 +301,7 @@
       "defaults": {
       },
       "aggregations": {
+        "artist_terms": {"type": "terms", "field": "artist", "size": 20, "title": "Artists"}
       },
       "sortings": {
         "most_likes": {
@@ -316,7 +318,7 @@
         }
       },
       "table": {
-        "fields": ["title", "visits", "likes", "yt_id"]
+        "fields": ["artist", "song", "visits", "likes", "yt_id"]
       }
     },
     "npm": {

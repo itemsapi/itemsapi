@@ -44,6 +44,24 @@ var configHelper = require('./../helpers/config')(nconf.get());
   /**
    * add collection (type)
    */
+  module.addMapping = function(data, callback) {
+    elastic.addMapping({
+      index: data.projectName,
+      type: data.collectionName,
+      body: {
+        properties: configHelper.getSchema(data.collectionName)
+      }
+    }, function(err, res, status) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res)
+    })
+  },
+
+  /**
+   * add collection (type)
+   */
   module.addCollection = function(data, callback) {
     elastic.addMapping({
       index: data.projectName,
@@ -60,7 +78,7 @@ var configHelper = require('./../helpers/config')(nconf.get());
   },
 
   /**
-   * ensure collection exists 
+   * ensure collection exists
    */
   module.ensureCollection = function(data, callback) {
     this.ensureProject(data, function(err, res) {

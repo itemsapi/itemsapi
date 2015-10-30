@@ -32,6 +32,8 @@ var configHelper = require('./src/helpers/config')(nconf.get());
 var mappingHelper = require('./src/helpers/mapping');
 var collectionsNames = configHelper.collectionsNames();
 var dataService = Promise.promisifyAll(require('./src/services/data'));
+var projectService = Promise.promisifyAll(require('./src/services/project'));
+var elasticMapping = Promise.promisifyAll(require('./src/elastic/mapping'));
 var searchService = require('./src/services/search');
 
 var client = require('redis').createClient()
@@ -141,9 +143,28 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     /*
      * clean items
      */
-    router.delete('/' + name, function deleteItem(req, res, next) {
-      var id = req.params.id;
+    router.put('/' + name + '/recreate-mapping', function deleteItem(req, res, next) {
+      elasticMapping.deleteMappingAsync({
+        index: 'project',
+        type: name
+      })
+      .then(function(result) {
+        return projectService.addMappingAsync({
+          projectName: 'project',
+          collectionName: name
+        })
+      })
+      .then(function(result) {
+        return res.json({});
+      }).catch(function(result) {
+        return next(result);
+      })
+    });
 
+    /*
+     * clean items
+     */
+    router.delete('/' + name, function deleteItem(req, res, next) {
       dataService.cleanDocumentsAsync({
         projectName: 'project',
         collectionName: name

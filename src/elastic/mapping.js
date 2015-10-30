@@ -3,16 +3,18 @@
 var request = require('request');
 var winston = require('winston');
 var nconf = require('nconf');
-var elastic = require('../connections/elastic').getElastic();
+var Promise = require('bluebird');
+var elastic = Promise.promisifyAll(require('../connections/elastic').getElastic());
+var indices = Promise.promisifyAll(require('../connections/elastic').getElastic().indices);
 var _ = require('lodash');
 var validate = require('validate.js');
 
-module.exports = {
+(function(module) {
 
   /**
    * validation for adding index
    */
-  addIndexValidate: function(data) {
+  module.addIndexValidate = function(data) {
     var constraints = {
       index: {presence: true},
     };
@@ -22,7 +24,7 @@ module.exports = {
   /**
    * add index (project)
    */
-  addIndex: function(data, callback) {
+  module.addIndex = function(data, callback) {
     var v = this.addIndexValidate(data);
     if (v) {
       return callback(v);
@@ -40,7 +42,7 @@ module.exports = {
   /**
    * check index exists
    */
-  existsIndex: function(data, callback) {
+  module.existsIndex = function(data, callback) {
     elastic.indices.exists(data, function(err, res) {
       if (err) {
         winston.error(err);
@@ -53,7 +55,7 @@ module.exports = {
   /**
    * delete index exists
    */
-  deleteIndex: function(data, callback) {
+  module.deleteIndex = function(data, callback) {
     elastic.indices.delete(data, function(err, res) {
       if (err) {
         winston.error(err);
@@ -66,7 +68,7 @@ module.exports = {
   /**
    * validation for adding mapping (collection schema)
    */
-  addMappingValidate: function(data) {
+  module.addMappingValidate = function(data) {
     var constraints = {
       index: {presence: true},
       type: {presence: true},
@@ -78,7 +80,7 @@ module.exports = {
   /**
    * add mapping
    */
-  addMapping: function(data, callback) {
+  module.addMapping = function(data, callback) {
     var v = this.addMappingValidate(data);
     if (v) {
       return callback(v);
@@ -94,22 +96,39 @@ module.exports = {
   },
 
   /**
+   * check mapping
+   */
+  module.existsMappingAsync = function(data, callback) {
+    return indices.existsType(data)
+    .then(function (res) {
+      return res;
+    })
+  },
+
+  /**
    * delete mapping
    */
-  deleteMapping: function(data, callback) {
-    elastic.indices.deleteMapping(data, function(err, res, status) {
-      if (err) {
-        winston.error(err);
-        return callback(err);
+  module.deleteMappingAsync = function(data, callback) {
+    return module.existsMappingAsync(data)
+    .then(function (res) {
+      if (!res) {
+        return {
+          notExisted: true,
+          acknowledged: true
+        }
       }
-      callback(null, res)
+
+      return indices.deleteMappingAsync(data)
+      .then(function (res) {
+        return res[0];
+      })
     })
   },
 
   /**
    * get mapping for type
    */
-  getMappingForType: function(data, callback) {
+  module.getMappingForType = function(data, callback) {
 
     elastic.indices.getMapping(data, function(err, res, status) {
       if (err) {
@@ -123,4 +142,4 @@ module.exports = {
       callback(null, res[data.index].mappings[data.type].properties);
     })
   }
-}
+}(exports));
