@@ -256,6 +256,8 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
         page = 10;
       }
 
+      var time = Date.now();
+
       // @todo filtering params
       searchService.search({
         projectName: 'project',
@@ -270,6 +272,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
         if (error) {
           return next(error);
         }
+        result.meta.time = Date.now() - time;
         return res.json(result);
       });
     });
