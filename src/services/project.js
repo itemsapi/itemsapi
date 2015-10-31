@@ -4,7 +4,11 @@ var request = require('request');
 var winston = require('winston');
 var nconf = require('nconf');
 var elastic = require('../elastic/mapping');
+var elasticData = require('../elastic/data');
 var configHelper = require('./../helpers/config')(nconf.get());
+var Promise = require('bluebird');
+var searchService = Promise.promisifyAll(require('./search'));
+var mappingHelper = require('./../helpers/mapping');
 
 (function(module) {
 
@@ -56,6 +60,34 @@ var configHelper = require('./../helpers/config')(nconf.get());
         return callback(err);
       }
       callback(null, res)
+    })
+  },
+
+  /**
+   * collection info
+   */
+  module.collectionInfoAsync = function(data) {
+    var name = data.collectionName;
+    var result;
+
+    return elasticData.countDocumentsAsync({
+      index: data.projectName,
+      type: data.collectionName
+    })
+    .then(function(res) {
+      var mapping = mappingHelper.getMapping(name);
+      var display_name = name;
+      if (mapping.meta && mapping.meta.title) {
+        display_name = mapping.meta.title;
+      }
+      return {
+        name: name,
+        display_name: display_name,
+        count: res
+      };
+    })
+    .catch(function(res) {
+      throw new Error('An error occured');
     })
   },
 

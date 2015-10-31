@@ -24,14 +24,6 @@ var _ = require('underscore');
       .size(per_page)
       .from(offset);
 
-    /*var scriptField = ejs.ScriptField('distance').script("doc[\u0027geo\u0027].arcDistanceInKm(lat,lon)");
-    scriptField.params({
-      lat: 50.0646500,
-      lon: 19.9449800
-    }).lang('groovy');
-    body.scriptField(scriptField);
-    body.fields('_source');*/
-
     var sortOptions = mappingHelper.getSortings(data.collectionName)[data.sort];
     var mappingDefaults = mappingHelper.getDefaults(data.collectionName);
     var defaultSort = mappingHelper.getSortings(data.collectionName)[mappingDefaults.sort];
@@ -94,10 +86,23 @@ var _ = require('underscore');
       if (value.type === 'terms') {
         aggregation = ejs.TermsAggregation(key)
           .field(value.field)
-          .size(value.size);
+          .size(value.size)
+          //.order('visits_stats', 'desc')
 
-        if (value.field === 'tags') {
-          //aggregation.include('drama');
+        //var stats_aggregation = ejs.StatsAggregation('visits_stats')
+          //.field('visits');
+
+        //console.log(stats_aggregation.toJSON());
+        //aggregation.aggregation(stats_aggregation);
+
+        if (value.order) {
+          var avg_aggregation = ejs.AvgAggregation('visits_avg')
+          .field('visits');
+
+          console.log(avg_aggregation.toJSON());
+
+          aggregation.aggregation(avg_aggregation);
+          aggregation.order('visits_avg', 'desc');
         }
 
         if (value.exclude) {
