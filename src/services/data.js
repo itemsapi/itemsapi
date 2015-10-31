@@ -145,7 +145,6 @@ var _ = require('lodash');
       function (callback) {
 
         var removed = documents.splice(0, batchSize);
-
         module.addDocuments({
           projectName: projectName,
           collectionName: collectionName,
@@ -159,6 +158,9 @@ var _ = require('lodash');
         length -= removed.length;
       },
       function (err, res) {
+        if (err) {
+          console.log(err);
+        }
         callback(null, limit + ' documents added');
       }
     );

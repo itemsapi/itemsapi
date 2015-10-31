@@ -97,6 +97,7 @@ var validate = require('validate.js');
 
   /**
    * check mapping
+   * @return true | false
    */
   module.existsMappingAsync = function(data, callback) {
     return indices.existsType(data)
@@ -104,6 +105,12 @@ var validate = require('validate.js');
       return res;
     })
   },
+
+  /**
+   * check type
+   * @return true | false
+   */
+  module.existsTypeAsync = module.existsMappingAsync,
 
   /**
    * delete mapping

@@ -19,6 +19,10 @@
         "title": "Movies",
         "created": "spring 2015"
       },
+      "visibility": "public",
+      "privileges": {
+        "read", "edit", "delete"
+      },
       "defaults": {
         "sort": "most_votes"
       },
@@ -301,7 +305,8 @@
       "defaults": {
       },
       "aggregations": {
-        "artist_terms": {"type": "terms", "field": "artist", "size": 20, "title": "Artists"}
+        "artist_terms": {"type": "terms", "field": "artist", "size": 10, "title": "Artists (popularity)", "order": true},
+        "artist_terms2": {"type": "terms", "field": "artist", "size": 10, "title": "Artists"}
       },
       "sortings": {
         "most_likes": {

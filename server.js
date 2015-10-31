@@ -34,7 +34,8 @@ var collectionsNames = configHelper.collectionsNames();
 var dataService = Promise.promisifyAll(require('./src/services/data'));
 var projectService = Promise.promisifyAll(require('./src/services/project'));
 var elasticMapping = Promise.promisifyAll(require('./src/elastic/mapping'));
-var searchService = require('./src/services/search');
+var searchService = Promise.promisifyAll(require('./src/services/search'));
+var statsService = Promise.promisifyAll(require('./src/services/stats'));
 
 var client = require('redis').createClient()
 var limiter = require('express-limiter')(router, client)
@@ -59,18 +60,19 @@ limiter({
 router.get('/collections', function getCollections(req, res, next) {
   var current = Promise.resolve();
   return Promise.map(collectionsNames, function(name) {
-    return new Promise(function(resolve, reject) {
-      searchService.search({
-        projectName: 'project',
-        collectionName: name
-      }, function afterSearch(error, result) {
-        var mapping = mappingHelper.getMapping(name);
-        var display_name = name;
-        if (mapping.meta && mapping.meta.title) {
-          display_name = mapping.meta.title;
-        }
-        return resolve({name: name, display_name: display_name, count: result.pagination.total});
+    return projectService.collectionInfoAsync({
+      projectName: 'project',
+      collectionName: name
+    }).then(function(result) {
+      return _.extend(result, {
+        author: 'itemsapi'
       });
+    }).catch(function(result) {
+      return null;
+    })
+  }).then(function(result) {
+    return _.filter(result, function(val) {
+      return val !== null && val.count > 0;
     })
   }).then(function(result){
     return res.json({
@@ -78,14 +80,25 @@ router.get('/collections', function getCollections(req, res, next) {
       pagination: {
         page: 1,
         per_page: 10,
-        total: collectionsNames.length
+        total: result.length
       },
       data: {
         items: result
       }
     });
   });
+});
 
+/*
+ * get stats
+ */
+router.get('/stats', function getStats(req, res, next) {
+  statsService.statsAsync({
+    projectName: 'project'
+  })
+  .then(function(result) {
+    return res.json(result);
+  })
 });
 
 for (var i = 0 ; i < collectionsNames.length ; ++i) {

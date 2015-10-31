@@ -75,7 +75,6 @@ var validate = require('validate.js');
       body.push(data.body[i]);
     }
 
-
     elastic.bulk({
       index: data.index,
       type: data.type,
@@ -121,6 +120,19 @@ var validate = require('validate.js');
         return callback(err);
       }
       callback(null, res);
+    });
+  }
+
+  /**
+   * count documents
+   * @param {Obj} data document
+   */
+  module.countDocumentsAsync = function(data, callback) {
+    return elastic.countAsync({
+      index: data.index,
+      type: data.type,
+    }).then(function(res) {
+      return res[0].count;
     });
   }
 

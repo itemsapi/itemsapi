@@ -38,9 +38,7 @@ setup.makeSuite('elastic data', function() {
   });
 
   describe('add data', function() {
-
     it('should add document to elastic successfully', function(done) {
-
       dataModel.addDocument({
         index: 'test',
         type: 'country',
@@ -67,10 +65,10 @@ setup.makeSuite('elastic data', function() {
         });
       });
     });
+
   });
 
   describe('add multiple data', function() {
-
     it('should add multiple document to elastic successfully', function(done) {
       var docs = [{
         data: {
@@ -94,6 +92,19 @@ setup.makeSuite('elastic data', function() {
         res.should.have.property('errors', false);
         done();
       });
+    });
+
+    it('should count documents', function(done) {
+      dataModel.countDocumentsAsync({
+        index: 'test',
+        type: 'country',
+      })
+      .then(function(res) {
+        //console.log(res);
+        should.exists(res);
+        //should.equal(res, 3);
+        done();
+      })
     });
   });
 });
