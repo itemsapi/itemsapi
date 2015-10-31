@@ -70,21 +70,6 @@ var mappingHelper = require('./../helpers/mapping');
     var name = data.collectionName;
     var result;
 
-    /*return elastic.existsMappingAsync({
-      index: data.projectName,
-      type: data.collectionName
-    })
-    .then(function (res) {
-      if (!res) {
-        throw new Error('Collection not exists')
-      }
-    });*/
-
-    /*return searchService.searchAsync({
-      projectName: data.projectName,
-      collectionName: name
-    })*/
-
     return elasticData.countDocumentsAsync({
       index: data.projectName,
       type: data.collectionName
