@@ -37,6 +37,30 @@
         "rating": {"type": "float", "store": true }
       },
       "sortings": {
+        "rating": {
+          "title": "Best rating",
+          "type": "normal",
+          "order": "desc",
+          "field": "rating"
+        },
+        "most_votes": {
+          "title": "Most votes",
+          "type": "normal",
+          "order": "desc",
+          "field": "votes"
+        },
+        "year_newest": {
+          "title": "Newest movies",
+          "type": "normal",
+          "order": "desc",
+          "field": "year"
+        },
+        "year_oldest": {
+          "title": "Oldest movies",
+          "type": "normal",
+          "order": "asc",
+          "field": "year"
+        }
       },
       "aggregations": {
         "actors_terms": {"type": "terms", "field": "actors", "size": 10, "title": "Actors"},
@@ -72,14 +96,6 @@
       },
       "table": {
         "fields": ["image", "name", "director", "rating", "year", "votes", "tags", "actors"]
-      },
-      "sorting": {
-        "popularity": {
-          "title": "Popularity"
-        },
-        "relevance": {
-          "title": "Relevance"
-        }
       }
     },
     "song": {
