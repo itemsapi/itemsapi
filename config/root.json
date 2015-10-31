@@ -271,6 +271,7 @@
       },
       "defaults": {
       },
+      "visibility": "private",
       "aggregations": {
         "voivodeship_terms": {"type": "terms", "field": "voivodeship", "size": 15, "title": "Voivodeships"},
         "region_terms": {"type": "terms", "field": "region", "size": 15, "title": "Regions"},
@@ -295,6 +296,9 @@
       }
     },
     "lyrics": {
+      "meta": {
+        "title": "Lyrics"
+      },
       "schema": {
         "artist": {"type": "string", "store": true, "index": "not_analyzed" },
         "song": {"type": "string", "store": true, "index": "not_analyzed" },
@@ -327,6 +331,9 @@
       }
     },
     "npm": {
+      "meta": {
+        "title": "NPM (javascript)"
+      },
       "schema": {
         "name": {"type": "string", "store": true, "index": "not_analyzed" },
         "short_description": {"type": "string", "store": true, "index": "not_analyzed" },
@@ -367,6 +374,7 @@
         "overviews_count": {"type": "integer", "store": true },
         "image": {"type": "string", "display": "image" }
       },
+      "visiblity": "private",
       "defaults": {
       },
       "aggregations": {

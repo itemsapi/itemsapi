@@ -72,7 +72,7 @@ router.get('/collections', function getCollections(req, res, next) {
     })
   }).then(function(result) {
     return _.filter(result, function(val) {
-      return val !== null && val.count > 0;
+      return val !== null && val.count > 0 && val.visibility !== 'private';
     })
   }).then(function(result){
     return res.json({

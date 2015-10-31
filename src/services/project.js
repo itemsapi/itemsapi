@@ -82,6 +82,7 @@ var mappingHelper = require('./../helpers/mapping');
       }
       return {
         name: name,
+        visibility: mapping.visibility,
         display_name: display_name,
         count: res
       };
