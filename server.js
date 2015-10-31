@@ -156,7 +156,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
     /*
      * clean items
      */
-    router.put('/' + name + '/recreate-mapping', function deleteItem(req, res, next) {
+    router.put('/' + name + '/recreate-mapping', function recreateMapping(req, res, next) {
       elasticMapping.deleteMappingAsync({
         index: 'project',
         type: name
@@ -272,7 +272,7 @@ for (var i = 0 ; i < collectionsNames.length ; ++i) {
         if (error) {
           return next(error);
         }
-        result.meta.time = Date.now() - time;
+        result.meta.search_time = Date.now() - time;
         return res.json(result);
       });
     });

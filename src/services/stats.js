@@ -6,8 +6,10 @@ var nconf = require('nconf');
 var elastic = require('../elastic/mapping');
 var elasticData = require('../elastic/data');
 var Promise = require('bluebird');
+var configHelper = require('./../helpers/config')(nconf.get());
 
 (function(module) {
+
 
   /**
    * get stats
@@ -20,7 +22,7 @@ var Promise = require('bluebird');
     .then(function(res) {
       return {
         'documents_count': res,
-        'collections_count': 0
+        'collections_count': configHelper.collectionsNames().length
       };
     })
   }
