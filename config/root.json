@@ -20,9 +20,9 @@
         "created": "spring 2015"
       },
       "visibility": "public",
-      "privileges": {
+      "privileges": [
         "read", "edit", "delete"
-      },
+      ],
       "defaults": {
         "sort": "most_votes"
       },
