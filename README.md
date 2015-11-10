@@ -48,6 +48,9 @@ You can import huge json collection within one command. i.e.
 ## Long term plans
 - people who like this also like (elasticsearch or neo4j) 
 
+## Questions
+- feel free to ask questions https://itemsapi.slack.com and share ideas
+
 ## Contributions
 If you have idea how to make this ItemsAPI better, feel free to join!
 
