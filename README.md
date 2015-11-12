@@ -31,7 +31,7 @@ You can import huge json collection within one command. i.e.
 `node cli.js --import --collection=movie --file ./data/documents.json`
 
 ## Demo
-- http://app.itemsapi.com/ - there are many different collections i.e. movies, quotes, libraries, etc
+- go to see <a href="http://app.itemsapi.com/" target="_blank">many different collections i.e. movies, quotes, libraries, etc</a> 
 
 ## ROADMAP
 - in progress..
