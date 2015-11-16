@@ -1,6 +1,12 @@
 {
   "elasticsearch": {
-    "url": "localhost:9200"
+    "host": "localhost:9200",
+    "log": "error"
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "auth_pass": null
   },
   "server": {
     "host": "http://127.0.0.1",

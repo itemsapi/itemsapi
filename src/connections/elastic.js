@@ -7,21 +7,11 @@
   var nconf = require('nconf');
   var client;
 
-  module.init = function() {
+  module.init = function(conf) {
     try {
-      var log = [{
-        type: 'stdio',
-        level: 'debug'
-      }, {
-        type: 'tracer',
-        level: 'debug'
-      }];
-
-      log = [];
-
       client = new elasticsearch.Client({
-        host: nconf.get().elasticsearch.url,
-        log: log
+        host: conf.host || "localhost:9200",
+        log: conf.log
       });
     } catch (err) {
       winston.error('Unable to initialize elasticsearch! Error :' + err.message);
