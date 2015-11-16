@@ -88,6 +88,7 @@ var mappingHelper = require('./../helpers/mapping');
       };
     })
     .catch(function(res) {
+      console.log(res);
       throw new Error('An error occured');
     })
   },

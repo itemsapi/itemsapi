@@ -15,6 +15,7 @@
   },
   "collections": {
     "movie": {
+      "project": "itemsapi",
       "meta": {
         "title": "Movies",
         "created": "spring 2015"

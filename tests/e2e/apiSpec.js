@@ -42,6 +42,7 @@ setup.makeSuite('creating items', function addSuite() {
       });
   });
 
+  // temporary turned off
   it('should be able to post many movies', function test(done) {
     request(setup.getServer())
       .post('/api/item/movie')
