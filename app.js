@@ -7,14 +7,13 @@ var server = null;
 var winston = require('winston');
 
 
-if (fs.existsSync(configFile) === false) {
-  throw Error('Couldnt find ' + configFile);
+nconf.use('memory');
+
+if (fs.existsSync(configFile) !== false) {
+  nconf.file('overrides', {file: configFile})
 }
 
-nconf.use('memory');
-nconf
-  .file('overrides', {file: configFile})
-  .file('defaults', {file: './config/root.json'});
+nconf.file('defaults', {file: './config/root.json'});
 
 winston.loggers.add('query', {
   console: {

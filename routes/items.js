@@ -46,16 +46,14 @@ module.exports = function(router) {
     var id = req.params.id;
     var name = req.params.name;
 
-    dataService.getDocument({
+    dataService.getDocumentAsync({
       projectName: 'project',
       collectionName: name,
       id: id
-    }, function afterGet(error, result) {
-      if (error) {
-        //return res.status(httpNotFound).json(error);
-        return next(error);
-      }
+    }).then(function(result) {
       return res.json(result);
+    }).catch(function(result) {
+      return next(result);
     });
   });
 
@@ -105,15 +103,14 @@ module.exports = function(router) {
     var id = req.params.id;
     var name = req.params.name;
 
-    dataService.deleteDocument({
+    dataService.deleteDocumentAsync({
       projectName: 'project',
       collectionName: name,
       id: id
-    }, function afterDelete(error, result) {
-      if (error) {
-        return next(error);
-      }
+    }).then(function(result) {
       return res.json(result);
+    }).catch(function(result) {
+      return next(result);
     });
   });
 
@@ -124,16 +121,15 @@ module.exports = function(router) {
     var id = req.params.id;
     var name = req.params.name;
 
-    dataService.updateDocument({
+    dataService.updateDocumentAsync({
       projectName: 'project',
       collectionName: name,
       id: id,
       body: req.body
-    }, function afterUpdate(error, result) {
-      if (error) {
-        return next(error);
-      }
+    }).then(function(result) {
       return res.json(result);
+    }).catch(function(result) {
+      return next(result);
     });
   });
 
@@ -147,8 +143,6 @@ module.exports = function(router) {
     if (req.query.aggs) {
       aggs = JSON.parse(req.query.aggs);
     }
-    //console.log(req.query.aggs);
-    //console.log(aggs);
 
     var fields = req.query.fields;
     if (fields !== undefined) {
@@ -170,7 +164,7 @@ module.exports = function(router) {
     var time = Date.now();
 
     // @todo filtering params
-    searchService.search({
+    searchService.searchAsync({
       projectName: 'project',
       collectionName: name,
       page: page,
@@ -179,12 +173,11 @@ module.exports = function(router) {
       sort: req.query.sort || '',
       aggs: aggs,
       fields: fields
-    }, function afterSearch(error, result) {
-      if (error) {
-        return next(error);
-      }
+    }).then(function(result) {
       result.meta.search_time = Date.now() - time;
       return res.json(result);
+    }).catch(function(result) {
+      return next(result);
     });
   });
 
@@ -230,15 +223,14 @@ module.exports = function(router) {
   router.get('/:name/autocomplete', function autocomplete(req, res, next) {
     var name = req.params.name;
     // @todo filtering params
-    searchService.suggest({
+    searchService.suggestAsync({
       projectName: 'project',
       collectionName: name,
       query: req.query.query || ''
-    }, function afterSuggest(error, result) {
-      if (error) {
-        return next(error);
-      }
+    }).then(function(result) {
       return res.json(result);
+    }).catch(function(result) {
+      return next(result);
     });
   });
 

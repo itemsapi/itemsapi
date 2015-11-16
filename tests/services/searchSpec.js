@@ -9,23 +9,18 @@ setup.makeSuite('search service', function() {
   var projectService = require('./../../src/services/project');
 
   before(function(done) {
-    projectService.ensureCollection({
+    projectService.ensureCollectionAsync({
       projectName: 'test',
       collectionName: 'movie'
-    }, function(err, res) {
-      assert.equal(err, null);
-
-      setTimeout(function() {
-        done()
-      }, 100);
+    }).delay(30).then(function(res) {
+      done();
     });
   });
 
   it('should search items', function(done) {
-    searchService.search({
+    searchService.searchAsync({
       collectionName: 'movie'
-    }, function(err, res) {
-      should.not.exist(err);
+    }).then(function(res) {
       res.should.have.property('data')
       res.data.should.have.property('items');
       res.should.have.property('pagination');
@@ -38,11 +33,10 @@ setup.makeSuite('search service', function() {
   });
 
   it('should suggest items', function(done) {
-    searchService.suggest({
+    searchService.suggestAsync({
       collectionName: 'movie',
       query: 'bat'
-    }, function(err, res) {
-      should.not.exist(err);
+    }).then(function(res) {
       done();
     });
   });

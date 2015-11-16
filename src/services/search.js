@@ -4,7 +4,8 @@ var request = require('request');
 var winston = require('winston');
 var nconf = require('nconf');
 var async = require('async');
-var elastic = require('../elastic/search');
+var Promise = require('bluebird');
+var elastic = Promise.promisifyAll(require('../elastic/search'));
 var _ = require('lodash');
 var searchHelper = require('../helpers/search');
 
@@ -13,26 +14,20 @@ var searchHelper = require('../helpers/search');
   /**
    * search documents
    */
-  module.search = function(data, callback) {
-    data.projectName = 'project';
-    elastic.search(data, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, searchHelper().searchConverter(data, res));
-    });
+  module.searchAsync = function(data) {
+    return elastic.searchAsync(data)
+    .then(function(res) {
+      return searchHelper().searchConverter(data, res);
+    })
   }
 
   /**
    * suggest documents
    */
-  module.suggest = function(data, callback) {
-    data.projectName = 'project';
-    elastic.suggest(data, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res);
+  module.suggestAsync = function(data) {
+    return elastic.suggestAsync(data)
+    .then(function(res) {
+      return res;
     });
   }
 }(exports));

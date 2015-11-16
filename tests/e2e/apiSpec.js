@@ -56,9 +56,6 @@ setup.makeSuite('creating items', function addSuite() {
       });
   });
 
-
-
-
   it('should fail to post movie', function test(done) {
     request(setup.getServer())
       .post('/api/item/movie')
@@ -69,6 +66,4 @@ setup.makeSuite('creating items', function addSuite() {
         done();
       });
   });
-
-
 });

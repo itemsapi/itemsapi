@@ -31,8 +31,14 @@ var server;
     }
 
     nconf.use('memory');
-    nconf.file('overrides', {file: configFile});
+    nconf
+    .file('overrides', {file: configFile})
+    .file('defaults', {file: './config/root.json'});
+
     server  = require(__dirname + '/../../server.js');
+
+
+
 
     describe(name, function describe() {
       before(function before(done) {

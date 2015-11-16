@@ -10,10 +10,17 @@ setup.makeSuite('project service', function() {
   var elasticClient = require('./../../src/connections/elastic');
 
   it('should create project successfully', function(done) {
-    projectService.addProject({
+    projectService.addProjectAsync({
       projectName: 'test'
-    }, function(err, res) {
-      should.not.exist(err);
+    }).then(function(res) {
+      done();
+    });
+  });
+
+  it('should ensure project exists', function(done) {
+    projectService.ensureProjectAsync({
+      projectName: 'test'
+    }).then(function(res) {
       done();
     });
   });
@@ -24,8 +31,8 @@ setup.makeSuite('project service', function() {
       collectionName: 'city'
     }
 
-    projectService.ensureCollection(data, function(err, res) {
-      should.not.exist(err);
+    projectService.ensureCollectionAsync(data)
+    .then(function(res) {
       done();
     });
   });
@@ -36,8 +43,8 @@ setup.makeSuite('project service', function() {
       collectionName: 'city'
     }
 
-    projectService.ensureCollection(data, function(err, res) {
-      should.not.exist(err);
+    projectService.ensureCollectionAsync(data)
+    .then(function(res) {
       done();
     });
   });
