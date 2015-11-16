@@ -87,13 +87,6 @@ var _ = require('underscore');
         aggregation = ejs.TermsAggregation(key)
           .field(value.field)
           .size(value.size)
-          //.order('visits_stats', 'desc')
-
-        //var stats_aggregation = ejs.StatsAggregation('visits_stats')
-          //.field('visits');
-
-        //console.log(stats_aggregation.toJSON());
-        //aggregation.aggregation(stats_aggregation);
 
         if (value.order) {
           var avg_aggregation = ejs.AvgAggregation('visits_avg')
