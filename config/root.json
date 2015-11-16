@@ -12,10 +12,6 @@
     "host": "http://127.0.0.1",
     "port": 3000
   },
-  "filesystem": {
-    "local": {},
-    "s3": {}
-  },
   "project": {
     "name": "itemsapi"
   },

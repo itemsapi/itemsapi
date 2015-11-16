@@ -1,14 +1,4 @@
 {
-  "elasticsearch": {
-    "url": "localhost:9200"
-  },
-  "server": {
-    "port": 3000
-  },
-  "filesystem": {
-    "local": {},
-    "s3": {}
-  },
   "project": {
     "name": "itemsapi"
   },
