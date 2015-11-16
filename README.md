@@ -18,7 +18,7 @@ This backend will offer powerful functionality like:
 - field types like standard (int, string, etc) and custom (image, rating, geo, tags)
 
 ## Getting started
-To find out more information about ItemsAPI please go to the official page - <a href="https://www.itemsapi.com/" target="_blank">Go there</a>.
+To find out more information about ItemsAPI please go to the official page - <a href="https://www.itemsapi.com/" target="_blank">Go to the documentation</a>.
 
 ## Requirement
 - node.js, npm
@@ -31,25 +31,16 @@ You can import huge json collection within one command. i.e.
 `node cli.js --import --collection=movie --file ./data/documents.json`
 
 ## Demo
-- it is in progress
+- go to see <a href="http://app.itemsapi.com/" target="_blank">many different collections i.e. movies, quotes, libraries, etc</a> 
 
+## ROADMAP
+- in progress..
 
-## Plan of 21 September 2015
-- Importing big json files and make internal indexing (finished)
-- Full text searching with pagination (finished)
-- Create simple documentation (finished but requires update https://www.itemsapi.com/docs/start/overview.html)
-- Make aggregations i.e. tags count, categories count, distance calculations, date range (in progress)
-- Sorting by field and by scores
-- Make schema configuration higher level than elasticsearch and easy for integration with external systems like angular.js
-- "Similar to" functionality. Simple recommendation system.
-- Authentication and user privileges
-- Autocomplete
-
-## Long term plans
-- people who like this also like (elasticsearch or neo4j) 
+## Questions
+- feel free to ask questions https://itemsapi.slack.com and share ideas
 
 ## Contributions
-If you have idea how to make this ItemsAPI better, feel free to join!
+If you have idea how to make this ItemsAPI better or help somehow, feel free to join!
 
 ## Testing
 `grunt test`
