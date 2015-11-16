@@ -5,7 +5,6 @@ var fs = require('fs');
 var winston = require('winston');
 var server;
 
-
 (function (module) {
   var serverInstance;
 
@@ -36,9 +35,6 @@ var server;
     .file('defaults', {file: './config/root.json'});
 
     server  = require(__dirname + '/../../server.js');
-
-
-
 
     describe(name, function describe() {
       before(function before(done) {
