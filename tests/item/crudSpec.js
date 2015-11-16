@@ -9,11 +9,10 @@ setup.makeSuite('item crud request', function() {
   var projectService = require('./../../src/services/project');
 
   before(function(done) {
-    projectService.ensureCollection({
+    projectService.ensureCollectionAsync({
       projectName: 'test',
       collectionName: 'movie'
-    }, function(err, res) {
-      assert.equal(err, null);
+    }).then(function(res) {
       done();
     });
   });

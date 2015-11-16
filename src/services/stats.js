@@ -10,7 +10,6 @@ var configHelper = require('./../helpers/config')(nconf.get());
 
 (function(module) {
 
-
   /**
    * get stats
    */

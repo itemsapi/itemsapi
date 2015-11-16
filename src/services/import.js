@@ -15,14 +15,10 @@ var dataService = require('./../../src/services/data');
    * ensure project
    * ensure mapping
    * add documents
-   * show statistics
    */
   module.import = function(data, callback) {
-    projectService.ensureCollection(data, function(err, res) {
-      if (err) {
-        return callback(err);
-      }
-
+    projectService.ensureCollectionAsync(data)
+    .then(function(res) {
       dataService.addAllDocuments(data, function(err, res) {
         if (err) {
           return callback(err);

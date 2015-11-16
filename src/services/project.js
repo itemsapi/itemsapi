@@ -3,10 +3,10 @@
 var request = require('request');
 var winston = require('winston');
 var nconf = require('nconf');
-var elastic = require('../elastic/mapping');
+var Promise = require('bluebird');
+var elastic = Promise.promisifyAll(require('../elastic/mapping'));
 var elasticData = require('../elastic/data');
 var configHelper = require('./../helpers/config')(nconf.get());
-var Promise = require('bluebird');
 var searchService = Promise.promisifyAll(require('./search'));
 var mappingHelper = require('./../helpers/mapping');
 
@@ -15,51 +15,59 @@ var mappingHelper = require('./../helpers/mapping');
   /**
    * add project (index)
    */
-  module.addProject = function(data, callback) {
-    elastic.addIndex({index: data.projectName}, function(err, res) {
-      if (err) {
-        return callback(err);
+  module.addProjectAsync = function(data) {
+    return elastic.addIndexAsync({index: data.projectName});
+  },
+
+  /**
+   * ensure if project exist, if not then create it
+   */
+  module.ensureProjectAsync = function(data) {
+    return elastic.existsIndexAsync({index: data.projectName})
+    .then(function(res) {
+      if (res === false) {
+        return elastic.addIndexAsync({index: data.projectName});
       }
-      callback(null, res);
+      return res;
+    })
+    .then(function(res) {
+      return res;
+    });
+  },
+
+  /**
+   * add collection (type)
+   */
+  module.addCollectionAsync = function(data) {
+    return elastic.addMappingAsync({
+      index: data.projectName,
+      type: data.collectionName,
+      body: {
+        properties: configHelper.getSchema(data.collectionName)
+      }
     })
   },
 
   /**
-   * ensure if project exist
+   * ensure collection exists
    */
-  module.ensureProject = function(data, callback) {
-    elastic.existsIndex({index: data.projectName}, function(err, res) {
-      if (err) {
-        return callback(err);
-      }
-      if (res === false) {
-        elastic.addIndex({index: data.projectName}, function(err, res) {
-          if (err) {
-            return callback(err);
-          }
-          callback(null, res);
-        })
-      } else {
-        callback(null, res);
-      }
+  module.ensureCollectionAsync = function(data) {
+    return module.ensureProjectAsync(data)
+    .then(function(res) {
+      return module.addCollectionAsync(data)
     })
   },
 
   /**
    * add collection (type)
    */
-  module.addMapping = function(data, callback) {
-    elastic.addMapping({
+  module.addMappingAsync = function(data) {
+    return elastic.addMappingAsync({
       index: data.projectName,
       type: data.collectionName,
       body: {
         properties: configHelper.getSchema(data.collectionName)
       }
-    }, function(err, res, status) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res)
     })
   },
 
@@ -90,42 +98,6 @@ var mappingHelper = require('./../helpers/mapping');
     .catch(function(res) {
       console.log(res);
       throw new Error('An error occured');
-    })
-  },
-
-  /**
-   * add collection (type)
-   */
-  module.addCollection = function(data, callback) {
-    elastic.addMapping({
-      index: data.projectName,
-      type: data.collectionName,
-      body: {
-        properties: configHelper.getSchema(data.collectionName)
-      }
-    }, function(err, res, status) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res)
-    })
-  },
-
-  /**
-   * ensure collection exists
-   */
-  module.ensureCollection = function(data, callback) {
-    this.ensureProject(data, function(err, res) {
-      if (err) {
-        return callback(err);
-      }
-
-      module.addCollection(data, function(err, res) {
-        if (err) {
-          return callback(err);
-        }
-        callback(null, res)
-      })
     })
   }
 }(exports));
