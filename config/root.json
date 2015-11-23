@@ -221,61 +221,6 @@
         "fields": ["image", "author", "text", "tags", "likes"]
       }
     },
-    "doctor": {
-      "schema": {
-        "title": {"type": "string", "store": true },
-        "age": {"type": "integer", "store": true },
-        "verified": {"type": "string" },
-        "price": {"type": "integer", "store": true },
-        "city": {"type": "string", "store": true, "index": "not_analyzed" },
-        "address": {"type": "string", "store": true },
-        "image": {"type": "string", "display": "image" }
-      },
-      "aggregations": {
-        "price_range": {"type": "range", "field": "price", "ranges": [
-          [null, 100],
-          [100, 150],
-          [150, 200],
-          [200, 300],
-          [300, null]]},
-        "city_terms": {"type": "terms", "field": "city", "size": 10},
-        "verified_terms": {"type": "terms", "field": "verified", "size": 2},
-        "title_terms": {"type": "terms", "field": "title", "size": 20, "exclude": "w|i|z"}
-      },
-      "table": {
-        "fields": ["image", "id", "title", "age", "verified", "price", "city", "address"]
-      }
-    },
-    "car": {
-      "schema": {
-        "model": {"type": "string", "store": true },
-        "brand": {"type": "string", "store": true }
-      },
-      "table": {
-        "fields": ["model", "brand"]
-      }
-    },
-    "programmer": {
-      "schema": {
-        "name": {"type": "string", "store": true },
-        "skills": {"type": "string", "store": true },
-        "countries_of_experience": {"type": "string", "store": true },
-        "place": {"type": "string", "store": true }
-      }
-    },
-    "restaurant": {
-      "schema": {
-        "name": {"type": "string", "store": true },
-        "place": {"type": "string", "store": true }
-      }
-    },
-    "famous_people": {
-      "schema": {
-        "name": {"type": "string", "store": true },
-        "country": {"type": "string", "store": true },
-        "birthday": {"type": "string", "store": true }
-      }
-    },
     "dotacje": {
       "schema": {
         "name": {"type": "string", "store": true, "index": "not_analyzed" },
@@ -381,47 +326,6 @@
       },
       "table": {
         "fields": ["name", "short_description", "author", "license", "tags", "releases", "downloads_last_day"]
-      }
-    },
-    "herb": {
-      "schema": {
-        "name": {"type": "string", "store": true, "index": "not_analyzed" },
-        "brand": {"type": "string", "store": true, "index": "not_analyzed" },
-        "breadcrumbs_mini": {"type": "string", "store": true, "index": "not_analyzed" },
-        "rating": {"type": "integer", "store": true },
-        "price": {"type": "float", "store": false },
-        "overviews_count": {"type": "integer", "store": true },
-        "image": {"type": "string", "display": "image" }
-      },
-      "visiblity": "private",
-      "defaults": {
-      },
-      "aggregations": {
-        "categories_terms": {"type": "terms", "field": "breadcrumbs_mini", "size": 15, "title": "Categories"},
-        "brands_terms": {"type": "terms", "field": "brand", "size": 10, "title": "Brands"}
-      },
-      "sortings": {
-        "most_overviews": {
-          "title": "Most overviews",
-          "type": "normal",
-          "order": "desc",
-          "field": "overviews_count"
-        },
-        "price": {
-          "title": "The cheapest",
-          "type": "normal",
-          "order": "asc",
-          "field": "price"
-        },
-        "price2": {
-          "title": "Most expensive",
-          "type": "normal",
-          "order": "desc",
-          "field": "price"
-        }
-      },
-      "table": {
-        "fields": ["name", "image", "brand", "price", "rating", "overviews_count", "url"]
       }
     }
   }

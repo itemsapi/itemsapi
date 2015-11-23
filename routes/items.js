@@ -3,7 +3,6 @@ var Promise = require('bluebird');
 var _ = require('underscore');
 var configHelper = require('./../src/helpers/config')(nconf.get());
 var mappingHelper = require('./../src/helpers/mapping');
-var collectionsNames = configHelper.collectionsNames();
 var dataService = Promise.promisifyAll(require('./../src/services/data'));
 var projectService = Promise.promisifyAll(require('./../src/services/project'));
 var elasticMapping = Promise.promisifyAll(require('./../src/elastic/mapping'));

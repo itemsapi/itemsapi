@@ -15,6 +15,9 @@ module.exports = function(data) {
   }
 
   var getSortings = function(collectionName) {
+    /*if (data.collections[collectionName]) {
+      return {};
+    }*/
     return data.collections[collectionName].sortings || {};
   }
 

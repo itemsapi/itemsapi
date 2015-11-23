@@ -31,11 +31,11 @@ var client = require('redis').createClient(nconf.get('redis'));
 // limit requests per IP
 var limiter = require('./hooks/limiter')(router, client);
 
-// get, put, post, delete, find, similar, autocomplete etc
-var itemsRoutes = require('./routes/items')(router);
-
 // all collections, stats
 var itemsRoutes = require('./routes/additional')(router);
+
+// get, put, post, delete, find, similar, autocomplete etc
+var itemsRoutes = require('./routes/items')(router);
 
 app.use(function errorRoute(err, req, res, next) {
   console.log(err);
