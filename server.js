@@ -22,7 +22,7 @@ app.use(bodyParser.json({
 }));
 
 app.use(cors());
-app.use('/api/item', router);
+app.use('/api/v1', router);
 
 var elastic = require('./src/connections/elastic');
 elastic.init(nconf.get('elasticsearch'));

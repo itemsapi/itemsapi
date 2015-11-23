@@ -18,7 +18,7 @@ setup.makeSuite('creating items', function addSuite() {
 
   it('should be able to post movie', function test(done) {
     request(setup.getServer())
-      .post('/api/item/movie')
+      .post('/api/v1/movie')
       .send({
         body: {name: 'fight club'}
       })
@@ -34,7 +34,7 @@ setup.makeSuite('creating items', function addSuite() {
 
   it('should be able to get movie by id', function test(done) {
     request(setup.getServer())
-      .get('/api/item/movie/id/' + id)
+      .get('/api/v1/movie/' + id)
       .end(function afterRequest(err, res) {
         res.status.should.equal(200);
         console.log(res.body);
@@ -45,7 +45,7 @@ setup.makeSuite('creating items', function addSuite() {
   // temporary turned off
   it('should be able to post many movies', function test(done) {
     request(setup.getServer())
-      .post('/api/item/movie')
+      .post('/api/v1/movie')
       .send([{name: 'god father 1'}, {name: 'god father 2'}])
       .end(function afterRequest(err, res) {
         res.body.ids.should.be.lengthOf(2);
@@ -58,7 +58,7 @@ setup.makeSuite('creating items', function addSuite() {
 
   it('should fail to post movie', function test(done) {
     request(setup.getServer())
-      .post('/api/item/movie')
+      .post('/api/v1/movie')
       .send({
       })
       .end(function afterRequest(err, res) {

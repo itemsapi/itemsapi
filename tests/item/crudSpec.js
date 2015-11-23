@@ -19,7 +19,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should make successfull post request', function(done) {
     request(setup.getServer())
-      .post('/api/item/movie')
+      .post('/api/v1/movie')
       .send(data)
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
@@ -29,7 +29,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should make successfull get request', function(done) {
     request(setup.getServer())
-      .get('/api/item/movie/id/100')
+      .get('/api/v1/movie/100')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
         res.body.should.have.property('rating', 5);
@@ -40,7 +40,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should make successfull update request', function(done) {
     request(setup.getServer())
-      .put('/api/item/movie/id/100')
+      .put('/api/v1/movie/100')
       .send({rating: 6})
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
@@ -50,7 +50,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should make successfull get request', function(done) {
     request(setup.getServer())
-      .get('/api/item/movie/id/100')
+      .get('/api/v1/movie/100')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
         res.body.should.have.property('rating', 6);
@@ -62,7 +62,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should make successfull delete request', function(done) {
     request(setup.getServer())
-      .delete('/api/item/movie/id/100')
+      .delete('/api/v1/movie/100')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
         done();
@@ -71,7 +71,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should get not found response', function(done) {
     request(setup.getServer())
-      .get('/api/item/movie/id/100')
+      .get('/api/v1/movie/100')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 400);
         done();

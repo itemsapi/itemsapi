@@ -40,24 +40,6 @@ module.exports = function(router) {
   });
 
   /*
-   * get specific item
-   */
-  router.get('/:name/id/:id', function getItem(req, res, next) {
-    var id = req.params.id;
-    var name = req.params.name;
-
-    dataService.getDocumentAsync({
-      projectName: 'project',
-      collectionName: name,
-      id: id
-    }).then(function(result) {
-      return res.json(result);
-    }).catch(function(result) {
-      return next(result);
-    });
-  });
-
-  /*
    * clean items
    */
   router.put('/:name/recreate-mapping', function recreateMapping(req, res, next) {
@@ -99,7 +81,7 @@ module.exports = function(router) {
   /*
    * delete specific item
    */
-  router.delete('/:name/id/:id', function deleteItem(req, res, next) {
+  router.delete('/:name/:id', function deleteItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
 
@@ -117,7 +99,7 @@ module.exports = function(router) {
   /*
    * update specific item
    */
-  router.put('/:name/id/:id', function updateItem(req, res, next) {
+  router.put('/:name/:id', function updateItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
 
@@ -136,7 +118,7 @@ module.exports = function(router) {
   /*
    * search items
    */
-  router.get('/:name/find', function getItems(req, res, next) {
+  router.get('/:name', function getItems(req, res, next) {
     var name = req.params.name;
 
     var aggs = {};
@@ -218,7 +200,6 @@ module.exports = function(router) {
   /*
    * item autocomplete
    * @not working yet - in progress
-   *
    */
   router.get('/:name/autocomplete', function autocomplete(req, res, next) {
     var name = req.params.name;
@@ -241,5 +222,23 @@ module.exports = function(router) {
   router.get('/:name/near/:key/:gps', function autocomplete(req, res, next) {
     var name = req.params.name;
     res.json({});
+  });
+
+  /*
+   * get specific item
+   */
+  router.get('/:name/:id', function getItem(req, res, next) {
+    var id = req.params.id;
+    var name = req.params.name;
+
+    dataService.getDocumentAsync({
+      projectName: 'project',
+      collectionName: name,
+      id: id
+    }).then(function(result) {
+      return res.json(result);
+    }).catch(function(result) {
+      return next(result);
+    });
   });
 }
