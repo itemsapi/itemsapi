@@ -23,16 +23,9 @@ var server;
   };
 
   module.makeSuite = function addSuite(name, tests) {
-    var configFile = './config/test.json';
 
-    if (fs.existsSync(configFile) === false) {
-      throw Error('Couldnt find ' + configFile);
-    }
-
-    nconf.use('memory');
-    nconf
-    .file('overrides', {file: configFile})
-    .file('defaults', {file: './config/root.json'});
+    process.env.NODE_ENV = 'test';
+    var config = require('./../../config/index');
 
     server  = require(__dirname + '/../../server.js');
 

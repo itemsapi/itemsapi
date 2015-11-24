@@ -1,19 +1,8 @@
 'use strict';
 
-var nconf = require('nconf');
-var fs = require('fs');
-var configFile = './config/local.json';
 var server = null;
+
 var winston = require('winston');
-
-
-nconf.use('memory');
-
-if (fs.existsSync(configFile) !== false) {
-  nconf.file('overrides', {file: configFile})
-}
-
-nconf.file('defaults', {file: './config/root.json'});
 
 winston.loggers.add('query', {
   console: {
