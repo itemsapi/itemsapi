@@ -33,11 +33,16 @@ You can import huge json collection within one command. i.e.
 ## Demo
 - go to see <a href="http://app.itemsapi.com/" target="_blank">many different collections i.e. movies, quotes, libraries, etc</a> 
 
-## ROADMAP
-- in progress..
+Example collections:
+- [Movies](http://app.itemsapi.com/documents/name/movie "Movies")
+- [Songs](http://app.itemsapi.com/documents/name/song "Songs")
+- [Quotes](http://app.itemsapi.com/documents/name/quote "Quotes")
+- [NPM libraries](http://app.itemsapi.com/documents/name/npm "NPM libraries")
 
-## Questions
-- feel free to ask questions https://itemsapi.slack.com and share ideas
+## Community
+- <a href="https://itemsapi.slack.com" target="_blank">Slack</a>
+- <a href="https://twitter.com/itemsapi" target="_blank">Twitter @itemsapi</a>
+- ask directly @cigolpl
 
 ## Contributions
 If you have idea how to make this ItemsAPI better or help somehow, feel free to join!
