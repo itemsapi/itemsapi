@@ -4,7 +4,8 @@
   "description": "creating search application without spending time for backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test mocha tests/*",
+    "start": "NODE_ENV=production node app.js"
   },
   "author": "Mateusz Rzepa",
   "repository": "itemsapi/item",

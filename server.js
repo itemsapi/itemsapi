@@ -4,7 +4,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var gzip = require('compression');
-var nconf = require('nconf');
+var config = require('./config/index');
 var _ = require('underscore');
 var router = express.Router();
 var cors = require('cors');
@@ -13,7 +13,7 @@ var httpNotFound = 404;
 var httpBadRequest = 400;
 var Promise = require('bluebird');
 
-app.locals.environment = process.env.NODE_ENV || 'development'; // set env var
+app.locals.environment = process.env.NODE_ENV || 'development';
 app.disable('etag');
 app.disable('x-powered-by');
 app.use(gzip({treshold: 512}));
@@ -25,8 +25,8 @@ app.use(cors());
 app.use('/api/v1', router);
 
 var elastic = require('./src/connections/elastic');
-elastic.init(nconf.get('elasticsearch'));
-var client = require('redis').createClient(nconf.get('redis'));
+elastic.init(config.elasticsearch);
+var client = require('redis').createClient(config.redis);
 
 // limit requests per IP
 var limiter = require('./hooks/limiter')(router, client);
@@ -47,7 +47,7 @@ app.use(function errorRoute(err, req, res, next) {
  * start server
  */
 exports.start = function start(done) {
-  server = app.listen(nconf.get('server').port, function afterListen() {
+  server = app.listen(config.server.port, function afterListen() {
     done(server);
   });
 };
