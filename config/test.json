@@ -2,6 +2,10 @@
   "project": {
     "name": "test"
   },
+  "collection": {
+    "db": "json",
+    "filename":  "./config/collections_test.json"
+  },
   "collections": {
     "movie": {
       "schema": {

@@ -1,0 +1,20 @@
+[{
+  "collection": "movie",
+  "schema": {
+    "name": {"type": "string", "store": true },
+    "year": {"type": "integer", "store": true },
+    "rating": {"type": "string", "store": true }
+  },
+  "aggregations": {},
+  "sortings": {},
+  "table": {
+    "fields": ["image", "name", "director", "rating", "year", "votes"]
+  }
+}, {
+  "collection": "city",
+  "schema": {
+    "name": {"type": "string", "store": true },
+    "country": {"type": "string", "store": true },
+    "rating": {"type": "string", "store": true }
+  }
+}]
