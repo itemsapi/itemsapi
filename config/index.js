@@ -1,7 +1,7 @@
 'use strict';
 
-const isProduction = process.env.NODE_ENV === 'production';
-const isTest = process.env.NODE_ENV === 'test';
+var isProduction = process.env.NODE_ENV === 'production';
+var isTest = process.env.NODE_ENV === 'test';
 
 var nconf = require('nconf');
 var fs = require('fs');
