@@ -28,3 +28,4 @@ node_modules
 data/logs/*
 
 config/local.json
+config/collections_local.json
