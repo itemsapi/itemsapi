@@ -28,59 +28,48 @@ var _ = require('underscore');
     var mappingDefaults = mappingHelper.getDefaults(data.collectionName);
     var defaultSort = mappingHelper.getSortings(data.collectionName)[mappingDefaults.sort];
 
-    if (sortOptions) {
-      var sort = ejs.Sort(sortOptions.field)
-      if (!sortOptions.type || sortOptions.type === 'normal') {
-      } else if (sortOptions.type === 'geo') {
-          sort.geoDistance(ejs.GeoPoint([50.0646500, 19.9449800])).unit('km')
-      }
-
-      if (sortOptions.order) {
-        sort.order(sortOptions.order);
-      }
+    var sort = module.generateSort(sortOptions);
+    if (sort) {
       body.sort(sort);
-    } else if (defaultSort) {
-      if (!defaultSort.type || defaultSort.type === 'normal') {
-        var sort = ejs.Sort(defaultSort.field)
-        if (defaultSort.order) {
-          sort.order(defaultSort.order);
-        }
-        body.sort(sort);
-      }
     }
-    var aggregations = mappingHelper.getAggregations(data.collectionName);
 
-    console.log(data.aggs);
-    var aggregation_filters = {};
-    _.each(data.aggs, function(value, key) {
-      if (value.length) {
+    var aggregationsOptions = mappingHelper.getAggregations(data.collectionName);
+    var aggregationFilters = module.generateAggregationFilters(aggregationsOptions, data.aggs);
+    body.filter(ejs.AndFilter(_.values(aggregationFilters)));
 
-        if (aggregations[key].type === 'terms') {
-          aggregation_filters[key] = ejs.TermsFilter(aggregations[key].field, value);
-        } else if (aggregations[key].type === 'range') {
-          aggregation_filters[key] = ejs.RangeFilter(aggregations[key].field, value);
-        }
-      }
+    // generate aggretations according to options
+    var aggregations = module.generateAggregations(aggregationsOptions, aggregationFilters);
+
+    // add all aggregations to body builder
+    _.each(aggregations, function(value) {
+      body.aggregation(value);
     });
 
-    //console.log(aggregation_filters.toJSON());
+    if (data.query) {
+      body.query(ejs.QueryStringQuery(data.query));
+    }
 
-    /*var aggregation_filters = {
-      director_terms: ejs.TermsFilter('director', ['David Fincher', 'Woody Allen']),
-      tags_terms: ejs.TermsFilter('tags', ['dramat', 'komedia']),
-      rating_range: ejs.RangeFilter('rating').gte(7),
-      votes_range: ejs.RangeFilter('votes').gte(20),
-      year_range: ejs.RangeFilter('year').gte(1970).lt(1975)
-    }*/
+    elastic.search({
+      index: data.projectName,
+      type: data.collectionName,
+      body: body,
+      _source: data.fields || true
+    }, function (err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    });
+  }
 
-    // each aggregation will have its own filter
-    // we will assign all filters to aggregations except the aggregation filter
-    body.filter(ejs.AndFilter(_.values(aggregation_filters)));
+  /**
+   * generate aggregations
+   */
+  module.generateAggregations = function(aggregations, filters) {
+    return _.map(aggregations, function(value, key) {
 
-    _.each(aggregations, function(value, key) {
-
-      var faggregation = ejs.FilterAggregation(key)
-        .filter(ejs.AndFilter(_.values(_.omit(aggregation_filters, key))));
+      var filterAggregation = ejs.FilterAggregation(key)
+        .filter(ejs.AndFilter(_.values(_.omit(filters, key))));
 
       var aggregation = null;
       if (value.type === 'terms') {
@@ -91,9 +80,6 @@ var _ = require('underscore');
         if (value.order) {
           var avg_aggregation = ejs.AvgAggregation('visits_avg')
           .field('visits');
-
-          console.log(avg_aggregation.toJSON());
-
           aggregation.aggregation(avg_aggregation);
           aggregation.order('visits_avg', 'desc');
         }
@@ -104,7 +90,7 @@ var _ = require('underscore');
       } else if (value.type === 'range') {
         aggregation = ejs.RangeAggregation(key).field(value.field);
         _.each(value.ranges, function(v, k) {
-          aggregation.range(v[0], v[1], v[2]);
+          aggregation.range(v.gte, v.lte, v.name);
         });
       } else if (value.type === 'geo_distance') {
         aggregation = ejs.GeoDistanceAggregation(key)
@@ -113,34 +99,88 @@ var _ = require('underscore');
           .unit(value.unit)
 
         _.each(value.ranges, function(v, k) {
+          // @deprecated config style
           aggregation.range(v[0], v[1], v[2]);
         });
       }
-      // filter aggregation
-      faggregation.agg(aggregation);
-      // add aggregation to request body
-      body.aggregation(faggregation);
+      filterAggregation.agg(aggregation);
+      return filterAggregation;
     });
 
-    if (data.query) {
-      body.query(ejs.QueryStringQuery(data.query));
-    }
-
-    logger.info(body.toJSON());
-
-    elastic.search({
-      index: data.projectName,
-      type: data.collectionName,
-      body: body,
-      _source: data.fields || true
-    }, function (err, res) {
-      if (err) {
-        console.log(data.projectName, data.collectionName, err);
-        return callback(err);
-      }
-      callback(null, res);
-    });
   }
+
+  /**
+   * generate sorting
+   */
+  module.generateSort = function(sortOptions) {
+
+    if (sortOptions) {
+      var sort = ejs.Sort(sortOptions.field)
+      if (!sortOptions.type || sortOptions.type === 'normal') {
+      } else if (sortOptions.type === 'geo') {
+        sort.geoDistance(ejs.GeoPoint([50.0646500, 19.9449800])).unit('km')
+      }
+
+      if (sortOptions.order) {
+        sort.order(sortOptions.order);
+      }
+      return sort;
+    }
+  }
+
+  /**
+   * generate terms filter for aggregation
+   */
+  module.generateTermsFilter = function(options, values) {
+    return ejs.TermsFilter(options.field, values);
+  }
+
+  /**
+   * generate range filter for aggregation
+   */
+  module.generateRangeFilter = function(options, values) {
+    var rangeFilters = _.chain(values)
+    .map(function(value) {
+      var rangeOptions = _.findWhere(options.ranges, {name: value});
+      // if input is incorrect
+      if (!rangeOptions) {
+        return null;
+      }
+      var rangeFilter = ejs.RangeFilter(options.field);
+      if (rangeOptions.gte) {
+        rangeFilter.gte(rangeOptions.gte);
+      }
+      if (rangeOptions.lte) {
+        rangeFilter.lte(rangeOptions.lte);
+      }
+      return rangeFilter;
+    })
+    .filter(function(val) {
+      return val !== null;
+    })
+    .value()
+    return ejs.OrFilter(rangeFilters);
+  }
+
+
+  /**
+   * generate aggregation filters
+   */
+  module.generateAggregationFilters = function(aggregations, values) {
+    var aggregation_filters = {};
+    _.each(values, function(value, key) {
+      if (value.length) {
+        if (aggregations[key].type === 'terms') {
+          aggregation_filters[key] = module.generateTermsFilter(aggregations[key], value)
+        } else if (aggregations[key].type === 'range') {
+          aggregation_filters[key] = module.generateRangeFilter(aggregations[key], value);
+        }
+      }
+    });
+    return aggregation_filters;
+  }
+
+
 
   /**
    * suggest documents (low level)
