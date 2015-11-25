@@ -69,33 +69,50 @@
         "actors_terms": {"type": "terms", "field": "actors", "size": 10, "title": "Actors"},
         "director_terms": {"type": "terms", "field": "director", "size": 5, "title": "Directors"},
         "tags_terms": {"type": "terms", "field": "tags", "size": 10, "title": "Tags"},
-        "votes_range": {"type": "range", "field": "votes", "ranges": [
-          [null, 300, "< 300"],
-          [300, 1000, "300 - 1000"],
-          [1000, 3000, "1000 - 3000"],
-          [3000, null, "> 3000"]], "title": "Votes range"},
-        "years_range": {"type": "range", "field": "year", "ranges": [
-          [null, 1950, "< 1950"],
-          [1950, 1960, "1950 - 1960"],
-          [1960, 1970, "1960 - 1970"],
-          [1970, 1980, "1970 - 1980"],
-          [1980, 1990, "1980 - 1990"],
-          [1990, 2000, "1990 - 2000"],
-          [2000, 2010, "2000 - 2010"],
-          [2010, null, "> 2010"]], "title": "Years range"},
-        "rating_range": {"type": "range", "field": "rating",
+
+        "votes_range": {
+          "type": "range",
+          "field": "votes",
+          "title": "Votes range",
           "ranges": [
-            [null, 1, "0 - 1"],
-            [1, 2, "1 - 2"],
-            [2, 3, "2 - 3"],
-            [3, 4, "3 - 4"],
-            [4, 5, "4 - 5"],
-            [5, 6, "5 - 6"],
-            [6, 7, "6 - 7"],
-            [7, 8, "7 - 8"],
-            [8, 9, "8 - 9"],
-            [9, null, "9 - 10"]],
-          "title": "Rating range"}
+            {"lte": 300, "name": "< 300"},
+            {"gte": 300, "lte": 1000, "name": "300 - 1000"},
+            {"gte": 1000, "lte": 3000, "name": "1000 - 3000"},
+            {"gte": 3000, "name": "> 3000"}
+          ]
+        },
+        "years_range": {
+          "type": "range",
+          "field": "year",
+          "title": "Years range",
+          "ranges": [
+            {"lte": 1950, "name": "1950 - 1960"},
+            {"gte": 1950, "lte": 1960, "name": "1950 - 1960"},
+            {"gte": 1960, "lte": 1970, "name": "1960 - 1970"},
+            {"gte": 1970, "lte": 1980, "name": "1970 - 1980"},
+            {"gte": 1980, "lte": 1990, "name": "1980 - 1990"},
+            {"gte": 1990, "lte": 2000, "name": "1990 - 2000"},
+            {"gte": 2000, "lte": 2010, "name": "2000 - 2010"},
+            {"gte": 2010, "name": "> 2010"}
+          ]
+        },
+        "rating_range": {
+          "type": "range",
+          "field": "rating",
+          "title": "Rating range",
+          "ranges": [
+            {"lte": 1, "name": "0 - 1"},
+            {"gte": 1, "lte": 2, "name": "1 - 2"},
+            {"gte": 2, "lte": 3, "name": "2 - 3"},
+            {"gte": 3, "lte": 4, "name": "3 - 4"},
+            {"gte": 4, "lte": 5, "name": "4 - 5"},
+            {"gte": 5, "lte": 6, "name": "5 - 6"},
+            {"gte": 6, "lte": 7, "name": "6 - 7"},
+            {"gte": 7, "lte": 8, "name": "7 - 8"},
+            {"gte": 8, "lte": 9, "name": "8 - 9"},
+            {"gte": 9, "name": "9 - 10"}
+          ]
+        }
       },
       "table": {
         "fields": ["image", "name", "director", "rating", "year", "votes", "tags", "actors"]

@@ -28,55 +28,115 @@ var _ = require('underscore');
     var mappingDefaults = mappingHelper.getDefaults(data.collectionName);
     var defaultSort = mappingHelper.getSortings(data.collectionName)[mappingDefaults.sort];
 
+    var sort = module.generateSort(sortOptions);
+    if (sort) {
+      body.sort(sort);
+    }
+    // definitely make tests for it
+    module.generateAggregations(body, data);
+
+    if (data.query) {
+      body.query(ejs.QueryStringQuery(data.query));
+    }
+
+    elastic.search({
+      index: data.projectName,
+      type: data.collectionName,
+      body: body,
+      _source: data.fields || true
+    }, function (err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    });
+  }
+
+  /**
+   * generate sorting
+   */
+  module.generateSort = function(sortOptions) {
+
     if (sortOptions) {
       var sort = ejs.Sort(sortOptions.field)
       if (!sortOptions.type || sortOptions.type === 'normal') {
       } else if (sortOptions.type === 'geo') {
-          sort.geoDistance(ejs.GeoPoint([50.0646500, 19.9449800])).unit('km')
+        sort.geoDistance(ejs.GeoPoint([50.0646500, 19.9449800])).unit('km')
       }
 
       if (sortOptions.order) {
         sort.order(sortOptions.order);
       }
-      body.sort(sort);
-    } else if (defaultSort) {
-      if (!defaultSort.type || defaultSort.type === 'normal') {
-        var sort = ejs.Sort(defaultSort.field)
-        if (defaultSort.order) {
-          sort.order(defaultSort.order);
-        }
-        body.sort(sort);
-      }
+      return sort;
     }
-    var aggregations = mappingHelper.getAggregations(data.collectionName);
+  }
 
-    console.log(data.aggs);
+  /**
+   * generate terms filter for aggregation
+   */
+  module.generateTermsFilter = function(options, values) {
+    return ejs.TermsFilter(options.field, values);
+  }
+
+  /**
+   * generate range filter for aggregation
+   */
+  module.generateRangeFilter = function(options, values) {
+    var rangeFilters = _.chain(values)
+    .map(function(value) {
+      var rangeOptions = _.findWhere(options.ranges, {name: value});
+      // if input is incorrect
+      if (!rangeOptions) {
+        return null;
+      }
+      var rangeFilter = ejs.RangeFilter(options.field);
+      if (rangeOptions.gte) {
+        rangeFilter.gte(rangeOptions.gte);
+      }
+      if (rangeOptions.lte) {
+        rangeFilter.lte(rangeOptions.lte);
+      }
+      return rangeFilter;
+    })
+    .filter(function(val) {
+      return val !== null;
+    })
+    .value()
+    return ejs.OrFilter(rangeFilters);
+  }
+
+
+  /**
+   * generate aggregation filters
+   */
+  module.generateAggregationFilters = function(aggregations, values) {
     var aggregation_filters = {};
-    _.each(data.aggs, function(value, key) {
+    _.each(values, function(value, key) {
       if (value.length) {
-
         if (aggregations[key].type === 'terms') {
-          aggregation_filters[key] = ejs.TermsFilter(aggregations[key].field, value);
+          aggregation_filters[key] = module.generateTermsFilter(aggregations[key], value)
         } else if (aggregations[key].type === 'range') {
-          aggregation_filters[key] = ejs.RangeFilter(aggregations[key].field, value);
+          aggregation_filters[key] = module.generateRangeFilter(aggregations[key], value);
         }
       }
     });
+    return aggregation_filters;
+  }
 
-    //console.log(aggregation_filters.toJSON());
 
-    /*var aggregation_filters = {
-      director_terms: ejs.TermsFilter('director', ['David Fincher', 'Woody Allen']),
-      tags_terms: ejs.TermsFilter('tags', ['dramat', 'komedia']),
-      rating_range: ejs.RangeFilter('rating').gte(7),
-      votes_range: ejs.RangeFilter('votes').gte(20),
-      year_range: ejs.RangeFilter('year').gte(1970).lt(1975)
-    }*/
+  /**
+   * generate aggregations
+   */
+  module.generateAggregations = function(body, data) {
+    var aggregations = mappingHelper.getAggregations(data.collectionName);
+
+    var aggregation_filters = module.generateAggregationFilters(aggregations, data.aggs);
 
     // each aggregation will have its own filter
     // we will assign all filters to aggregations except the aggregation filter
     body.filter(ejs.AndFilter(_.values(aggregation_filters)));
 
+    // aggregations
     _.each(aggregations, function(value, key) {
 
       var faggregation = ejs.FilterAggregation(key)
@@ -91,9 +151,6 @@ var _ = require('underscore');
         if (value.order) {
           var avg_aggregation = ejs.AvgAggregation('visits_avg')
           .field('visits');
-
-          console.log(avg_aggregation.toJSON());
-
           aggregation.aggregation(avg_aggregation);
           aggregation.order('visits_avg', 'desc');
         }
@@ -104,7 +161,7 @@ var _ = require('underscore');
       } else if (value.type === 'range') {
         aggregation = ejs.RangeAggregation(key).field(value.field);
         _.each(value.ranges, function(v, k) {
-          aggregation.range(v[0], v[1], v[2]);
+          aggregation.range(v.gte, v.lte, v.name);
         });
       } else if (value.type === 'geo_distance') {
         aggregation = ejs.GeoDistanceAggregation(key)
@@ -118,28 +175,10 @@ var _ = require('underscore');
       }
       // filter aggregation
       faggregation.agg(aggregation);
-      // add aggregation to request body
       body.aggregation(faggregation);
+      //return faggregation;
     });
 
-    if (data.query) {
-      body.query(ejs.QueryStringQuery(data.query));
-    }
-
-    logger.info(body.toJSON());
-
-    elastic.search({
-      index: data.projectName,
-      type: data.collectionName,
-      body: body,
-      _source: data.fields || true
-    }, function (err, res) {
-      if (err) {
-        console.log(data.projectName, data.collectionName, err);
-        return callback(err);
-      }
-      callback(null, res);
-    });
   }
 
   /**
