@@ -25,16 +25,15 @@ var _ = require('underscore');
       .size(per_page)
       .from(offset);
 
-    var sortOptions = mappingHelper.getSortings(data.collection.name)[data.sort];
-    var mappingDefaults = mappingHelper.getDefaults(data.collection.name);
-    var defaultSort = mappingHelper.getSortings(data.collection.name)[mappingDefaults.sort];
+    var helper = collectionHelper(data.collection);
 
+    var sortOptions = helper.getSorting(data.sort);
     var sort = module.generateSort(sortOptions);
     if (sort) {
       body.sort(sort);
     }
+    var aggregationsOptions = helper.getAggregations();
 
-    var aggregationsOptions = mappingHelper.getAggregations(data.collection.name);
     var aggregationFilters = module.generateAggregationFilters(aggregationsOptions, data.aggs);
     body.filter(ejs.AndFilter(_.values(aggregationFilters)));
 

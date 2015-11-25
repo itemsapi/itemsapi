@@ -1,9 +1,10 @@
 'use strict';
 var _ = require('underscore');
-var mappingHelper = require('./mapping');
+var collectionHelper = require('./collection');
 
 module.exports = function() {
   var searchConverter = function(input, data) {
+    var helper = collectionHelper(input.collection);
     return {
       meta: {
         query: input.query,
@@ -20,16 +21,10 @@ module.exports = function() {
             {id: doc._id, score: doc._score},
             doc._source, doc.fields
           );
-
-          /*var source = doc.fields ||
-          return _.extend(
-            {id: doc._id, score: doc._score},
-            source
-          );*/
         }),
         groups: [],
         aggregations: _.extend(_.clone(data.aggregations), _.mapObject(data.aggregations, function(v, k) {
-          var aggregation = mappingHelper.getAggregations(input.collection.name);
+          var aggregation = helper.getAggregations();
 
           // supports filters in aggregations
           if (!v.buckets && v[k]) {
@@ -38,7 +33,7 @@ module.exports = function() {
           }
           return _.extend(v, {title: aggregation[k].title || k, name: k, type: aggregation[k].type });
         })),
-        sortings: _.mapObject(mappingHelper.getSortings(input.collection.name), function(v, k) {
+        sortings: _.mapObject(helper.getSortings(), function(v, k) {
           return {
             name: k,
             order: v.order,

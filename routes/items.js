@@ -1,12 +1,12 @@
 var nconf = require('nconf');
 var Promise = require('bluebird');
 var _ = require('underscore');
-var configHelper = require('./../src/helpers/config')(nconf.get());
-var mappingHelper = require('./../src/helpers/mapping');
+var collectionHelper = require('./../src/helpers/collection');
 var dataService = Promise.promisifyAll(require('./../src/services/data'));
 var projectService = Promise.promisifyAll(require('./../src/services/project'));
 var elasticMapping = Promise.promisifyAll(require('./../src/elastic/mapping'));
 var searchService = Promise.promisifyAll(require('./../src/services/search'));
+var collectionService = require('./../src/services/collection');
 
 module.exports = function(router) {
 
@@ -167,9 +167,13 @@ module.exports = function(router) {
    */
   router.get('/:name/metadata', function getCollectionInfo(req, res, next) {
     var name = req.params.name;
-    return res.json({
-      metadata: configHelper.getMetadata(name)
-    });
+    return collectionService.findCollectionAsync(name)
+    .then(function(collection) {
+      return res.json({
+        metadata: collectionHelper(collection).getMetadata()
+      });
+    })
+
   });
 
   /*
@@ -178,7 +182,7 @@ module.exports = function(router) {
   router.get('/:name/mapping', function getMapping(req, res, next) {
     var name = req.params.name;
     return res.json({
-      mapping: configHelper.getMapping(name)
+      //mapping: configHelper.getMapping(name)
     });
   });
 
