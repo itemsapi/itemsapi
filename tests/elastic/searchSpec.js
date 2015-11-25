@@ -27,7 +27,6 @@ setup.makeSuite('elastic data', function() {
   });
 
   describe('should build range filter for aggregations', function() {
-
     var options = {
       //name: "rating_range",
       type: "range",
@@ -69,14 +68,11 @@ setup.makeSuite('elastic data', function() {
     });
 
     it('should not generate range filter for not existent options or empty input', function(done) {
-      //var filter = search.generateRangeFilter(options, ["wrong"]).toJSON();
       var filter = search.generateRangeFilter(options, []).toJSON();
       filter.or.should.have.property('filters').and.be.instanceOf(Array).and.have.lengthOf(0);
 
       var filter = search.generateRangeFilter(options, ["wrong"]).toJSON();
       filter.or.should.have.property('filters').and.be.instanceOf(Array).and.have.lengthOf(0);
-      //filter.or.filters[0].range.rating.should.have.property('gte', 9);
-      //filter.or.filters[0].range.rating.should.not.have.property('lte');
       done();
     });
   })
@@ -90,7 +86,6 @@ setup.makeSuite('elastic data', function() {
     };
     var sort = search.generateSort(options);
     sort.toJSON().should.have.property('rating', {order: 'desc'});
-
     done();
   });
 
@@ -103,7 +98,6 @@ setup.makeSuite('elastic data', function() {
     };
     var sort = search.generateSort(options);
     sort.toJSON().should.have.property('rating', {order: 'asc'});
-
     done();
   });
 
@@ -123,8 +117,4 @@ setup.makeSuite('elastic data', function() {
 
     done();
   });
-
-
-
-
 });
