@@ -1,17 +1,33 @@
 [{
-  "collection": "movie",
+  "name": "movie",
   "schema": {
     "name": {"type": "string", "store": true },
     "year": {"type": "integer", "store": true },
     "rating": {"type": "string", "store": true }
   },
-  "aggregations": {},
-  "sortings": {},
+  "aggregations": {
+    "actors_terms": {"type": "terms", "field": "actors", "size": 10, "title": "Actors"},
+    "director_terms": {"type": "terms", "field": "director", "size": 5, "title": "Directors"}
+  },
+  "sortings": {
+    "favorites": {
+      "title": "Favorites count",
+      "type": "normal",
+      "order": "desc",
+      "field": "favorites"
+    },
+    "played": {
+      "title": "Played count",
+      "type": "normal",
+      "order": "desc",
+      "field": "played"
+    }
+  },
   "table": {
     "fields": ["image", "name", "director", "rating", "year", "votes"]
   }
 }, {
-  "collection": "city",
+  "name": "city",
   "schema": {
     "name": {"type": "string", "store": true },
     "country": {"type": "string", "store": true },

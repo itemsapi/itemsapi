@@ -29,7 +29,7 @@ module.exports = function() {
         }),
         groups: [],
         aggregations: _.extend(_.clone(data.aggregations), _.mapObject(data.aggregations, function(v, k) {
-          var aggregation = mappingHelper.getAggregations(input.collectionName);
+          var aggregation = mappingHelper.getAggregations(input.collection.name);
 
           // supports filters in aggregations
           if (!v.buckets && v[k]) {
@@ -38,7 +38,7 @@ module.exports = function() {
           }
           return _.extend(v, {title: aggregation[k].title || k, name: k, type: aggregation[k].type });
         })),
-        sortings: _.mapObject(mappingHelper.getSortings(input.collectionName), function(v, k) {
+        sortings: _.mapObject(mappingHelper.getSortings(input.collection.name), function(v, k) {
           return {
             name: k,
             order: v.order,

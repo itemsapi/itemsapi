@@ -11,9 +11,16 @@ module.exports = function(data) {
     return data.aggregations || {};
   }
 
+  var getAggregation = function(name) {
+    return data.aggregations[name] || null;
+  }
+
   var getSortings = function() {
     return data.sortings || {};
   }
+
+  var getSorting = function(name) {
+    return data.sortings[name] || null; }
 
   var getMetadata = function() {
     var collection = data;
@@ -35,7 +42,9 @@ module.exports = function(data) {
   return {
     getSchema: getSchema,
     getAggregations: getAggregations,
+    getAggregation: getAggregation,
     getSortings: getSortings,
+    getSorting: getSorting,
     getMetadata: getMetadata
   }
 };

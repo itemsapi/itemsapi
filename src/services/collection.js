@@ -12,7 +12,7 @@ var fs = Promise.promisifyAll(require('fs-extra'));
   module.findCollectionAsync = function(name) {
     return module.getCollectionsAsync()
     .then(function(res) {
-      return _.findWhere(res, {collection: name});
+      return _.findWhere(res, {name: name});
     });
   }
 
@@ -38,7 +38,7 @@ var fs = Promise.promisifyAll(require('fs-extra'));
   module.getCollectionsListAsync = function(data) {
     return module.getCollectionsAsync(data)
     .map(function(res) {
-      return res.collection
+      return res.name;
     });
   }
 

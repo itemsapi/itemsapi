@@ -19,6 +19,22 @@ setup.makeSuite('collection service', function() {
     })
   });
 
+  it('should test collection helpers', function(done) {
+    collectionService.findCollectionAsync('movie')
+    .then(function(res) {
+      should(collectionHelper(res).getSortings()).be.instanceOf(Object);
+      should(collectionHelper(res).getSorting('favorites')).have.property('field', 'favorites');
+      should(collectionHelper(res).getSorting('wrong_value')).be.equal(null);
+
+      should(collectionHelper(res).getAggregations()).be.instanceOf(Object);
+      should(collectionHelper(res).getAggregation('actors_terms')).have.property('field', 'actors');
+      should(collectionHelper(res).getAggregation('wrong_value')).be.equal(null);
+
+      should(collectionHelper(res).getSchema()).have.property('name');
+      done();
+    })
+  });
+
   it('should find all collections', function(done) {
     collectionService.getCollectionsAsync()
     .then(function(res) {
@@ -28,7 +44,7 @@ setup.makeSuite('collection service', function() {
   });
 
   it('should filter collections', function(done) {
-    collectionService.getCollectionsAsync({collection: 'movie'})
+    collectionService.getCollectionsAsync({name: 'movie'})
     .then(function(res) {
       res.should.be.instanceOf(Array).and.have.lengthOf(1);
       done();
