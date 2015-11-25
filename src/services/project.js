@@ -9,6 +9,8 @@ var elasticData = require('../elastic/data');
 var configHelper = require('./../helpers/config')(nconf.get());
 var searchService = Promise.promisifyAll(require('./search'));
 var mappingHelper = require('./../helpers/mapping');
+var collectionHelper = require('./../helpers/collection');
+var collectionService = require('./collection');
 
 (function(module) {
 
@@ -77,20 +79,25 @@ var mappingHelper = require('./../helpers/mapping');
   module.collectionInfoAsync = function(data) {
     var name = data.collectionName;
     var result;
+    var collection;
 
-    return elasticData.countDocumentsAsync({
-      index: data.projectName,
-      type: data.collectionName
+    return collectionService.findCollectionAsync(name)
+    .then(function(res) {
+      collection = res;
+      return elasticData.countDocumentsAsync({
+        index: data.projectName,
+        type: data.collectionName
+      })
     })
     .then(function(res) {
-      var mapping = mappingHelper.getMapping(name);
+      var helper = collectionHelper(collection);
       var display_name = name;
-      if (mapping.meta && mapping.meta.title) {
-        display_name = mapping.meta.title;
+      if (collection.meta && collection.meta.title) {
+        display_name = collection.meta.title;
       }
       return {
         name: name,
-        visibility: mapping.visibility,
+        visibility: collection.visibility,
         display_name: display_name,
         count: res
       };
