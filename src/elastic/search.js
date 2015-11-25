@@ -32,8 +32,18 @@ var _ = require('underscore');
     if (sort) {
       body.sort(sort);
     }
-    // definitely make tests for it
-    module.generateAggregations(body, data);
+
+    var aggregationsOptions = mappingHelper.getAggregations(data.collectionName);
+    var aggregationFilters = module.generateAggregationFilters(aggregationsOptions, data.aggs);
+    body.filter(ejs.AndFilter(_.values(aggregationFilters)));
+
+    // generate aggretations according to options
+    var aggregations = module.generateAggregations(aggregationsOptions, aggregationFilters);
+
+    // add all aggregations to body builder
+    _.each(aggregations, function(value) {
+      body.aggregation(value);
+    });
 
     if (data.query) {
       body.query(ejs.QueryStringQuery(data.query));
@@ -50,6 +60,53 @@ var _ = require('underscore');
       }
       callback(null, res);
     });
+  }
+
+  /**
+   * generate aggregations
+   */
+  module.generateAggregations = function(aggregations, filters) {
+    return _.map(aggregations, function(value, key) {
+
+      var filterAggregation = ejs.FilterAggregation(key)
+        .filter(ejs.AndFilter(_.values(_.omit(filters, key))));
+
+      var aggregation = null;
+      if (value.type === 'terms') {
+        aggregation = ejs.TermsAggregation(key)
+          .field(value.field)
+          .size(value.size)
+
+        if (value.order) {
+          var avg_aggregation = ejs.AvgAggregation('visits_avg')
+          .field('visits');
+          aggregation.aggregation(avg_aggregation);
+          aggregation.order('visits_avg', 'desc');
+        }
+
+        if (value.exclude) {
+          aggregation.exclude(value.exclude);
+        }
+      } else if (value.type === 'range') {
+        aggregation = ejs.RangeAggregation(key).field(value.field);
+        _.each(value.ranges, function(v, k) {
+          aggregation.range(v.gte, v.lte, v.name);
+        });
+      } else if (value.type === 'geo_distance') {
+        aggregation = ejs.GeoDistanceAggregation(key)
+          .field(value.field)
+          .point(ejs.GeoPoint(value.point))
+          .unit(value.unit)
+
+        _.each(value.ranges, function(v, k) {
+          // @deprecated config style
+          aggregation.range(v[0], v[1], v[2]);
+        });
+      }
+      filterAggregation.agg(aggregation);
+      return filterAggregation;
+    });
+
   }
 
   /**
@@ -124,62 +181,6 @@ var _ = require('underscore');
   }
 
 
-  /**
-   * generate aggregations
-   */
-  module.generateAggregations = function(body, data) {
-    var aggregations = mappingHelper.getAggregations(data.collectionName);
-
-    var aggregation_filters = module.generateAggregationFilters(aggregations, data.aggs);
-
-    // each aggregation will have its own filter
-    // we will assign all filters to aggregations except the aggregation filter
-    body.filter(ejs.AndFilter(_.values(aggregation_filters)));
-
-    // aggregations
-    _.each(aggregations, function(value, key) {
-
-      var faggregation = ejs.FilterAggregation(key)
-        .filter(ejs.AndFilter(_.values(_.omit(aggregation_filters, key))));
-
-      var aggregation = null;
-      if (value.type === 'terms') {
-        aggregation = ejs.TermsAggregation(key)
-          .field(value.field)
-          .size(value.size)
-
-        if (value.order) {
-          var avg_aggregation = ejs.AvgAggregation('visits_avg')
-          .field('visits');
-          aggregation.aggregation(avg_aggregation);
-          aggregation.order('visits_avg', 'desc');
-        }
-
-        if (value.exclude) {
-          aggregation.exclude(value.exclude);
-        }
-      } else if (value.type === 'range') {
-        aggregation = ejs.RangeAggregation(key).field(value.field);
-        _.each(value.ranges, function(v, k) {
-          aggregation.range(v.gte, v.lte, v.name);
-        });
-      } else if (value.type === 'geo_distance') {
-        aggregation = ejs.GeoDistanceAggregation(key)
-          .field(value.field)
-          .point(ejs.GeoPoint(value.point))
-          .unit(value.unit)
-
-        _.each(value.ranges, function(v, k) {
-          aggregation.range(v[0], v[1], v[2]);
-        });
-      }
-      // filter aggregation
-      faggregation.agg(aggregation);
-      body.aggregation(faggregation);
-      //return faggregation;
-    });
-
-  }
 
   /**
    * suggest documents (low level)
