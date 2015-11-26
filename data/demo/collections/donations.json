@@ -1,5 +1,5 @@
 {
-  "collection": "dotacje",
+  "name": "dotacje",
   "project": "itemsapi",
   "schema": {
     "name": {"type": "string", "store": true, "index": "not_analyzed" },

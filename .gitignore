@@ -29,3 +29,5 @@ data/logs/*
 
 config/local.json
 config/collections_local.json
+config/local
+config/local/*

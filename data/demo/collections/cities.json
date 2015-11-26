@@ -1,5 +1,5 @@
 {
-  "collection": "city",
+  "name": "city",
   "project": "itemsapi",
   "meta": {
     "title": "Cities"

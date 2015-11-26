@@ -41,12 +41,16 @@ var collectionService = require('./collection');
    * add collection (type)
    */
   module.addCollectionAsync = function(data) {
-    return elastic.addMappingAsync({
-      index: data.projectName,
-      type: data.collectionName,
-      body: {
-        properties: configHelper.getSchema(data.collectionName)
-      }
+    return collectionService.findCollectionAsync(data.collectionName)
+    .then(function(res) {
+      var helper = collectionHelper(res);
+      return elastic.addMappingAsync({
+        index: data.projectName,
+        type: data.collectionName,
+        body: {
+          properties: helper.getSchema()
+        }
+      })
     })
   },
 
@@ -64,12 +68,16 @@ var collectionService = require('./collection');
    * add collection (type)
    */
   module.addMappingAsync = function(data) {
-    return elastic.addMappingAsync({
-      index: data.projectName,
-      type: data.collectionName,
-      body: {
-        properties: configHelper.getSchema(data.collectionName)
-      }
+    return collectionService.findCollectionAsync(data.collectionName)
+    .then(function(res) {
+      var helper = collectionHelper(res);
+      return elastic.addMappingAsync({
+        index: data.projectName,
+        type: data.collectionName,
+        body: {
+          properties: helper.getSchema()
+        }
+      })
     })
   },
 

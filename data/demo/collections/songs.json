@@ -1,5 +1,5 @@
 {
-  "collection": "song",
+  "name": "song",
   "project": "itemsapi",
   "meta": {
     "title": "Songs"
