@@ -21,7 +21,7 @@ var fs = Promise.promisifyAll(require('fs-extra'));
    * in the future it should supports other more scalable dbs like mongodb, mysql or redis
    */
   module.getCollectionsAsync = function(data) {
-    var filename = config.collection.filename;
+    var filename = config.collections.filename;
 
     return fs.readFileAsync(filename)
     .then(function(res) {
