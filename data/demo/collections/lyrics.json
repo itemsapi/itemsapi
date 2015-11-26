@@ -1,0 +1,37 @@
+{
+  "name": "lyrics",
+  "project": "itemsapi",
+  "meta": {
+    "title": "Lyrics"
+  },
+  "schema": {
+    "artist": {"type": "string", "store": true, "index": "not_analyzed" },
+    "song": {"type": "string", "store": true, "index": "not_analyzed" },
+    "visits": {"type": "integer", "store": true },
+    "likes": {"type": "integer", "store": true },
+    "yt_id": {"type": "string", "store": true }
+  },
+  "defaults": {
+  },
+  "aggregations": {
+    "artist_terms": {"type": "terms", "field": "artist", "size": 10, "title": "Artists (popularity)", "order": true},
+    "artist_terms2": {"type": "terms", "field": "artist", "size": 10, "title": "Artists"}
+  },
+  "sortings": {
+    "most_likes": {
+      "title": "Most likes",
+      "type": "normal",
+      "order": "desc",
+      "field": "likes"
+    },
+    "most_visits": {
+      "title": "Most visits",
+      "type": "normal",
+      "order": "desc",
+      "field": "visits"
+    }
+  },
+  "table": {
+    "fields": ["artist", "song", "visits", "likes", "yt_id"]
+  }
+}

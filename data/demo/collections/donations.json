@@ -1,0 +1,40 @@
+{
+  "name": "dotacje",
+  "project": "itemsapi",
+  "schema": {
+    "name": {"type": "string", "store": true, "index": "not_analyzed" },
+    "receiver": {"type": "string", "store": true, "index": "not_analyzed" },
+    "voivodeship": {"type": "string", "store": true, "index": "not_analyzed" },
+    "region": {"type": "string", "display": "array", "store": true },
+    "investment": {"type": "integer", "store": false },
+    "value": {"type": "integer", "store": false },
+    "percent": {"type": "integer", "store": false },
+    "start": {"type": "integer", "store": false },
+    "end": {"type": "integer", "store": false }
+  },
+  "defaults": {
+  },
+  "visibility": "private",
+  "aggregations": {
+    "voivodeship_terms": {"type": "terms", "field": "voivodeship", "size": 15, "title": "Voivodeships"},
+    "region_terms": {"type": "terms", "field": "region", "size": 15, "title": "Regions"},
+    "receiver_terms": {"type": "terms", "field": "receiver", "size": 15, "title": "Receivers"}
+  },
+  "sortings": {
+    "biggest_investment": {
+      "title": "Biggest investment",
+      "type": "normal",
+      "order": "desc",
+      "field": "investment"
+    },
+    "biggest_percent": {
+      "title": "Biggest percent of investment",
+      "type": "normal",
+      "order": "desc",
+      "field": "percent"
+    }
+  },
+  "table": {
+    "fields": ["name", "receiver", "voivodeship", "region", "investment", "value", "percent", "start", "end"]
+  }
+}

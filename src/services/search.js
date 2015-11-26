@@ -8,6 +8,7 @@ var Promise = require('bluebird');
 var elastic = Promise.promisifyAll(require('../elastic/search'));
 var _ = require('lodash');
 var searchHelper = require('../helpers/search');
+var collectionService = require('./collection');
 
 (function(module) {
 
@@ -15,10 +16,15 @@ var searchHelper = require('../helpers/search');
    * search documents
    */
   module.searchAsync = function(data) {
-    return elastic.searchAsync(data)
+    return collectionService.findCollectionAsync(data.collectionName)
+    .then(function(res) {
+      data.collection = res;
+      return elastic.searchAsync(data);
+    })
     .then(function(res) {
       return searchHelper().searchConverter(data, res);
     })
+
   }
 
   /**

@@ -1,0 +1,86 @@
+{
+  "name": "movie",
+  "project": "itemsapi",
+  "meta": {
+    "title": "Movies",
+    "created": "spring 2015"
+  },
+  "visibility": "public",
+  "privileges": [
+    "read", "edit", "delete"
+  ],
+  "defaults": {
+    "sort": "most_votes"
+  },
+  "schema": {
+    "name": {"type": "string", "store": true },
+    "image": {"type": "string", "display": "image" },
+    "year": {"type": "integer", "store": true },
+    "votes": {"type": "integer", "store": true },
+    "director": {"type": "string", "index": "not_analyzed", "store": true },
+    "actors": {"type": "string", "index": "not_analyzed", "display": "array", "store": true },
+    "tags": {"type": "string", "display": "array", "store": true },
+    "rating": {"type": "float", "store": true }
+  },
+  "sortings": {
+    "rating": {
+      "title": "Best rating",
+      "type": "normal",
+      "order": "desc",
+      "field": "rating"
+    },
+    "most_votes": {
+      "title": "Most votes",
+      "type": "normal",
+      "order": "desc",
+      "field": "votes"
+    },
+    "year_newest": {
+      "title": "Newest movies",
+      "type": "normal",
+      "order": "desc",
+      "field": "year"
+    },
+    "year_oldest": {
+      "title": "Oldest movies",
+      "type": "normal",
+      "order": "asc",
+      "field": "year"
+    }
+  },
+  "aggregations": {
+    "actors_terms": {"type": "terms", "field": "actors", "size": 10, "title": "Actors"},
+    "director_terms": {"type": "terms", "field": "director", "size": 5, "title": "Directors"},
+    "tags_terms": {"type": "terms", "field": "tags", "size": 10, "title": "Tags"},
+    "votes_range": {"type": "range", "field": "votes", "ranges": [
+      [null, 300, "< 300"],
+      [300, 1000, "300 - 1000"],
+      [1000, 3000, "1000 - 3000"],
+      [3000, null, "> 3000"]], "title": "Votes range"},
+      "years_range": {"type": "range", "field": "year", "ranges": [
+        [null, 1950, "< 1950"],
+        [1950, 1960, "1950 - 1960"],
+        [1960, 1970, "1960 - 1970"],
+        [1970, 1980, "1970 - 1980"],
+        [1980, 1990, "1980 - 1990"],
+        [1990, 2000, "1990 - 2000"],
+        [2000, 2010, "2000 - 2010"],
+        [2010, null, "> 2010"]], "title": "Years range"},
+        "rating_range": {"type": "range", "field": "rating",
+          "ranges": [
+            [null, 1, "0 - 1"],
+            [1, 2, "1 - 2"],
+            [2, 3, "2 - 3"],
+            [3, 4, "3 - 4"],
+            [4, 5, "4 - 5"],
+            [5, 6, "5 - 6"],
+            [6, 7, "6 - 7"],
+            [7, 8, "7 - 8"],
+            [8, 9, "8 - 9"],
+            [9, null, "9 - 10"]],
+            "title": "Rating range"}
+  },
+  "table": {
+    "fields": ["image", "name", "director", "rating", "year", "votes", "tags", "actors"]
+  }
+}

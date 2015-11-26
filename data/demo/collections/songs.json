@@ -1,0 +1,52 @@
+{
+  "name": "song",
+  "project": "itemsapi",
+  "meta": {
+    "title": "Songs"
+  },
+  "defaults": {
+    "sort": "favorites"
+  },
+  "schema": {
+    "name": {"type": "string", "store": true },
+    "artist": {"type": "string", "store": true, "index": "not_analyzed" },
+    "year": {"type": "integer", "store": true },
+    "favorites": {"type": "integer", "store": true },
+    "played": {"type": "integer", "store": true },
+    "image": {"type": "string", "display": "image" },
+    "tags": {"type": "string", "index": "not_analyzed", "display": "array", "store": true },
+    "rating": {"type": "integer", "store": true }
+  },
+  "table": {
+    "fields": ["name", "tags", "artist", "favorites", "played"]
+  },
+  "sortings": {
+    "favorites": {
+      "title": "Favorites count",
+      "type": "normal",
+      "order": "desc",
+      "field": "favorites"
+    },
+    "played": {
+      "title": "Played count",
+      "type": "normal",
+      "order": "desc",
+      "field": "played"
+    }
+  },
+  "aggregations": {
+    "artist_terms": {"type": "terms", "field": "artist", "size": 10, "title": "Artists"},
+    "tags_terms": {"type": "terms", "field": "tags", "size": 10, "title": "Tags"},
+    "favorites_range": {"type": "range", "field": "favorites", "ranges": [
+      [300000, 400000, "300 - 400"],
+      [400000, 500000, "400 - 500"],
+      [500000, null, "> 500"]],
+      "title": "Favorites count [k]"},
+      "played_range": {"type": "range", "field": "played", "ranges": [
+        [1000000, 2000000, "1 - 2"],
+        [2000000, 3000000, "2 - 3"],
+        [3000000, 4000000, "3 - 4"],
+        [4000000, null, "> 4"]],
+        "title": "Played count [mln]"}
+  }
+}

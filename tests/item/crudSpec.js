@@ -38,6 +38,17 @@ setup.makeSuite('item crud request', function() {
       });
   });
 
+  it('should make successfull get (find) request', function(done) {
+    request(setup.getServer())
+      .get('/api/v1/movie')
+      .end(function afterRequest(err, res) {
+        res.should.have.property('status', 200);
+        //res.body.should.have.property('rating', 5);
+        //res.body.should.have.property('name', 'Godfather');
+        done();
+      });
+  });
+
   it('should make successfull update request', function(done) {
     request(setup.getServer())
       .put('/api/v1/movie/100')

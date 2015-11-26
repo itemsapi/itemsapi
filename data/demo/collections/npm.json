@@ -1,0 +1,36 @@
+{
+  "name": "npm",
+  "project": "itemsapi",
+  "meta": {
+    "title": "NPM (javascript)"
+  },
+  "schema": {
+    "name": {"type": "string", "store": true, "index": "not_analyzed" },
+    "short_description": {"type": "string", "store": true, "index": "not_analyzed" },
+    "license": {"type": "string", "store": true, "index": "not_analyzed" },
+    "tags": {"type": "string", "display": "array", "store": true },
+    "collaborators": {"type": "string", "display": "array", "store": true },
+    "downloads_last_day": {"type": "integer", "store": false },
+    "releases": {"type": "integer", "store": false },
+    "author": {"type": "string", "store": true, "index": "not_analyzed" }
+  },
+  "defaults": {
+  },
+  "aggregations": {
+    "authors_terms": {"type": "terms", "field": "author", "size": 30, "title": "Authors"},
+    "tags_terms": {"type": "terms", "field": "tags", "size": 15, "title": "Tags"},
+    "collaborators_terms": {"type": "terms", "field": "collaborators", "size": 15, "title": "Collaborators"},
+    "license_terms": {"type": "terms", "field": "license", "size": 10, "title": "Licenses"}
+  },
+  "sortings": {
+    "most_overviews": {
+      "title": "Most downloads last day",
+      "type": "normal",
+      "order": "desc",
+      "field": "downloads_last_day"
+    }
+  },
+  "table": {
+    "fields": ["name", "short_description", "author", "license", "tags", "releases", "downloads_last_day"]
+  }
+}

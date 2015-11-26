@@ -8,6 +8,7 @@ var validate = require('validate.js');
 var ejs = require('elastic.js');
 var logger = winston.loggers.get('query');
 var mappingHelper = require('./../helpers/mapping');
+var collectionHelper = require('./../helpers/collection');
 var _ = require('underscore');
 
 (function(module) {
@@ -24,16 +25,15 @@ var _ = require('underscore');
       .size(per_page)
       .from(offset);
 
-    var sortOptions = mappingHelper.getSortings(data.collectionName)[data.sort];
-    var mappingDefaults = mappingHelper.getDefaults(data.collectionName);
-    var defaultSort = mappingHelper.getSortings(data.collectionName)[mappingDefaults.sort];
+    var helper = collectionHelper(data.collection);
 
+    var sortOptions = helper.getSorting(data.sort);
     var sort = module.generateSort(sortOptions);
     if (sort) {
       body.sort(sort);
     }
+    var aggregationsOptions = helper.getAggregations();
 
-    var aggregationsOptions = mappingHelper.getAggregations(data.collectionName);
     var aggregationFilters = module.generateAggregationFilters(aggregationsOptions, data.aggs);
     body.filter(ejs.AndFilter(_.values(aggregationFilters)));
 
@@ -51,7 +51,7 @@ var _ = require('underscore');
 
     elastic.search({
       index: data.projectName,
-      type: data.collectionName,
+      type: data.collection.name,
       body: body,
       _source: data.fields || true
     }, function (err, res) {

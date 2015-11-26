@@ -6,6 +6,7 @@ var collectionsNames = configHelper.collectionsNames();
 var projectService = Promise.promisifyAll(require('./../src/services/project'));
 var elasticMapping = Promise.promisifyAll(require('./../src/elastic/mapping'));
 var statsService = Promise.promisifyAll(require('./../src/services/stats'));
+var collectionService = require('./../src/services/collection');
 
 module.exports = function(router) {
 
@@ -13,8 +14,9 @@ module.exports = function(router) {
    * get collections
    */
   router.get('/collections', function getCollections(req, res, next) {
-    var current = Promise.resolve();
-    return Promise.map(collectionsNames, function(name) {
+    return collectionService.getCollectionsListAsync()
+    //return Promise.map(collectionsNames, function(name) {
+    .map(function(name) {
       return projectService.collectionInfoAsync({
         projectName: 'project',
         collectionName: name
