@@ -20,7 +20,7 @@ module.exports = function(data) {
   }
 
   var getSorting = function(name) {
-    return getSortings[name] || null;
+    return getSortings()[name] || null;
   }
 
   var getMetadata = function() {
