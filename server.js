@@ -26,10 +26,13 @@ app.use('/api/v1', router);
 
 var elastic = require('./src/connections/elastic');
 elastic.init(config.elasticsearch);
-var client = require('redis').createClient(config.redis);
 
-// limit requests per IP
-var limiter = require('./hooks/limiter')(router, client);
+
+if (config.hooks && config.hooks.limiter && config.hooks.limiter.enabled === true) {
+  var client = require('redis').createClient(config.redis);
+  // limit requests per IP
+  var limiter = require('./hooks/limiter')(router, client);
+}
 
 // all collections, stats
 var itemsRoutes = require('./routes/additional')(router);

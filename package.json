@@ -1,6 +1,6 @@
 {
   "name": "itemsapi",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "creating search application without spending time for backend",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "start": "NODE_ENV=production node app.js"
   },
   "author": "Mateusz Rzepa",
-  "repository": "itemsapi/item",
+  "repository": "itemsapi/itemsapi",
   "license": "MIT",
   "keywords": [
     "faceted",

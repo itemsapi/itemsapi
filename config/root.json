@@ -15,5 +15,10 @@
   "collections": {
     "db": "json",
     "filename":  "./config/collections.json"
+  },
+  "hooks": {
+    "limiter": {
+      "enabled": false
+    }
   }
 }
