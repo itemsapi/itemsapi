@@ -44,8 +44,15 @@ Example collections:
 - <a href="https://twitter.com/itemsapi" target="_blank">Twitter @itemsapi</a>
 - ask directly @cigolpl
 
+## Tutorials
+- https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies
+
 ## Contributions
-If you have idea how to make this ItemsAPI better or help somehow, feel free to join!
+If you like ItemsAPI and want to help you can:
+- ask for new feature
+- make code review and suggest improvements
+- share your ideas
+- write clients for frameworks (angular, node.js, ror, php)
 
 ## Testing
 `grunt test`
