@@ -152,6 +152,7 @@ module.exports = function(router) {
       query: req.query.query || '',
       sort: req.query.sort || '',
       aggs: aggs,
+      aroundLatLng: req.query.around_lat_lng,
       fields: fields
     }).then(function(result) {
       result.meta.search_time = Date.now() - time;

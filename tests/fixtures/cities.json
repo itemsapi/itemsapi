@@ -1,0 +1,44 @@
+[
+    {
+        "latitude": "52.31",
+        "longitude": "13.23",
+        "geo": "52.31, 13.23",
+        "city": "Berlin",
+        "country": "Germany"
+    },
+    {
+        "latitude": "40.40",
+        "longitude": "73.56",
+        "geo": "40.40, 73.56",
+        "city": "New York City",
+        "country": "United States"
+    },
+    {
+        "latitude": "51.30",
+        "longitude": "0.08",
+        "geo": "51.30, 0.08",
+        "city": "London",
+        "country": "United Kingdom"
+    },
+    {
+        "latitude": "55.45",
+        "longitude": "37.37",
+        "geo": "55.45, 37.37",
+        "city": "Moscow",
+        "country": "Russia"
+    },
+    {
+        "latitude": "40.24",
+        "longitude": "3.41",
+        "geo": "40.24, 3.41",
+        "city": "Madrid",
+        "country": "Spain"
+    },
+    {
+        "latitude": "50.04",
+        "longitude": "19.56",
+        "geo": "50.04, 19.56",
+        "city": "Krakow",
+        "country": "Poland"
+    }
+]
