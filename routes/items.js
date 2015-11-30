@@ -113,10 +113,7 @@ module.exports = function(router) {
     });
   });
 
-  /*
-   * search items
-   */
-  router.get('/:name', function getItems(req, res, next) {
+  var searchItemsAsync = function(req, res, next) {
     var name = req.params.name;
 
     var aggs = {};
@@ -144,7 +141,7 @@ module.exports = function(router) {
     var time = Date.now();
 
     // @todo filtering params
-    searchService.searchAsync({
+    return searchService.searchAsync({
       projectName: 'project',
       collectionName: name,
       page: page,
@@ -154,8 +151,35 @@ module.exports = function(router) {
       aggs: aggs,
       aroundLatLng: req.query.around_lat_lng,
       fields: fields
-    }).then(function(result) {
+    })
+    .then(function(result) {
       result.meta.search_time = Date.now() - time;
+      return result;
+    })
+  };
+
+  /*
+   * search items
+   */
+  router.get('/:name/export', function searchItems(req, res, next) {
+    return searchItemsAsync(req, res, next)
+    .then(function(result) {
+      res.type('application/octet-stream');
+      return res.end(JSON.stringify(_.map(result.data.items, function(val) {
+        return _.omit(val, 'id', 'score');
+      }), null, 4));
+
+    }).catch(function(result) {
+      return next(result);
+    });
+  });
+
+  /*
+   * search items
+   */
+  router.get('/:name', function searchItems(req, res, next) {
+    return searchItemsAsync(req, res, next)
+    .then(function(result) {
       return res.json(result);
     }).catch(function(result) {
       return next(result);
