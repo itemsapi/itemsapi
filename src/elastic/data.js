@@ -1,8 +1,5 @@
 'use strict';
 
-var request = require('request');
-var winston = require('winston');
-var nconf = require('nconf');
 var Promise = require('bluebird');
 var elastic = Promise.promisifyAll(require('../connections/elastic').getElastic());
 var validate = require('validate.js');

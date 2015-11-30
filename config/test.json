@@ -2,27 +2,8 @@
   "project": {
     "name": "test"
   },
-  "collection": {
+  "collections": {
     "db": "json",
     "filename":  "./config/collections_test.json"
-  },
-  "collections": {
-    "movie": {
-      "schema": {
-        "name": {"type": "string", "store": true },
-        "year": {"type": "integer", "store": true },
-        "rating": {"type": "string", "store": true }
-      },
-      "table": {
-        "fields": ["image", "name", "director", "rating", "year", "votes"]
-      }
-    },
-    "city": {
-      "schema": {
-        "name": {"type": "string", "store": true },
-        "country": {"type": "string", "store": true },
-        "rating": {"type": "string", "store": true }
-      }
-    }
   }
 }

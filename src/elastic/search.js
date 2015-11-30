@@ -2,12 +2,9 @@
 
 var request = require('request');
 var winston = require('winston');
-var nconf = require('nconf');
 var elastic = require('../connections/elastic').getElastic();
-var validate = require('validate.js');
 var ejs = require('elastic.js');
 var logger = winston.loggers.get('query');
-var mappingHelper = require('./../helpers/mapping');
 var collectionHelper = require('./../helpers/collection');
 var _ = require('underscore');
 

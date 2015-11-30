@@ -1,10 +1,5 @@
 'use strict';
 
-var request = require('request');
-var winston = require('winston');
-var nconf = require('nconf');
-var elastic = require('../elastic/mapping');
-var async = require('async');
 var projectService = require('./../../src/services/project');
 var dataService = require('./../../src/services/data');
 

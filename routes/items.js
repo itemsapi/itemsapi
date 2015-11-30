@@ -1,4 +1,3 @@
-var nconf = require('nconf');
 var Promise = require('bluebird');
 var _ = require('underscore');
 var collectionHelper = require('./../src/helpers/collection');
