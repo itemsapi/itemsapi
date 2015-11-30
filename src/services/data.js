@@ -1,13 +1,10 @@
 'use strict';
 
-var request = require('request');
-var winston = require('winston');
-var nconf = require('nconf');
 var Promise = require('bluebird');
 var elastic = Promise.promisifyAll(require('../elastic/data'));
 var async = require('async');
 var _ = require('lodash');
-//Promise.promisifyAll(elastic);
+
 (function(module) {
 
   /**

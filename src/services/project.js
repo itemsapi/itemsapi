@@ -1,14 +1,9 @@
 'use strict';
 
-var request = require('request');
-var winston = require('winston');
-var nconf = require('nconf');
 var Promise = require('bluebird');
 var elastic = Promise.promisifyAll(require('../elastic/mapping'));
 var elasticData = require('../elastic/data');
-var configHelper = require('./../helpers/config')(nconf.get());
 var searchService = Promise.promisifyAll(require('./search'));
-var mappingHelper = require('./../helpers/mapping');
 var collectionHelper = require('./../helpers/collection');
 var collectionService = require('./collection');
 

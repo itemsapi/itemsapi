@@ -1,8 +1,5 @@
 'use strict';
 
-var nconf = require('nconf');
-var fs = require('fs');
-var winston = require('winston');
 var server;
 
 (function (module) {

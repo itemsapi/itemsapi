@@ -1,8 +1,5 @@
-var nconf = require('nconf');
 var Promise = require('bluebird');
 var _ = require('underscore');
-var configHelper = require('./../src/helpers/config')(nconf.get());
-var collectionsNames = configHelper.collectionsNames();
 var projectService = Promise.promisifyAll(require('./../src/services/project'));
 var elasticMapping = Promise.promisifyAll(require('./../src/elastic/mapping'));
 var statsService = Promise.promisifyAll(require('./../src/services/stats'));
@@ -15,7 +12,6 @@ module.exports = function(router) {
    */
   router.get('/collections', function getCollections(req, res, next) {
     return collectionService.getCollectionsListAsync()
-    //return Promise.map(collectionsNames, function(name) {
     .map(function(name) {
       return projectService.collectionInfoAsync({
         projectName: 'project',
