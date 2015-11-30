@@ -1,11 +1,9 @@
 'use strict';
 
-var request = require('request');
-var winston = require('winston');
 var elastic = require('../connections/elastic').getElastic();
 var ejs = require('elastic.js');
-var logger = winston.loggers.get('query');
 var collectionHelper = require('./../helpers/collection');
+var geoHelper = require('./../helpers/geo');
 var _ = require('underscore');
 
 (function(module) {
@@ -17,6 +15,7 @@ var _ = require('underscore');
     var page = data.page || 1;
     var per_page = data.per_page || 10;
     var offset = (page - 1) * per_page;
+    data.geoPoint = geoHelper.getGeoPoint(data.aroundLatLng);
 
     var body = ejs.Request()
       .size(per_page)
@@ -25,7 +24,7 @@ var _ = require('underscore');
     var helper = collectionHelper(data.collection);
 
     var sortOptions = helper.getSorting(data.sort);
-    var sort = module.generateSort(sortOptions);
+    var sort = module.generateSort(sortOptions, data);
     if (sort) {
       body.sort(sort);
     }
@@ -35,7 +34,7 @@ var _ = require('underscore');
     body.filter(ejs.AndFilter(_.values(aggregationFilters)));
 
     // generate aggretations according to options
-    var aggregations = module.generateAggregations(aggregationsOptions, aggregationFilters);
+    var aggregations = module.generateAggregations(aggregationsOptions, aggregationFilters, data);
 
     // add all aggregations to body builder
     _.each(aggregations, function(value) {
@@ -62,9 +61,10 @@ var _ = require('underscore');
   /**
    * generate aggregations
    */
-  module.generateAggregations = function(aggregations, filters) {
-    return _.map(aggregations, function(value, key) {
+  module.generateAggregations = function(aggregations, filters, input) {
+    var input = input || {};
 
+    return _.map(aggregations, function(value, key) {
       var filterAggregation = ejs.FilterAggregation(key)
         .filter(ejs.AndFilter(_.values(_.omit(filters, key))));
 
@@ -92,30 +92,29 @@ var _ = require('underscore');
       } else if (value.type === 'geo_distance') {
         aggregation = ejs.GeoDistanceAggregation(key)
           .field(value.field)
-          .point(ejs.GeoPoint(value.point))
+          .point(ejs.GeoPoint(input.geoPoint))
           .unit(value.unit)
 
         _.each(value.ranges, function(v, k) {
-          // @deprecated config style
-          aggregation.range(v[0], v[1], v[2]);
+          aggregation.range(v.gte, v.lte, v.name);
         });
       }
       filterAggregation.agg(aggregation);
       return filterAggregation;
     });
-
   }
 
   /**
    * generate sorting
    */
-  module.generateSort = function(sortOptions) {
+  module.generateSort = function(sortOptions, input) {
+    var input = input || {};
 
     if (sortOptions) {
       var sort = ejs.Sort(sortOptions.field)
       if (!sortOptions.type || sortOptions.type === 'normal') {
       } else if (sortOptions.type === 'geo') {
-        sort.geoDistance(ejs.GeoPoint([50.0646500, 19.9449800])).unit('km')
+        sort.geoDistance(ejs.GeoPoint(input.geoPoint)).unit('km')
       }
 
       if (sortOptions.order) {
@@ -188,7 +187,7 @@ var _ = require('underscore');
       .text(data.query)
       .field('name');
 
-    logger.info(body.toJSON());
+    //logger.info(body.toJSON());
 
     elastic.suggest({
       index: data.projectName,

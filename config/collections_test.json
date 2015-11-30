@@ -31,6 +31,21 @@
   "schema": {
     "name": {"type": "string", "store": true },
     "country": {"type": "string", "store": true },
-    "rating": {"type": "string", "store": true }
+    "rating": {"type": "string", "store": true },
+    "geo": {"type": "geo_point"}
+  },
+  "sortings": {
+    "city": {
+      "title": "City",
+      "type": "normal",
+      "order": "asc",
+      "field": "city"
+    },
+    "distance": {
+      "title": "Distance",
+      "type": "geo",
+      "order": "asc",
+      "field": "geo"
+    }
   }
 }]

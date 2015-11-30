@@ -40,14 +40,21 @@
     "fields": ["country_icon", "country", "city", "province_icon", "province", "geo", "distance"]
   },
   "aggregations": {
-    "country": {"type": "terms", "field": "country", "size": 10, "title": "Country"},
-    "distance_ranges": {"type": "geo_distance", "field": "geo", "point": [50.0646500, 19.9449800],
+    "country": {
+      "type": "terms",
+      "field": "country",
+      "size": 10,
+      "title": "Country"
+    },
+    "distance_ranges": {
+      "type": "geo_distance",
+      "field": "geo",
       "ranges": [
-        [null, 500, "< 500"],
-        [500, 1000, "500 - 1000"],
-        [1000, 1500, "1000 - 1500"],
-        [1500, 2000, "1500 - 2000"],
-        [2000, null, "> 2000"]], "unit": "km",
-        "title": "Distance ranges [km]"}
+        {"lte": 500, "name": "< 500"},
+        {"gte": 500, "name": "> 2000"}
+      ],
+      "unit": "km",
+      "title": "Distance ranges [km]"
+    }
   }
 }
