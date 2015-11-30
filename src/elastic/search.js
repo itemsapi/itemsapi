@@ -24,7 +24,7 @@ var _ = require('underscore');
     var helper = collectionHelper(data.collection);
 
     var sortOptions = helper.getSorting(data.sort);
-    var sort = module.generateSort(data, sortOptions);
+    var sort = module.generateSort(sortOptions, data);
     if (sort) {
       body.sort(sort);
     }
@@ -34,7 +34,7 @@ var _ = require('underscore');
     body.filter(ejs.AndFilter(_.values(aggregationFilters)));
 
     // generate aggretations according to options
-    var aggregations = module.generateAggregations(data, aggregationsOptions, aggregationFilters);
+    var aggregations = module.generateAggregations(aggregationsOptions, aggregationFilters, data);
 
     // add all aggregations to body builder
     _.each(aggregations, function(value) {
@@ -61,9 +61,10 @@ var _ = require('underscore');
   /**
    * generate aggregations
    */
-  module.generateAggregations = function(input, aggregations, filters) {
-    return _.map(aggregations, function(value, key) {
+  module.generateAggregations = function(aggregations, filters, input) {
+    var input = input || {};
 
+    return _.map(aggregations, function(value, key) {
       var filterAggregation = ejs.FilterAggregation(key)
         .filter(ejs.AndFilter(_.values(_.omit(filters, key))));
 
@@ -101,13 +102,13 @@ var _ = require('underscore');
       filterAggregation.agg(aggregation);
       return filterAggregation;
     });
-
   }
 
   /**
    * generate sorting
    */
-  module.generateSort = function(input, sortOptions) {
+  module.generateSort = function(sortOptions, input) {
+    var input = input || {};
 
     if (sortOptions) {
       var sort = ejs.Sort(sortOptions.field)
