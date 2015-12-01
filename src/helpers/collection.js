@@ -7,6 +7,12 @@ module.exports = function(data) {
     return data.schema || {};
   }
 
+  var getElasticSchema = function() {
+    return _.mapObject(getSchema(), function(val, key) {
+      return _.pick(val, 'type', 'index', 'store')
+    });
+  }
+
   var getAggregations = function() {
     return data.aggregations || {};
   }
@@ -42,6 +48,7 @@ module.exports = function(data) {
 
   return {
     getSchema: getSchema,
+    getElasticSchema: getElasticSchema,
     getAggregations: getAggregations,
     getAggregation: getAggregation,
     getSortings: getSortings,
