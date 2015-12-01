@@ -31,6 +31,11 @@ setup.makeSuite('collection service', function() {
       should(collectionHelper(res).getAggregation('wrong_value')).be.equal(null);
 
       should(collectionHelper(res).getSchema()).have.property('name');
+      should(collectionHelper(res).getSchema()).have.property('image');
+      should(collectionHelper(res).getSchema().image).have.property('display');
+      should(collectionHelper(res).getElasticSchema()).have.property('image');
+      should(collectionHelper(res).getElasticSchema().image).have.property('type');
+      should(collectionHelper(res).getElasticSchema().image).not.have.property('display');
       done();
     })
   });

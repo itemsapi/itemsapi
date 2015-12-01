@@ -3,7 +3,8 @@
   "schema": {
     "name": {"type": "string", "store": true },
     "year": {"type": "integer", "store": true },
-    "rating": {"type": "string", "store": true }
+    "rating": {"type": "string", "store": true},
+    "image": {"type": "string", "display": "image"}
   },
   "aggregations": {
     "actors_terms": {"type": "terms", "field": "actors", "size": 10, "title": "Actors"},

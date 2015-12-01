@@ -43,7 +43,7 @@ var collectionService = require('./collection');
         index: data.projectName,
         type: data.collectionName,
         body: {
-          properties: helper.getSchema()
+          properties: helper.getElasticSchema()
         }
       })
     })
@@ -70,7 +70,7 @@ var collectionService = require('./collection');
         index: data.projectName,
         type: data.collectionName,
         body: {
-          properties: helper.getSchema()
+          properties: helper.getElasticSchema()
         }
       })
     })
