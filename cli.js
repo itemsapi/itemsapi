@@ -61,7 +61,6 @@ cli.main(function(args, options) {
   } else if (options.import === true) {
     var filename = options.file || './data/movies.json';
     importService.import({
-      projectName: 'project',
       collectionName: options.collection,
       bulkSize: 200,
       body: JSON.parse(fs.readFileSync(filename, 'utf8'))

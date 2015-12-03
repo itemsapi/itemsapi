@@ -15,7 +15,11 @@ var _ = require('underscore');
    * add documents
    */
   module.import = function(data, callback) {
-    projectService.ensureCollectionAsync(data)
+    collectionService.findCollectionAsync(data.collectionName)
+    .then(function(res) {
+      data.projectName = res.project;
+      return projectService.ensureCollectionAsync(data)
+    })
     .then(function(res) {
       dataService.addAllDocuments(data, function(err, res) {
         if (err) {
