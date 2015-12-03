@@ -170,6 +170,37 @@ setup.makeSuite('elastic mapping', function() {
       });
     });
 
+    it('should get original elastic mapping', function(done) {
+      model.getMappingAsync({
+        index: 'test',
+        type: 'city'
+      }).then(function(res) {
+        //console.log(JSON.stringify(res, null, 4));
+        res.should.have.property('test');
+        res.test.should.have.property('mappings');
+        res.test.mappings.should.have.property('city');
+        res.test.mappings.city.properties.should.have.property('name');
+        done();
+      });
+    });
+
+    it('should get original elastic mapping properties', function(done) {
+      model.getOneMappingAsync({
+        index: 'test',
+        type: 'city'
+      }).then(function(res) {
+        //console.log(JSON.stringify(res, null, 4));
+        res.should.have.property('index');
+        res.should.have.property('type');
+        res.properties.should.have.property('message');
+        res.properties.should.have.property('name');
+        res.properties.should.have.property('rating');
+        done();
+      });
+    });
+
+
+
     it('should check if mapping exists successfully', function(done) {
       model.existsMappingAsync({
         index: 'test',

@@ -16,12 +16,12 @@ var collectionService = require('./collection');
     return collectionService.findCollectionAsync(data.collectionName)
     .then(function(res) {
       data.collection = res;
+      data.projectName = res.project;
       return elastic.searchAsync(data);
     })
     .then(function(res) {
       return searchHelper().searchConverter(data, res);
     })
-
   }
 
   /**

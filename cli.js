@@ -13,6 +13,9 @@ nconf.file('defaults', {file: './config/root.json'});
 
 var server = require('./server');
 var importService = require('./src/services/import');
+var collectionService = require('./src/services/collection');
+var elasticStats = require('./src/elastic/stats');
+var elasticMapping = require('./src/elastic/mapping');
 
 var cli = require('cli');
 
@@ -20,10 +23,42 @@ cli.parse({
   import: ['import', 'Import external data'],
   collection: ['collection', 'Collection name', 'string'],
   file: ['import', 'Path to file', 'string'],
+
+  elasticsearch: ['elasticsearch', 'Elasticsearch utils'],
+  indices: ['indices', 'Indices'],
+  mapping: ['mapping', 'Mapping'],
+  index: ['index', 'Elastic index', 'string'],
+  type: ['type', 'Elastic type', 'string']
 });
 
 cli.main(function(args, options) {
-  if (options.import === true) {
+  if (options.elasticsearch === true) {
+    if (options.import === true) {
+      importService.importElasticTypeMappingAsync({
+        index: options.index,
+        type: options.type
+      })
+      .then(function(res) {
+        console.log('type from elasticsearch has been imported to local database');
+        process.exit();
+      });
+    } else if (options.indices === true) {
+      elasticStats.getIndicesAsync()
+      .then(function(res) {
+        console.log(res);
+        process.exit();
+      });
+    } else if (options.mapping === true) {
+      elasticMapping.getMappingAsync({
+        index: options.index,
+        type: options.type
+      })
+      .then(function(res) {
+        console.log(JSON.stringify(res, null, 4));
+        process.exit();
+      });
+    }
+  } else if (options.import === true) {
     var filename = options.file || './data/movies.json';
     importService.import({
       projectName: 'project',

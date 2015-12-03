@@ -5,8 +5,14 @@ var setup = require(__dirname + '/mocks/setup');
 
 setup.makeSuite('routing', function addSuite() {
 
-    before(function before(done) {
-        done();
+    var projectService = require('./../src/services/project');
+    before(function(done) {
+        projectService.ensureCollectionAsync({
+            projectName: 'test',
+            collectionName: 'movie'
+        }).delay(30).then(function(res) {
+            done();
+        });
     });
 
     after(function after(done) {

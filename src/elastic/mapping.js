@@ -131,10 +131,10 @@ var validate = require('validate.js');
   },
 
   /**
-   * get mapping for type
+   * get mapping for one type
+   * @deprecated
    */
   module.getMappingForType = function(data, callback) {
-
     elastic.indices.getMapping(data, function(err, res, status) {
       if (err) {
         winston.error(err);
@@ -143,8 +143,47 @@ var validate = require('validate.js');
       if (res[data.index] === undefined) {
         return callback('Mapping not found');
       }
-
       callback(null, res[data.index].mappings[data.type].properties);
+    })
+  }
+
+  /**
+   * get mapping for index / type
+   */
+  module.getMappingAsync = function(data) {
+    return elastic.indices.getMappingAsync(data)
+    .then(function (res) {
+      return res[0];
+    })
+  }
+
+  /**
+   * get mapping properties
+   * return object with type, index and properties
+   */
+  module.getOneMappingAsync = function(data) {
+    var index, type;
+    return module.getMappingAsync(data)
+    .then(function (res) {
+      // get first index
+      index = _.keys(res)[0];
+      return res[index];
+    })
+    .then(function (res) {
+      // get mappings
+      return res.mappings;
+    })
+    .then(function (res) {
+      // get first type
+      type = _.keys(res)[0];
+      return res[type];
+    })
+    .then(function (res) {
+      return {
+        index: index,
+        type: type,
+        properties: res.properties
+      };
     })
   }
 }(exports));
