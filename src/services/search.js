@@ -14,7 +14,8 @@ var collectionService = require('./collection');
    */
   module.searchAsync = function(data) {
     return collectionService.findCollectionAsync({
-      name: data.collectionName
+      name: data.collectionName,
+      project: data.projectName,
     })
     .then(function(res) {
       data.collection = res;
