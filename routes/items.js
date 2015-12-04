@@ -14,17 +14,18 @@ module.exports = function(router) {
    */
   router.post('/:name', function postItem(req, res, next) {
     var name = req.params.name;
+    var project = req.query.project;
     var processAsync;
 
     if (_.isArray(req.body)) {
       processAsync = dataService.addDocumentsAsync({
-        projectName: 'project',
+        projectName: project,
         collectionName: name,
         body: req.body
       });
     } else {
       processAsync = dataService.addDocumentAsync({
-        projectName: 'project',
+        projectName: project,
         collectionName: name,
         body: req.body
       });
@@ -42,14 +43,15 @@ module.exports = function(router) {
    */
   router.put('/:name/recreate-mapping', function recreateMapping(req, res, next) {
     var name = req.params.name;
+    var project = req.query.project;
 
     elasticMapping.deleteMappingAsync({
-      index: 'project',
+      index: project,
       type: name
     })
     .then(function(result) {
       return projectService.addMappingAsync({
-        projectName: 'project',
+        projectName: project,
         collectionName: name
       })
     })
@@ -65,9 +67,10 @@ module.exports = function(router) {
    */
   router.delete('/:name', function deleteItem(req, res, next) {
     var name = req.params.name;
+    var project = req.query.project;
 
     dataService.cleanDocumentsAsync({
-      projectName: 'project',
+      projectName: project,
       collectionName: name
     }).then(function(result) {
       return res.json({});
@@ -82,9 +85,10 @@ module.exports = function(router) {
   router.delete('/:name/:id', function deleteItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
+    var project = req.query.project;
 
     dataService.deleteDocumentAsync({
-      projectName: 'project',
+      projectName: project,
       collectionName: name,
       id: id
     }).then(function(result) {
@@ -100,9 +104,10 @@ module.exports = function(router) {
   router.put('/:name/:id', function updateItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
+    var project = req.query.project;
 
     dataService.updateDocumentAsync({
-      projectName: 'project',
+      projectName: project,
       collectionName: name,
       id: id,
       body: req.body
@@ -115,6 +120,7 @@ module.exports = function(router) {
 
   var searchItemsAsync = function(req, res, next) {
     var name = req.params.name;
+    var project = req.query.project;
 
     var aggs = {};
     if (req.query.aggs) {
@@ -142,7 +148,7 @@ module.exports = function(router) {
 
     // @todo filtering params
     return searchService.searchAsync({
-      projectName: 'project',
+      projectName: project,
       collectionName: name,
       page: page,
       per_page: per_page,
@@ -232,9 +238,10 @@ module.exports = function(router) {
    */
   router.get('/:name/autocomplete', function autocomplete(req, res, next) {
     var name = req.params.name;
+    var project = req.query.project;
     // @todo filtering params
     searchService.suggestAsync({
-      projectName: 'project',
+      projectName: project,
       collectionName: name,
       query: req.query.query || ''
     }).then(function(result) {
@@ -259,9 +266,10 @@ module.exports = function(router) {
   router.get('/:name/:id', function getItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
+    var project = req.query.project;
 
     dataService.getDocumentAsync({
-      projectName: 'project',
+      projectName: project,
       collectionName: name,
       id: id
     }).then(function(result) {

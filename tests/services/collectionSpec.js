@@ -32,6 +32,18 @@ setup.makeSuite('collection service', function() {
     })
   });
 
+  it('should find collection with undefined project name', function(done) {
+    collectionService.findCollectionAsync({
+      name: 'movie',
+      project: undefined
+    })
+    .then(function(res) {
+      should(res).not.be.undefined;
+      res.should.have.property('schema');
+      done();
+    })
+  });
+
   it('should not find collection with not existent project', function(done) {
     collectionService.findCollectionAsync({
       name: 'movie',
