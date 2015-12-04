@@ -2,6 +2,9 @@
 
 var projectService = require('./../../src/services/project');
 var dataService = require('./../../src/services/data');
+var collectionService = require('./../../src/services/collection');
+var elasticMapping = require('./../../src/elastic/mapping');
+var _ = require('underscore');
 
 (function(module) {
 
@@ -12,7 +15,11 @@ var dataService = require('./../../src/services/data');
    * add documents
    */
   module.import = function(data, callback) {
-    projectService.ensureCollectionAsync(data)
+    collectionService.findCollectionAsync(data.collectionName)
+    .then(function(res) {
+      data.projectName = res.project;
+      return projectService.ensureCollectionAsync(data)
+    })
     .then(function(res) {
       dataService.addAllDocuments(data, function(err, res) {
         if (err) {
@@ -21,5 +28,22 @@ var dataService = require('./../../src/services/data');
         callback(null, res);
       });
     });
+  }
+
+  /**
+   * import elastic type and save it to local collections
+   */
+  module.importElasticTypeMappingAsync = function(data, callback) {
+    return elasticMapping.getOneMappingAsync(data)
+    .then(function(res) {
+      return collectionService.addCollectionAsync({
+        name: res.type,
+        project: res.index,
+        schema: res.properties,
+        table: {
+          fields: _.keys(res.properties)
+        }
+      });
+    })
   }
 }(exports));

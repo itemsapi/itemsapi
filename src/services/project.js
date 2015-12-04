@@ -100,7 +100,8 @@ var collectionService = require('./collection');
       }
       return {
         name: name,
-        visibility: collection.visibility,
+        project: collection.project,
+        //visibility: collection.visibility,
         display_name: display_name,
         count: res
       };

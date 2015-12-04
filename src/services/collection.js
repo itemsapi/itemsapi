@@ -17,6 +17,54 @@ var fs = Promise.promisifyAll(require('fs-extra'));
   }
 
   /**
+   * add collection manually
+   * we should switch to https://github.com/typicode/lowdb later
+   * we should make data validation too
+   */
+  module.addCollectionAsync = function(data) {
+    var filename = config.collections.filename;
+
+    return fs.readFileAsync(filename)
+    .then(function(res) {
+      return JSON.parse(res);
+    })
+    .then(function(res) {
+      res.push(data);
+      return res;
+    })
+    .then(function(res) {
+      return fs.writeFileAsync(
+        filename,
+        JSON.stringify(res, null, 4),
+        {encoding: 'utf8'}
+      );
+    });
+  }
+
+  /**
+   * remove collection manually
+   * we should switch to https://github.com/typicode/lowdb later
+   */
+  module.removeCollectionAsync = function(where) {
+    var filename = config.collections.filename;
+
+    return fs.readFileAsync(filename)
+    .then(function(res) {
+      return JSON.parse(res);
+    })
+    .then(function(res) {
+      return _.reject(res, where);
+    })
+    .then(function(res) {
+      return fs.writeFileAsync(
+        filename,
+        JSON.stringify(res, null, 4),
+        {encoding: 'utf8'}
+      );
+    });
+  }
+
+  /**
    * get collections from json file
    * in the future it should supports other more scalable dbs like mongodb, mysql or redis
    */

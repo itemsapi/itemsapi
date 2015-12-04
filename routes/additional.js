@@ -11,11 +11,11 @@ module.exports = function(router) {
    * get collections
    */
   router.get('/collections', function getCollections(req, res, next) {
-    return collectionService.getCollectionsListAsync()
-    .map(function(name) {
+    return collectionService.getCollectionsAsync()
+    .map(function(collection) {
       return projectService.collectionInfoAsync({
-        projectName: 'project',
-        collectionName: name
+        projectName: collection.project,
+        collectionName: collection.name
       }).then(function(result) {
         return _.extend(result, {
           author: 'itemsapi'
