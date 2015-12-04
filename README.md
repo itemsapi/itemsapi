@@ -1,4 +1,7 @@
 # ItemsAPI 
+
+ItemsAPI is restful search backend written in node.js and elasticsearch.
+
 The goal of this project is creating advanced search application without spending time for backend. You just provide configuration and data and your backend is ready to go. You don't need to be node.js developer to use it.
 
 With ItemsAPI you can create very easily:
@@ -6,19 +9,20 @@ With ItemsAPI you can create very easily:
 - autocomplete and simple recommendation system for ecommerce
 - songs and movies recommendation
 
-ItemsAPI is restful backend best for:
-- javascript frameworks (angular.js, meteor.js, react.js)
-- mobile (ios, android)
- 
 This backend will offer powerful functionality like:
 - full text searching
 - autocomplete
 - simple recommendation
 - geo searching
-- field types like standard (int, string, etc) and custom (image, rating, geo, tags)
 
 ## Getting started
-To find out more information about ItemsAPI please go to the official page - <a href="https://www.itemsapi.com/docs/getting-started" target="_blank">go to the documentation</a>.
+<a href="https://www.itemsapi.com/docs/getting-started" target="_blank">Getting started</a>
+
+<a href="https://www.itemsapi.com" target="_blank">ItemsAPI website</a>
+
+## Documentation
+
+To find out more go to the - <a href="https://itemsapi.readme.io" target="_blank">official documentation</a>.
 
 ## Requirement
 - node.js, npm
@@ -35,8 +39,7 @@ You can import huge json collection within one command. i.e.
 
 Example collections:
 - [Movies](http://app.itemsapi.com/documents/name/movie "Movies")
-- [Songs](http://app.itemsapi.com/documents/name/song "Songs")
-- [Quotes](http://app.itemsapi.com/documents/name/quote "Quotes")
+- [Cities](http://app.itemsapi.com/documents/name/city "Cities")
 - [NPM libraries](http://app.itemsapi.com/documents/name/npm "NPM libraries")
 
 ## Community
