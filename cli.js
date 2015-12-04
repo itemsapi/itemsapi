@@ -21,19 +21,32 @@ var cli = require('cli');
 
 cli.parse({
   import: ['import', 'Import external data'],
+  export: ['export', 'Export data'],
   collection: ['collection', 'Collection name', 'string'],
+  project: ['project', 'Project name', 'string'],
   file: ['import', 'Path to file', 'string'],
 
   elasticsearch: ['elasticsearch', 'Elasticsearch utils'],
   indices: ['indices', 'Indices'],
   mapping: ['mapping', 'Mapping'],
   index: ['index', 'Elastic index', 'string'],
-  type: ['type', 'Elastic type', 'string']
+  type: ['type', 'Elastic type', 'string'],
+  limit: ['limit', 'Items limit', 'int']
 });
 
 cli.main(function(args, options) {
   if (options.elasticsearch === true) {
-    if (options.import === true) {
+    if (options.export === true) {
+      importService.exportAsync({
+        projectName: options.project,
+        collectionName: options.collection,
+        limit: options.limit
+      })
+      .then(function(res) {
+        console.log('Data has been exported to ./data/exports/collections.json');
+        process.exit();
+      });
+    } else if (options.import === true) {
       importService.importElasticTypeMappingAsync({
         index: options.index,
         type: options.type

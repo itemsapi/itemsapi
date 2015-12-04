@@ -3,8 +3,10 @@
 var projectService = require('./../../src/services/project');
 var dataService = require('./../../src/services/data');
 var collectionService = require('./../../src/services/collection');
+var searchService = require('./../../src/services/search');
 var elasticMapping = require('./../../src/elastic/mapping');
 var _ = require('underscore');
+var fs = require('fs-extra');
 
 (function(module) {
 
@@ -30,6 +32,27 @@ var _ = require('underscore');
         callback(null, res);
       });
     });
+  }
+
+  /**
+   * export collection
+   */
+  module.exportAsync = function(data) {
+    return searchService.searchAsync({
+      name: data.collectionName,
+      project: data.projectName,
+      per_page: data.limit || 100
+    })
+    .then(function(res) {
+      return res.data.items;
+    })
+    .then(function(res) {
+      return fs.writeFileAsync(
+        './data/exports/collection.json',
+        JSON.stringify(res, null, 4),
+        {encoding: 'utf8'}
+      );
+    })
   }
 
   /**
