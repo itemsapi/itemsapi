@@ -10,7 +10,15 @@ var fs = Promise.promisifyAll(require('fs-extra'));
    * find collection
    */
   module.findCollectionAsync = function(where) {
+    // pick only properties which are defined
+    where = _.pick(where, function(value) {
+      return !_.isUndefined(value);
+    });
+
     return module.getCollectionsAsync()
+    .then(function(res) {
+      return res;
+    })
     .then(function(res) {
       return _.findWhere(res, where);
     });

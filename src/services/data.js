@@ -2,6 +2,7 @@
 
 var Promise = require('bluebird');
 var elastic = Promise.promisifyAll(require('../elastic/data'));
+var collectionService = require('../services/collection');
 var async = require('async');
 var _ = require('lodash');
 
@@ -11,11 +12,18 @@ var _ = require('lodash');
    * get document
    */
   module.addDocumentAsync = function(data) {
-    return elastic.addDocumentAsync({
-      index: data.projectName,
-      type: data.collectionName,
-      body: data.body,
-      id: data.body.id
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+      project: data.projectName
+    })
+    .then(function(res) {
+      var collection = res || {};
+      return elastic.addDocumentAsync({
+        index: collection.project,
+        type: data.collectionName,
+        body: data.body,
+        id: data.body.id
+      })
     }).then(function(res) {
       return {
         id: res._id,
@@ -29,11 +37,17 @@ var _ = require('lodash');
    * update document
    */
   module.updateDocumentAsync = function(data) {
-    return elastic.updateDocumentAsync({
-      index: data.projectName,
-      type: data.collectionName,
-      body: data.body,
-      id: data.id
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+      project: data.projectName
+    })
+    .then(function(res) {
+      return elastic.updateDocumentAsync({
+        index: res.project,
+        type: data.collectionName,
+        body: data.body,
+        id: data.id
+      })
     }).then(function(res) {
       return res;
     })
@@ -53,6 +67,18 @@ var _ = require('lodash');
    * delete document
    */
   module.deleteDocumentAsync = function(data) {
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+      project: data.projectName
+    })
+    .then(function(res) {
+      return elastic.deleteDocumentAsync({
+        index: res.project,
+        type: data.collectionName,
+        id: data.id
+      })
+    })
+
     return elastic.deleteDocumentAsync({
       index: data.projectName,
       type: data.collectionName,
@@ -66,11 +92,18 @@ var _ = require('lodash');
    * get document
    */
   module.getDocumentAsync = function(data) {
-    return elastic.getDocumentAsync({
-      index: data.projectName,
-      type: data.collectionName,
-      id: data.id
-    }).then(function(res) {
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+      project: data.projectName
+    })
+    .then(function(res) {
+      return elastic.getDocumentAsync({
+        index: res.project,
+        type: data.collectionName,
+        id: data.id
+      })
+    })
+    .then(function(res) {
       return res._source;
     })
   }
@@ -82,16 +115,24 @@ var _ = require('lodash');
    * @param {String} collectionName
    */
   module.addDocumentsAsync = function(data) {
-    return elastic.addDocumentsAsync({
-      index: data.projectName,
-      type: data.collectionName,
-      body: data.body
+    var project;
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+      project: data.projectName
+    })
+    .then(function(res) {
+      project = res.project;
+      return elastic.addDocumentsAsync({
+        index: project,
+        type: data.collectionName,
+        body: data.body
+      })
     }).then(function(res) {
       return _.pick(_.extend(res, {
         ids: _.map(res.items, function(val) {
           return val.create._id;
         }),
-        project: data.projectName,
+        project: project,
         collection: data.collectionName
       }), 'took', 'errors', 'ids', 'project', 'collection');
     })
