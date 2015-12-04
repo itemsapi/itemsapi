@@ -13,7 +13,9 @@ var collectionService = require('./collection');
    * search documents
    */
   module.searchAsync = function(data) {
-    return collectionService.findCollectionAsync(data.collectionName)
+    return collectionService.findCollectionAsync({
+      name: data.collectionName
+    })
     .then(function(res) {
       data.collection = res;
       data.projectName = res.project;
