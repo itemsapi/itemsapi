@@ -9,10 +9,10 @@ var fs = Promise.promisifyAll(require('fs-extra'));
   /**
    * find collection
    */
-  module.findCollectionAsync = function(name) {
+  module.findCollectionAsync = function(where) {
     return module.getCollectionsAsync()
     .then(function(res) {
-      return _.findWhere(res, {name: name});
+      return _.findWhere(res, where);
     });
   }
 

@@ -36,7 +36,9 @@ var collectionService = require('./collection');
    * add collection (type)
    */
   module.addCollectionAsync = function(data) {
-    return collectionService.findCollectionAsync(data.collectionName)
+    return collectionService.findCollectionAsync({
+      name: data.collectionName
+    })
     .then(function(res) {
       var helper = collectionHelper(res);
       return elastic.addMappingAsync({
@@ -63,7 +65,9 @@ var collectionService = require('./collection');
    * add collection (type)
    */
   module.addMappingAsync = function(data) {
-    return collectionService.findCollectionAsync(data.collectionName)
+    return collectionService.findCollectionAsync({
+      name: data.collectionName
+    })
     .then(function(res) {
       var helper = collectionHelper(res);
       return elastic.addMappingAsync({
@@ -84,7 +88,9 @@ var collectionService = require('./collection');
     var result;
     var collection;
 
-    return collectionService.findCollectionAsync(name)
+    return collectionService.findCollectionAsync({
+      name: name
+    })
     .then(function(res) {
       collection = res;
       return elasticData.countDocumentsAsync({

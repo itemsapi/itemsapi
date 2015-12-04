@@ -8,7 +8,9 @@ setup.makeSuite('collection service', function() {
   var collectionHelper = require('./../../src/helpers/collection')
 
   it('should find collection', function(done) {
-    collectionService.findCollectionAsync('movie')
+    collectionService.findCollectionAsync({
+      name: 'movie'
+    })
     .then(function(res) {
       res.should.have.property('schema');
       res.should.have.property('aggregations');
@@ -19,8 +21,32 @@ setup.makeSuite('collection service', function() {
     })
   });
 
+  it('should find collection with defined project name', function(done) {
+    collectionService.findCollectionAsync({
+      name: 'movie',
+      project: 'test'
+    })
+    .then(function(res) {
+      should(res).not.be.undefined;
+      done();
+    })
+  });
+
+  it('should not find collection with not existent project', function(done) {
+    collectionService.findCollectionAsync({
+      name: 'movie',
+      project: 'notexistent'
+    })
+    .then(function(res) {
+      should(res).be.undefined;
+      done();
+    })
+  });
+
   it('should test collection helpers', function(done) {
-    collectionService.findCollectionAsync('movie')
+    collectionService.findCollectionAsync({
+      name: 'movie'
+    })
     .then(function(res) {
       should(collectionHelper(res).getSortings()).be.instanceOf(Object);
       should(collectionHelper(res).getSorting('favorites')).have.property('field', 'favorites');
@@ -72,7 +98,9 @@ setup.makeSuite('collection service', function() {
       schema: {}
     })
     .then(function(res) {
-      collectionService.findCollectionAsync('new-collection')
+      collectionService.findCollectionAsync({
+        name: 'new-collection'
+      })
       .then(function(res) {
         res.should.have.property('schema');
         res.should.have.property('name');
@@ -88,7 +116,9 @@ setup.makeSuite('collection service', function() {
       project: 'new-project',
     })
     .then(function(res) {
-      collectionService.findCollectionAsync('new-collection')
+      collectionService.findCollectionAsync({
+        name: 'new-collection'
+      })
       .then(function(res) {
         should(res).be.undefined;
         done();

@@ -191,7 +191,9 @@ module.exports = function(router) {
    */
   router.get('/:name/metadata', function getCollectionInfo(req, res, next) {
     var name = req.params.name;
-    return collectionService.findCollectionAsync(name)
+    return collectionService.findCollectionAsync({
+      name: name
+    })
     .then(function(collection) {
       return res.json({
         metadata: collectionHelper(collection).getMetadata()
