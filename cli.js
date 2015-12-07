@@ -14,6 +14,7 @@ nconf.file('defaults', {file: './config/root.json'});
 var server = require('./server');
 var importService = require('./src/services/import');
 var collectionService = require('./src/services/collection');
+var documentService = require('./src/services/data');
 var elasticStats = require('./src/elastic/stats');
 var elasticMapping = require('./src/elastic/mapping');
 
@@ -22,11 +23,13 @@ var cli = require('cli');
 cli.parse({
   import: ['import', 'Import external data'],
   export: ['export', 'Export data'],
+  elasticsearch: ['elasticsearch', 'Elasticsearch utils'],
+  clear: ['clear', 'Clean items'],
+
   collection: ['collection', 'Collection name', 'string'],
   project: ['project', 'Project name', 'string'],
   file: ['import', 'Path to file', 'string'],
 
-  elasticsearch: ['elasticsearch', 'Elasticsearch utils'],
   indices: ['indices', 'Indices'],
   mapping: ['mapping', 'Mapping'],
   index: ['index', 'Elastic index', 'string'],
@@ -35,18 +38,28 @@ cli.parse({
 });
 
 cli.main(function(args, options) {
-  if (options.elasticsearch === true) {
-    if (options.export === true) {
-      importService.exportAsync({
-        projectName: options.project,
-        collectionName: options.collection,
-        limit: options.limit
-      })
-      .then(function(res) {
-        console.log('Data has been exported to ./data/exports/collections.json');
-        process.exit();
-      });
-    } else if (options.import === true) {
+
+  if (options.clear === true) {
+    documentService.cleanDocumentsAsync({
+      projectName: options.project ? options.project : undefined,
+      collectionName: options.collection
+    })
+    .then(function(res) {
+      console.log('Collection items has been cleaned');
+      process.exit();
+    });
+  } else if (options.export === true) {
+    importService.exportAsync({
+      projectName: options.project,
+      collectionName: options.collection,
+      limit: options.limit
+    })
+    .then(function(res) {
+      console.log('Data has been exported to ./data/exports/collections.json');
+      process.exit();
+    });
+  } else if (options.elasticsearch === true) {
+    if (options.import === true) {
       importService.importElasticTypeMappingAsync({
         index: options.index,
         type: options.type

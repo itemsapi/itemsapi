@@ -25,7 +25,8 @@ module.exports = function(router) {
       })
     }).then(function(result) {
       return _.filter(result, function(val) {
-        return val !== null && val.count > 0 && val.visibility !== 'private';
+        return val !== null;
+        //return val !== null && val.count > 0 && val.visibility !== 'private';
       })
     }).then(function(result){
       return res.json({
