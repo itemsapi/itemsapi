@@ -57,10 +57,16 @@ var _ = require('lodash');
    * clean documents
    */
   module.cleanDocumentsAsync = function(data) {
-    return elastic.cleanDocumentsAsync({
-      index: data.projectName,
-      type: data.collectionName,
-    });
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+      project: data.projectName
+    })
+    .then(function(res) {
+      return elastic.cleanDocumentsAsync({
+        index: res.project,
+        type: data.collectionName,
+      });
+    })
   }
 
   /**
