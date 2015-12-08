@@ -39,8 +39,8 @@ var fs = require('fs-extra');
    */
   module.exportAsync = function(data) {
     return searchService.searchAsync({
-      name: data.collectionName,
-      project: data.projectName,
+      collectionName: data.collectionName,
+      projectName: data.projectName,
       per_page: data.limit || 100
     })
     .then(function(res) {
