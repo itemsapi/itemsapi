@@ -1,6 +1,6 @@
 # ItemsAPI 
 
-ItemsAPI is restful search backend written in node.js and elasticsearch.
+<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> is restful search backend written in node.js and elasticsearch.
 
 The goal of this project is creating advanced search application without spending time for backend. You just provide configuration and data and your backend is ready to go. You don't need to be node.js developer to use it.
 
