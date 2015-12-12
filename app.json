@@ -3,7 +3,7 @@
     "description": "ItemsAPI is an open source full text search backend",
     "website": "http://www.itemsapi.com",
     "success_url": "/",
-    "addons": [],
+    "addons": ["searchbox:starter"],
     "env": {
         "NODE_ENV": "production",
         "PORT": "3000"

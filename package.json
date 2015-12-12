@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha tests/*",
-    "start": "NODE_ENV=production node app.js"
+    "start": "node app.js"
   },
   "author": "Mateusz Rzepa",
   "repository": "itemsapi/itemsapi",
