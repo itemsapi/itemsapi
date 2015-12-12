@@ -36,7 +36,6 @@
     "express-limiter": "^1.6.0",
     "fs-extra": "^0.26.2",
     "lodash": "^3.9.3",
-    "mongodb": "^1.4.29",
     "nconf": "^0.7.1",
     "redis": "^2.2.5",
     "request": "^2.53.0",
