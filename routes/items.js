@@ -132,17 +132,13 @@ module.exports = function(router) {
       fields = fields.split(",");
     }
 
-    // it should goes to configuration files
     var per_page = req.query.per_page || 10;
-    if (per_page > 20) {
-      per_page = 20;
+    if (per_page > 100) {
+      per_page = 100;
     }
 
-    // it should goes to configuration files
+    // max limit etc should goes to configuration files
     var page = req.query.page || 1;
-    if (page > 10) {
-      page = 10;
-    }
 
     var time = Date.now();
 
