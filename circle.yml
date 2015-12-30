@@ -4,3 +4,5 @@ dependencies:
   post:
     - if [[ ! -e elasticsearch-1.7.4 ]]; then wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.4.tar.gz && tar -xvf elasticsearch-1.7.4.tar.gz; fi
     - elasticsearch-1.7.4/bin/elasticsearch: {background: true}
+    - sleep 60
+
