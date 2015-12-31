@@ -7,6 +7,12 @@
                 "type": "string",
                 "store": true
             },
+            "tags": {
+                "type": "string",
+                "display": "array",
+                "index": "not_analyzed",
+                "store": true
+            },
             "year": {
                 "type": "integer",
                 "store": true
@@ -21,6 +27,12 @@
             }
         },
         "aggregations": {
+            "tags": {
+                "type": "tags",
+                "field": "actors",
+                "size": 10,
+                "title": "Tags"
+            },
             "actors_terms": {
                 "type": "terms",
                 "field": "actors",

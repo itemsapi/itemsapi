@@ -31,6 +31,7 @@ var _ = require('underscore');
     var aggregationsOptions = helper.getAggregations();
 
     var aggregationFilters = module.generateAggregationFilters(aggregationsOptions, data.aggs);
+    // responsible for filtering items
     body.filter(ejs.AndFilter(_.values(aggregationFilters)));
 
     // generate aggretations according to options
@@ -63,10 +64,16 @@ var _ = require('underscore');
    */
   module.generateAggregations = function(aggregations, filters, input) {
     var input = input || {};
-
     return _.map(aggregations, function(value, key) {
+
+
       var filterAggregation = ejs.FilterAggregation(key)
-        .filter(ejs.AndFilter(_.values(_.omit(filters, key))));
+      .filter(ejs.AndFilter(_.values(_.omit(filters, key))));
+
+      if (value.conjunction === true) {
+        var filterAggregation = ejs.FilterAggregation(key)
+        .filter(ejs.AndFilter(_.values(filters)));
+      }
 
       var aggregation = null;
       if (value.type === 'terms') {
@@ -128,6 +135,11 @@ var _ = require('underscore');
    * generate terms filter for aggregation
    */
   module.generateTermsFilter = function(options, values) {
+    if (options.conjunction === true) {
+      return ejs.AndFilter(_.map(values, function(val) {
+        return ejs.TermFilter(options.field, val);
+      }));
+    }
     return ejs.TermsFilter(options.field, values);
   }
 

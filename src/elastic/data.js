@@ -33,7 +33,7 @@ var validate = require('validate.js');
       type: data.type,
       id: data.id,
       //replication: 'async',
-      //refresh: true,
+      refresh: data.refresh || false,
       body: data.body
     }, function (err, res) {
       if (err) {
@@ -75,8 +75,8 @@ var validate = require('validate.js');
     elastic.bulk({
       index: data.index,
       type: data.type,
-      refresh: true,
-      consistency: "one",
+      refresh: data.refresh || false,
+      consistency: 'one',
       body: body
     }, function (err, res) {
       if (err) {

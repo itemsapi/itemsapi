@@ -21,6 +21,7 @@ var _ = require('lodash');
       return elastic.addDocumentAsync({
         index: collection.project,
         type: data.collectionName,
+        refresh: data.refresh,
         body: data.body,
         id: data.body.id
       })
@@ -131,6 +132,7 @@ var _ = require('lodash');
       return elastic.addDocumentsAsync({
         index: project,
         type: data.collectionName,
+        refresh: data.refresh,
         body: data.body
       })
     }).then(function(res) {
@@ -173,6 +175,7 @@ var _ = require('lodash');
         module.addDocumentsAsync({
           projectName: projectName,
           collectionName: collectionName,
+          refresh: data.refresh,
           body: removed
         }).then(function(res) {
           return callback(null, res);

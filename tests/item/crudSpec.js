@@ -11,6 +11,7 @@ setup.makeSuite('item crud request', function() {
   var projectService = require('./../../src/services/project');
   var collectionService = require('./../../src/services/collection');
   var documentElastic = require('./../../src/elastic/data');
+  var elasticTools = require('./../../src/elastic/tools');
   var elastic = require('./../../src/connections/elastic').getElastic();
 
   before(function(done) {
@@ -28,12 +29,16 @@ setup.makeSuite('item crud request', function() {
       .post('/api/v1/movie')
       .send(data)
       .end(function afterRequest(err, res) {
-        res.should.have.property('status', 200);
+        res.body.should.have.property('id', '100');
+        res.body.should.have.property('project', 'test');
         assert(spy.calledOnce);
         assert(spy.calledWithMatch({type: 'movie'}));
         assert(spy.calledWithMatch({index: 'test'}));
         documentElastic.addDocumentAsync.restore();
-        done();
+        elasticTools.refreshAsync({
+        }).then(function(res) {
+          done();
+        });
       });
   });
 
@@ -46,6 +51,7 @@ setup.makeSuite('item crud request', function() {
         assert(spy.calledWithMatch({type: 'movie'}));
         assert(spy.calledWithMatch({index: 'test'}));
         res.should.have.property('status', 200);
+        res.body.should.have.property('id', 100);
         res.body.should.have.property('rating', 5);
         res.body.should.have.property('name', 'Godfather');
         documentElastic.getDocumentAsync.restore();
@@ -74,6 +80,7 @@ setup.makeSuite('item crud request', function() {
       .get('/api/v1/movie')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
+        res.body.pagination.should.have.property('total', 1);
         assert(spy.calledOnce);
         assert(spy.calledWithMatch({type: 'movie'}));
         assert(spy.calledWithMatch({index: 'test'}));
