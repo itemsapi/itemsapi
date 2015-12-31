@@ -56,4 +56,3 @@ module.exports = function(data) {
     getMetadata: getMetadata
   }
 };
-
