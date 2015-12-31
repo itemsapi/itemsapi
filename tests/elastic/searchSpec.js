@@ -19,16 +19,24 @@ setup.makeSuite('elastic data', function() {
 
     it('generates terms filter', function(done) {
       var filter = search.generateTermsFilter(options, ['drama', 'fantasy']).toJSON();
+      console.log(filter);
       filter.should.have.property('terms');
       filter.terms.actors[0].should.be.equal('drama');
       filter.terms.actors.should.be.instanceOf(Array).and.have.lengthOf(2);
+      done();
+    });
+
+    it('generates conjunctive terms filter', function(done) {
+      options.conjunction = true;
+      var filter = search.generateTermsFilter(options, ['drama', 'fantasy']).toJSON();
+      filter.should.have.property('and');
+      filter.and.should.have.property('filters').and.have.lengthOf(2);
       done();
     });
   });
 
   describe('should build range filter for aggregations', function() {
     var options = {
-      //name: 'rating_range',
       type: 'range',
       field: 'rating',
       title: 'Rating range',

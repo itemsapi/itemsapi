@@ -7,6 +7,7 @@ setup.makeSuite('search service', function() {
   var searchService = require('./../../src/services/search');
   var projectService = require('./../../src/services/project');
   var importService = require('./../../src/services/import');
+  var elasticTools = require('./../../src/elastic/tools');
   var fs = require('fs-extra');
 
   before(function(done) {
@@ -47,7 +48,10 @@ setup.makeSuite('search service', function() {
           collectionName: 'city',
           body: res
         }, function(err, res) {
-          done();
+          return elasticTools.refreshAsync({
+          }).then(function(res) {
+            done();
+          });
         });
       })
     });
