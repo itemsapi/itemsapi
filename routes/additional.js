@@ -18,7 +18,8 @@ module.exports = function(router) {
         collectionName: collection.name
       }).then(function(result) {
         return _.extend(result, {
-          author: 'itemsapi'
+          author: 'itemsapi',
+          visibility: collection.visibility
         });
       }).catch(function(result) {
         return null;
