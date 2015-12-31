@@ -13,7 +13,6 @@ winston.loggers.add('query', {
   },
   file: {
     json: true,
-    //prettyPrint: true,
     filename: './data/logs/query.log'
   }
 });
