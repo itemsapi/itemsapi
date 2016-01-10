@@ -7,6 +7,7 @@ setup.makeSuite('collection service', function() {
   var collectionService = require('./../../src/services/collection');
   var collectionHelper = require('./../../src/helpers/collection')
 
+
   it('should find collection', function(done) {
     collectionService.findCollectionAsync({
       name: 'movie'
@@ -50,7 +51,9 @@ setup.makeSuite('collection service', function() {
       project: 'notexistent'
     })
     .then(function(res) {
-      should(res).be.undefined;
+      should.fail('error should be here')
+    })
+    .catch(function(err) {
       done();
     })
   });
@@ -122,7 +125,43 @@ setup.makeSuite('collection service', function() {
     })
   });
 
-  it('should add collection', function(done) {
+  it('should update collection', function(done) {
+    return collectionService.updateCollectionAsync({
+      test: true
+    }, {
+      name: 'new-collection'
+    })
+    .then(function(res) {
+      //res.should.have.property('name', 'new-collection');
+      //res.should.have.property('project', 'new-project');
+      //res.should.have.property('test', true);
+      collectionService.findCollectionAsync({
+        name: 'new-collection'
+      })
+      .then(function(res) {
+        res.should.have.property('name', 'new-collection');
+        res.should.have.property('project', 'new-project');
+        res.should.have.property('test', true);
+        done();
+      });
+    })
+  });
+
+  it('should not update unexistent collection', function(done) {
+    collectionService.updateCollectionAsync({
+      test: true
+    }, {
+      name: 'new-collection',
+      project: 'blackhole'
+    })
+    .then(function(res) {
+    })
+    .catch(function(err) {
+      done();
+    })
+  });
+
+  it('should remove collection', function(done) {
     collectionService.removeCollectionAsync({
       name: 'new-collection',
       project: 'new-project',
@@ -132,9 +171,13 @@ setup.makeSuite('collection service', function() {
         name: 'new-collection'
       })
       .then(function(res) {
-        should(res).be.undefined;
+        should.fail('error should be here')
         done();
-      });
+      })
+      .catch(function(err) {
+        done();
+      })
+
     })
   });
 });

@@ -1,0 +1,109 @@
+[
+    {
+        "name": "movie",
+        "project": "test",
+        "schema": {
+            "name": {
+                "type": "string",
+                "store": true
+            },
+            "tags": {
+                "type": "string",
+                "display": "array",
+                "index": "not_analyzed",
+                "store": true
+            },
+            "year": {
+                "type": "integer",
+                "store": true
+            },
+            "rating": {
+                "type": "string",
+                "store": true
+            },
+            "image": {
+                "type": "string",
+                "display": "image"
+            }
+        },
+        "aggregations": {
+            "tags": {
+                "type": "tags",
+                "field": "actors",
+                "size": 10,
+                "title": "Tags"
+            },
+            "actors_terms": {
+                "type": "terms",
+                "field": "actors",
+                "size": 10,
+                "title": "Actors"
+            },
+            "director_terms": {
+                "type": "terms",
+                "field": "director",
+                "size": 5,
+                "title": "Directors"
+            }
+        },
+        "sortings": {
+            "favorites": {
+                "title": "Favorites count",
+                "type": "normal",
+                "order": "desc",
+                "field": "favorites"
+            },
+            "played": {
+                "title": "Played count",
+                "type": "normal",
+                "order": "desc",
+                "field": "played"
+            }
+        },
+        "table": {
+            "fields": [
+                "image",
+                "name",
+                "director",
+                "rating",
+                "year",
+                "votes"
+            ]
+        }
+    },
+    {
+        "name": "city",
+        "project": "test",
+        "schema": {
+            "name": {
+                "type": "string",
+                "store": true
+            },
+            "country": {
+                "type": "string",
+                "store": true
+            },
+            "rating": {
+                "type": "string",
+                "store": true
+            },
+            "geo": {
+                "type": "geo_point"
+            }
+        },
+        "sortings": {
+            "city": {
+                "title": "City",
+                "type": "normal",
+                "order": "asc",
+                "field": "city"
+            },
+            "distance": {
+                "title": "Distance",
+                "type": "geo",
+                "order": "asc",
+                "field": "geo"
+            }
+        }
+    }
+]

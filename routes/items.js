@@ -12,7 +12,7 @@ module.exports = function(router) {
   /*
    * create specific item
    */
-  router.post('/:name', function postItem(req, res, next) {
+  router.post(['/items/:name', '/:name'], function postItem(req, res, next) {
     var name = req.params.name;
     var project = req.query.project;
     var processAsync;
@@ -40,8 +40,9 @@ module.exports = function(router) {
 
   /*
    * clean items
+   * @deprecated
    */
-  router.put('/:name/recreate-mapping', function recreateMapping(req, res, next) {
+  router.put(['/items/:name/recreate-mapping', '/:name/recreate-mapping'], function recreateMapping(req, res, next) {
     var name = req.params.name;
     var project = req.query.project;
 
@@ -65,7 +66,7 @@ module.exports = function(router) {
   /*
    * clean items
    */
-  router.delete('/:name', function deleteItem(req, res, next) {
+  router.delete(['/items/:name', '/:name'], function deleteItem(req, res, next) {
     var name = req.params.name;
     var project = req.query.project;
 
@@ -82,7 +83,7 @@ module.exports = function(router) {
   /*
    * delete specific item
    */
-  router.delete('/:name/:id', function deleteItem(req, res, next) {
+  router.delete(['/items/:name/:id', '/:name/:id'], function deleteItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
     var project = req.query.project;
@@ -101,7 +102,7 @@ module.exports = function(router) {
   /*
    * update specific item
    */
-  router.put('/:name/:id', function updateItem(req, res, next) {
+  router.put(['/items/:name/:id', '/:name/:id'], function updateItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
     var project = req.query.project;
@@ -163,7 +164,7 @@ module.exports = function(router) {
   /*
    * search items
    */
-  router.get('/:name/export', function searchItems(req, res, next) {
+  router.get(['/:name/export', '/:name/export'], function searchItems(req, res, next) {
     return searchItemsAsync(req, res, next)
     .then(function(result) {
       res.type('application/octet-stream');
@@ -179,7 +180,7 @@ module.exports = function(router) {
   /*
    * search items
    */
-  router.get('/:name', function searchItems(req, res, next) {
+  router.get(['/items/:name', '/:name'], function searchItems(req, res, next) {
     return searchItemsAsync(req, res, next)
     .then(function(result) {
       return res.json(result);
@@ -189,23 +190,8 @@ module.exports = function(router) {
   });
 
   /*
-   * collection info (schema, table, etc)
-   */
-  router.get('/:name/metadata', function getCollectionInfo(req, res, next) {
-    var name = req.params.name;
-    return collectionService.findCollectionAsync({
-      name: name
-    })
-    .then(function(collection) {
-      return res.json({
-        metadata: collectionHelper(collection).getMetadata()
-      });
-    })
-
-  });
-
-  /*
    * mapping
+   * @deprecated
    */
   router.get('/:name/mapping', function getMapping(req, res, next) {
     var name = req.params.name;

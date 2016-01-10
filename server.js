@@ -37,11 +37,15 @@ if (config.hooks && config.hooks.limiter && config.hooks.limiter.enabled === tru
 // all collections, stats
 var itemsRoutes = require('./routes/additional')(router);
 
+// manage collections (schema, aggregations options, sortings, etc)
+var collectionsRoutes = require('./routes/collections')(router);
+
 // get, put, post, delete, find, similar, autocomplete etc
 var itemsRoutes = require('./routes/items')(router);
 
 app.use(function errorRoute(err, req, res, next) {
   console.log(err);
+  console.log(err.stack);
   res.status(httpBadRequest).json(err);
   next();
 });

@@ -6,21 +6,48 @@ var fs = Promise.promisifyAll(require('fs-extra'));
 
 (function(module) {
 
+  var filename = config.collections.filename;
+
+  /**
+   * update collection
+   */
+  module.updateCollectionAsync = function(data, where) {
+    return module.getCollectionsAsync()
+    .then(function(res) {
+      var index = _.findIndex(res, _.pick(where, function(value) {
+        return !_.isUndefined(value);
+      }));
+
+      if (index === -1) {
+        throw new Error('Not found');
+      }
+      res[index] = _.assign(res[index], data);
+      return fs.writeFileAsync(
+        filename,
+        JSON.stringify(res, null, 4),
+        {encoding: 'utf8'}
+      );
+    })
+  }
+
   /**
    * find collection
    */
   module.findCollectionAsync = function(where) {
-    // pick only properties which are defined
-    where = _.pick(where, function(value) {
-      return !_.isUndefined(value);
-    });
-
     return module.getCollectionsAsync()
     .then(function(res) {
       return res;
     })
     .then(function(res) {
-      return _.findWhere(res, where);
+      return _.findWhere(res, _.pick(where, function(value) {
+        return !_.isUndefined(value);
+      }));
+    })
+    .then(function(res) {
+      if (!res) {
+        throw new Error('Not found');
+      }
+      return res;
     });
   }
 
@@ -30,12 +57,7 @@ var fs = Promise.promisifyAll(require('fs-extra'));
    * we should make data validation too
    */
   module.addCollectionAsync = function(data) {
-    var filename = config.collections.filename;
-
-    return fs.readFileAsync(filename)
-    .then(function(res) {
-      return JSON.parse(res);
-    })
+    return module.getCollectionsAsync()
     .then(function(res) {
       res.push(data);
       return res;
@@ -54,14 +76,11 @@ var fs = Promise.promisifyAll(require('fs-extra'));
    * we should switch to https://github.com/typicode/lowdb later
    */
   module.removeCollectionAsync = function(where) {
-    var filename = config.collections.filename;
-
-    return fs.readFileAsync(filename)
+    return module.getCollectionsAsync()
     .then(function(res) {
-      return JSON.parse(res);
-    })
-    .then(function(res) {
-      return _.reject(res, where);
+      return _.reject(res, _.pick(where, function(value) {
+        return !_.isUndefined(value);
+      }));
     })
     .then(function(res) {
       return fs.writeFileAsync(
@@ -77,8 +96,6 @@ var fs = Promise.promisifyAll(require('fs-extra'));
    * in the future it should supports other more scalable dbs like mongodb, mysql or redis
    */
   module.getCollectionsAsync = function(data) {
-    var filename = config.collections.filename;
-
     return fs.readFileAsync(filename)
     .then(function(res) {
       return JSON.parse(res);
