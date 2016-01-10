@@ -164,7 +164,7 @@ module.exports = function(router) {
   /*
    * search items
    */
-  router.get(['/:name/export', '/:name/export'], function searchItems(req, res, next) {
+  router.get(['/items/:name/export', '/:name/export'], function searchItems(req, res, next) {
     return searchItemsAsync(req, res, next)
     .then(function(result) {
       res.type('application/octet-stream');
