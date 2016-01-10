@@ -204,7 +204,7 @@ module.exports = function(router) {
    * get similar items
    * @not working yet - in progress
    */
-  router.get('/:name/:id/similar', function getSimilarItems(req, res, next) {
+  router.get(['/items/:name/:id/similar', '/:name/:id/similar'], function getSimilarItems(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
 
@@ -218,7 +218,7 @@ module.exports = function(router) {
    * item autocomplete
    * @not working yet - in progress
    */
-  router.get('/:name/autocomplete', function autocomplete(req, res, next) {
+  router.get(['/items/:name/autocomplete', '/:name/autocomplete'], function autocomplete(req, res, next) {
     var name = req.params.name;
     var project = req.query.project;
     // @todo filtering params
@@ -237,7 +237,7 @@ module.exports = function(router) {
    * find nearest items to provided current gps
    * @not working yet - in progress
    */
-  router.get('/:name/near/:key/:gps', function autocomplete(req, res, next) {
+  router.get(['/items/:name/near/:key/:gps', '/:name/near/:key/:gps'], function autocomplete(req, res, next) {
     var name = req.params.name;
     res.json({});
   });
@@ -245,7 +245,7 @@ module.exports = function(router) {
   /*
    * get specific item
    */
-  router.get('/:name/:id', function getItem(req, res, next) {
+  router.get(['/items/:name/:id', '/:name/:id'], function getItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
     var project = req.query.project;
