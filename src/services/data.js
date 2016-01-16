@@ -5,6 +5,7 @@ var elastic = Promise.promisifyAll(require('../elastic/data'));
 var collectionService = require('../services/collection');
 var async = require('async');
 var _ = require('lodash');
+var dataHelper = require('../helpers/data');
 
 (function(module) {
 
@@ -22,7 +23,7 @@ var _ = require('lodash');
         index: collection.project,
         type: data.collectionName,
         refresh: data.refresh,
-        body: data.body,
+        body: dataHelper.inputMapper(data.body, collection.schema),
         id: data.body.id
       })
     }).then(function(res) {
@@ -47,6 +48,7 @@ var _ = require('lodash');
         index: res.project,
         type: data.collectionName,
         body: data.body,
+        body: dataHelper.inputMapper(data.body, res.schema),
         id: data.id
       })
     }).then(function(res) {
@@ -133,7 +135,7 @@ var _ = require('lodash');
         index: project,
         type: data.collectionName,
         refresh: data.refresh,
-        body: data.body
+        body: dataHelper.inputMapper(data.body, res.schema),
       })
     }).then(function(res) {
       return _.pick(_.extend(res, {
