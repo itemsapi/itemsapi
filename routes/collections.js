@@ -127,7 +127,7 @@ module.exports = function(router) {
   /*
    * returns elasticsearch mapping for collection
    */
-  router.get(['/collections/:name/mapping'], function getCollectionInfo(req, res, next) {
+  router.get('/collections/:name/mapping', function getCollectionInfo(req, res, next) {
     var name = req.params.name;
     return collectionService.findCollectionAsync({
       name: name
@@ -137,19 +137,6 @@ module.exports = function(router) {
         type: collection.name,
         index: collection.project
       })
-    })
-    .then(function(mapping) {
-      return res.json(mapping);
-    })
-  });
-
-  /*
-   * add elasticsearch mapping
-   */
-  router.get(['/collections/:name/mapping'], function (req, res, next) {
-    var name = req.params.name;
-    return projectService.getMappingAsync({
-      collectionName: name
     })
     .then(function(mapping) {
       return res.json(mapping);
