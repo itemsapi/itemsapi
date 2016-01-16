@@ -123,4 +123,49 @@ module.exports = function(router) {
       });
     })
   });
+
+  /*
+   * returns elasticsearch mapping for collection
+   */
+  router.get('/collections/:name/mapping', function getCollectionInfo(req, res, next) {
+    var name = req.params.name;
+    return collectionService.findCollectionAsync({
+      name: name
+    })
+    .then(function(collection) {
+      return elasticMapping.getMappingAsync({
+        type: collection.name,
+        index: collection.project
+      })
+    })
+    .then(function(mapping) {
+      return res.json(mapping);
+    })
+  });
+
+  /*
+   * update elasticsearch mapping
+   */
+  router.put('/collections/:name/mapping', function (req, res, next) {
+    var name = req.params.name;
+    return projectService.updateMappingAsync({
+      collectionName: name
+    })
+    .then(function(result) {
+      return res.json(result);
+    })
+  });
+
+  /*
+   * add elasticsearch mapping
+   */
+  router.post('/collections/:name/mapping', function (req, res, next) {
+    var name = req.params.name;
+    return projectService.addMappingAsync({
+      collectionName: name
+    })
+    .then(function(result) {
+      return res.json(result);
+    })
+  });
 }

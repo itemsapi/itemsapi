@@ -170,6 +170,41 @@ setup.makeSuite('elastic mapping', function() {
       });
     });
 
+    it('should update mapping in elastic second time successfully', function(done) {
+      model.updateMapping({
+        index: 'test',
+        type: 'city',
+        body: {
+          properties: {
+            message: {type: "string", store: false },
+            name: {type: "string", store: true },
+            geo: {type: "geo_point", store: true },
+            rating: {type: "integer", store: true }
+          }
+        }
+      }, function(err, res) {
+        console.log(err);
+        console.log(res);
+        assert.equal(err, null);
+        done();
+      });
+    });
+
+    it('should get updated elastic mapping successfully', function(done) {
+      model.getMappingForType({
+        index: 'test',
+        type: 'city'
+      }, function(err, res) {
+        assert.equal(err, null);
+        console.log(res);
+        res.should.have.property('message');
+        res.should.have.property('name');
+        res.should.have.property('rating');
+        res.should.have.property('geo');
+        done();
+      });
+    });
+
     it('should get original elastic mapping', function(done) {
       model.getMappingAsync({
         index: 'test',

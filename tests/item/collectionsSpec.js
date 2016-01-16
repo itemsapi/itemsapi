@@ -105,4 +105,32 @@ setup.makeSuite('collections management by api', function() {
         done();
       });
   });
+
+  it('should add mapping', function(done) {
+    request(setup.getServer())
+      .post('/api/v1/collections/movie/mapping')
+      .end(function afterRequest(err, res) {
+        res.body.should.have.property('acknowledged', true);
+        done();
+      });
+  });
+
+  it('should get mapping', function(done) {
+    request(setup.getServer())
+      .get('/api/v1/collections/movie/mapping')
+      .end(function afterRequest(err, res) {
+        res.body.should.have.property('test');
+        res.body.test.should.have.property('mappings');
+        done();
+      });
+  });
+
+  it('should update mapping', function(done) {
+    request(setup.getServer())
+      .put('/api/v1/collections/movie/mapping')
+      .end(function afterRequest(err, res) {
+        res.body.should.have.property('acknowledged', true);
+        done();
+      });
+  });
 });

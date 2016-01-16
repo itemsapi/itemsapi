@@ -33,23 +33,69 @@ var collectionService = require('./collection');
   },
 
   /**
-   * add collection (type)
+   * add mapping from collection schema
    */
-  module.addCollectionAsync = function(data) {
+  module.addMappingAsync = function(data) {
+    var collection;
+    return collectionService.findCollectionAsync({
+      name: data.collectionName
+    })
+    .then(function(res) {
+      collection = res;
+      return module.ensureProjectAsync({
+        projectName: res.project
+      })
+    })
+    .then(function(res) {
+      return elastic.addMappingAsync({
+        index: collection.project,
+        type: collection.name,
+        body: {
+          properties: collection.schema
+        }
+      })
+    })
+  },
+
+  /**
+   * update mapping from collection schema
+   */
+  module.updateMappingAsync = function(data) {
+    return collectionService.findCollectionAsync({
+      name: data.collectionName
+    })
+    .then(function(res) {
+      return elastic.updateMappingAsync({
+        index: res.project,
+        type: res.name,
+        body: {
+          properties: res.schema
+        }
+      })
+    })
+  },
+
+  /**
+   * get mapping
+   */
+  module.getMappingAsync = function(data) {
     return collectionService.findCollectionAsync({
       name: data.collectionName
     })
     .then(function(res) {
       var helper = collectionHelper(res);
-      return elastic.addMappingAsync({
+      return elastic.getMappingAsync({
         index: data.projectName,
-        type: data.collectionName,
-        body: {
-          properties: helper.getElasticSchema()
-        }
+        type: data.collectionName
       })
     })
   },
+
+  /**
+   * add collection (type)
+   * @the name is deprecated in the future
+   */
+  module.addCollectionAsync = module.addMappingAsync,
 
   /**
    * ensure collection exists
@@ -58,25 +104,6 @@ var collectionService = require('./collection');
     return module.ensureProjectAsync(data)
     .then(function(res) {
       return module.addCollectionAsync(data)
-    })
-  },
-
-  /**
-   * add collection (type)
-   */
-  module.addMappingAsync = function(data) {
-    return collectionService.findCollectionAsync({
-      name: data.collectionName
-    })
-    .then(function(res) {
-      var helper = collectionHelper(res);
-      return elastic.addMappingAsync({
-        index: data.projectName,
-        type: data.collectionName,
-        body: {
-          properties: helper.getElasticSchema()
-        }
-      })
     })
   },
 
@@ -113,7 +140,6 @@ var collectionService = require('./collection');
       };
     })
     .catch(function(res) {
-      console.log(res);
       throw new Error('An error occured');
     })
   }
