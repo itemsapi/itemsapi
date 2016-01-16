@@ -47,7 +47,6 @@ var dataHelper = require('../helpers/data');
       return elastic.updateDocumentAsync({
         index: res.project,
         type: data.collectionName,
-        body: data.body,
         body: dataHelper.inputMapper(data.body, res.schema),
         id: data.id
       })
