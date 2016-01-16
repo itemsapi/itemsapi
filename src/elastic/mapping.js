@@ -83,7 +83,24 @@ var validate = require('validate.js');
     if (v) {
       return callback(v);
     }
+    elastic.indices.putMapping(data, function(err, res, status) {
+      if (err) {
+        winston.error(err);
+        return callback(err);
+      }
+      callback(null, res)
+    })
+  },
 
+  /**
+   * update mapping
+   */
+  module.updateMapping = function(data, callback) {
+    var v = this.addMappingValidate(data);
+    if (v) {
+      return callback(v);
+    }
+    data.ignore_conflicts = true;
     elastic.indices.putMapping(data, function(err, res, status) {
       if (err) {
         winston.error(err);
