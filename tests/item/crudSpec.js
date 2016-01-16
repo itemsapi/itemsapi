@@ -6,7 +6,7 @@ var request = require('supertest');
 var _ = require('underscore');
 
 setup.makeSuite('item crud request', function() {
-  var data = {id: 100, rating: 5, name: 'Godfather'};
+  var data = {id: 100, rating: 5, name: 'Godfather', tags: 'drama, criminal'};
 
   var projectService = require('./../../src/services/project');
   var collectionService = require('./../../src/services/collection');
