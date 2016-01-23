@@ -1,6 +1,6 @@
 # ItemsAPI 
 
-<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> is restful search backend written in node.js and elasticsearch.
+<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> is restful search backend written in express.js / node.js and elasticsearch.
 
 The goal of this project is creating advanced search application without spending time for backend. You just provide configuration and data and your backend is ready to go. You don't need to be node.js developer to use it.
 
@@ -9,10 +9,10 @@ With ItemsAPI you can create very easily:
 - autocomplete and simple recommendation system for ecommerce
 - songs and movies recommendation
 
-This backend will offer powerful functionality like:
+This backend offers powerful functionality like:
 - full text searching
-- autocomplete
-- simple recommendation
+- generating facets / aggregations out of the box
+- managing schema and indexes from command line or by API
 - geo searching
 
 ## Getting started
@@ -60,13 +60,11 @@ If you like ItemsAPI and want to help you can:
 - write clients for frameworks (angular, node.js, ror, php)
 
 ## Testing
-`grunt test`
+`npm test`
 
 ## Long term inspiration
 - http://expressjs.com/resources/middleware.html (expressjs for simplicity)
 - http://neo4j.com/docs/stable/cypher-cookbook-similar-favorites.html (recommendation system)
-- https://templates.prediction.io/PredictionIO/template-scala-parallel-universal-recommendation (recommendation system)
-- symfony2, meteor.js, ionic (command line interface)
 - https://www.algolia.com/ (very fast hosted search engine)
 
 ## License
