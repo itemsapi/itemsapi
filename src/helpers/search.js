@@ -43,8 +43,32 @@ module.exports = function() {
       }
     }
   }
+
+  var similarConverter = function(input, data) {
+    var helper = collectionHelper(input.collection);
+    return {
+      meta: {
+        query: input.query,
+        sort: input.sort
+      },
+      pagination: {
+        page: input.page,
+        per_page: input.per_page,
+        total: data.hits.total
+      },
+      data: {
+        items: _.map(data.hits.hits, function(doc) {
+          return _.extend(
+            {id: doc._id, score: doc._score},
+            doc._source, doc.fields
+          );
+        })
+      }
+    }
+  }
   return {
-    searchConverter: searchConverter
+    searchConverter: searchConverter,
+    similarConverter: similarConverter
   }
 };
 

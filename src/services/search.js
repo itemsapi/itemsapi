@@ -28,6 +28,25 @@ var collectionService = require('./collection');
   }
 
   /**
+   * similar documents
+   */
+  module.similarAsync = function(data) {
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+      project: data.projectName,
+    })
+    .then(function(res) {
+      data.collection = res;
+      data.projectName = res.project;
+      delete data.collection;
+      return elastic.similarAsync(data);
+    })
+    .then(function(res) {
+      return searchHelper().similarConverter(data, res);
+    })
+  }
+
+  /**
    * suggest documents
    */
   module.suggestAsync = function(data) {

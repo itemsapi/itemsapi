@@ -204,14 +204,32 @@ module.exports = function(router) {
    * get similar items
    * @not working yet - in progress
    */
-  router.get(['/items/:name/:id/similar', '/:name/:id/similar'], function getSimilarItems(req, res, next) {
+  router.get('/items/:name/:id/similar', function getSimilarItems(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
+    var project = req.query.project;
 
-    if (!id) {
-      return res.status(httpNotFound).json({});
+    var fields = req.query.fields;
+    if (fields !== undefined) {
+      fields = fields.split(",");
     }
-    res.json({});
+
+    var per_page = req.query.per_page || 8;
+
+    return searchService.similarAsync({
+      projectName: project,
+      collectionName: name,
+      ids: [id],
+      per_page: per_page,
+      fields: fields
+    })
+    .then(function(result) {
+      return res.json(result);
+    })
+    .catch(function(result) {
+      console.log(result);
+      return res.status(400).json({});
+    })
   });
 
   /*
