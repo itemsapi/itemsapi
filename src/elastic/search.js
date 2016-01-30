@@ -189,6 +189,42 @@ var _ = require('underscore');
   }
 
 
+  /**
+   * similar documents
+   * https://www.elastic.co/guide/en/elasticsearch/reference/1.3/query-dsl-mlt-query.html#query-dsl-mlt-query
+   */
+  module.similar = function(data, callback) {
+    //var body = ejs.Request()
+    //var helper = collectionHelper(data.collection);
+    //ejs.MoreLikeThisQuery('tags')
+    //body.query(ejs.MoreLikeThisQuery('tags'));
+    // elastic.js doesnt support `ids` so we need to write plain json query
+
+    var query = {
+      mlt:{
+        fields: data.fields,
+        ids: data.ids,
+        min_doc_freq: 0,
+        min_term_freq: 0
+      }
+    }
+
+    var body = {
+      query: query,
+      //from: 0,
+      //size: 5
+    }
+    elastic.search({
+      index: data.projectName,
+      type: data.collectionName,
+      body: body,
+    }, function (err, res) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, res);
+    });
+  }
 
   /**
    * suggest documents (low level)

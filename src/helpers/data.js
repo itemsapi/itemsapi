@@ -13,6 +13,9 @@ exports.inputMapper = function(items, schema, options) {
   return exports.convertItem(items, schema, options);
 }
 
+/**
+ * map string with delimiter for an array
+ */
 exports.convertItem = function(item, schema, options) {
   var newItem = item;
   options = options || {};

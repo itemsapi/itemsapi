@@ -71,7 +71,7 @@ setup.makeSuite('routing', function addSuite() {
         });
     });
 
-    it('should be able to get similar movies', function test(done) {
+    it.skip('should be able to get similar movies', function test(done) {
         request(setup.getServer())
         .get('/api/v1/movie/5/similar')
         .end(function afterRequest(err, res) {
