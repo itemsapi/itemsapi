@@ -266,7 +266,9 @@ var _ = require('underscore');
         return callback(err);
       }
       var result = res.hits.hits;
-      result = result.length ? result[0]._source : null;
+      result = result.length ? _.extend({
+        id: result[0]._id
+      }, result[0]._source) : null;
       callback(null, result);
     });
   }
