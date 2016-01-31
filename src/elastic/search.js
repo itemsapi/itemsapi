@@ -248,4 +248,27 @@ var _ = require('underscore');
     });
   }
 
+  /**
+   * find one document
+   */
+  module.findOne = function(data, callback) {
+    var body = ejs.Request()
+    var query = ejs.TermQuery(data.key, data.val)
+    body.query(query);
+
+    elastic.search({
+      index: data.projectName,
+      type: data.collectionName,
+      body: body,
+      _source: true
+    }, function (err, res) {
+      if (err) {
+        return callback(err);
+      }
+      var result = res.hits.hits;
+      result = result.length ? result[0]._source : null;
+      callback(null, result);
+    });
+  }
+
 }(exports));
