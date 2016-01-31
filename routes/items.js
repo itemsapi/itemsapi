@@ -4,6 +4,7 @@ var collectionHelper = require('./../src/helpers/collection');
 var dataService = Promise.promisifyAll(require('./../src/services/data'));
 var projectService = Promise.promisifyAll(require('./../src/services/project'));
 var elasticMapping = Promise.promisifyAll(require('./../src/elastic/mapping'));
+var elastic = Promise.promisifyAll(require('./../src/elastic/search'));
 var searchService = Promise.promisifyAll(require('./../src/services/search'));
 var collectionService = require('./../src/services/collection');
 
@@ -202,7 +203,6 @@ module.exports = function(router) {
 
   /*
    * get similar items
-   * @not working yet - in progress
    */
   router.get('/items/:name/:id/similar', function getSimilarItems(req, res, next) {
     var id = req.params.id;
@@ -228,6 +228,34 @@ module.exports = function(router) {
     })
     .catch(function(result) {
       console.log(result);
+      return res.status(400).json({});
+    })
+  });
+
+  /*
+   * find one
+   */
+  router.get('/items/:name/:key/:val/one', function findOne(req, res, next) {
+    var key = req.params.key;
+    var val = req.params.val;
+    var name = req.params.name;
+    var project = req.query.project;
+
+    return elastic.findOneAsync({
+      projectName: project,
+      collectionName: name,
+      key: key,
+      val: val
+    })
+    .then(function(result) {
+      if (!result) {
+        return res.status(404).json({});
+      }
+      return res.json(result);
+    })
+    .catch(function(result) {
+      console.log(result.stack);
+      //return next();
       return res.status(400).json({});
     })
   });
