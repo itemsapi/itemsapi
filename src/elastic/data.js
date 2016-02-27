@@ -129,7 +129,7 @@ var validate = require('validate.js');
       index: data.index,
       type: data.type,
     }).then(function(res) {
-      return res[0].count;
+      return res.count;
     });
   }
 
