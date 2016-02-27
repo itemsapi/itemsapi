@@ -4,20 +4,10 @@ var itemsapi = require('./server');
 var logger = require('./config/logger')
 
 itemsapi.init({
-  elasticsearch: {
-    host: "localhost:9200",
-    log: "error"
-  },
-  server: {
-    host: "http://127.0.0.1",
-    port: 3000
-  },
-  collections: {
-    db: "json",
-    filename:  "./config/collections.json"
-  }
+  //server: {
+    //port: 3002
+  //},
 })
-
 
 // should be implemented in custom application not in itemsapi itself
 /*if (config.hooks && config.hooks.limiter && config.hooks.limiter.enabled === true) {

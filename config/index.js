@@ -32,7 +32,7 @@ if (process.env.SEARCHBOX_URL) {
 exports.get = function() {
   return nconf.get();
 }
-exports.overrides = function(data) {
+exports.merge = function(data) {
   nconf.merge(data)
 }
 exports.set = function(key, value) {

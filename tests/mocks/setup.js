@@ -19,12 +19,14 @@ var server;
     serverInstance = server;
   };
 
+
   module.makeSuite = function addSuite(name, tests) {
 
     process.env.NODE_ENV = 'test';
     var config = require('./../../config/index').get();
 
     server  = require(__dirname + '/../../server.js');
+    server.init();
 
     describe(name, function describe() {
       before(function before(done) {

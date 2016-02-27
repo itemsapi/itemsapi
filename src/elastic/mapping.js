@@ -3,7 +3,7 @@
 var winston = require('winston');
 var Promise = require('bluebird');
 var elastic = Promise.promisifyAll(require('../connections/elastic').getElastic());
-var indices = elastic.indices;
+var indices = Promise.promisifyAll(require('../connections/elastic').getElastic().indices);
 var _ = require('lodash');
 var validate = require('validate.js');
 

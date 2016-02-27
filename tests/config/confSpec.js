@@ -22,7 +22,7 @@ setup.makeSuite('conf tool', function() {
     config.get().server.should.be.an.Object;
     config.set('test', 'test');
     config.get().test.should.be.equal('test');
-    config.overrides({
+    config.merge({
       test: 'test2',
       a: {
         b: 'b',
@@ -32,7 +32,7 @@ setup.makeSuite('conf tool', function() {
     config.get().test.should.be.equal('test2');
     config.get().a.b.should.be.equal('b');
     config.get().a.c.should.be.equal('c');
-    config.overrides({
+    config.merge({
       a: {
         b: 'b2'
       }
