@@ -11,6 +11,7 @@ setup.makeSuite('item crud request', function() {
   var projectService = require('./../../src/services/project');
   var collectionService = require('./../../src/services/collection');
   var documentElastic = require('./../../src/elastic/data');
+  var searchElastic = require('./../../src/elastic/search');
   var elasticTools = require('./../../src/elastic/tools');
   var elastic = require('./../../src/connections/elastic').getElastic();
 
@@ -75,16 +76,19 @@ setup.makeSuite('item crud request', function() {
   });
 
   it('should make successfull get (find) request', function(done) {
-    var spy = sinon.spy(elastic, 'search');
+    //var spy = sinon.spy(elastic, 'search');
+    var spy = sinon.spy(searchElastic, 'search');
     request(setup.getServer())
       .get('/api/v1/movie')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
         res.body.pagination.should.have.property('total', 1);
         assert(spy.calledOnce);
-        assert(spy.calledWithMatch({type: 'movie'}));
-        assert(spy.calledWithMatch({index: 'test'}));
-        elastic.search.restore();
+        //console.log(spy.args[0]);
+        //assert(spy.calledWithMatch({type: 'movie'}));
+        assert(spy.calledWithMatch({collectionName: 'movie'}));
+        //assert(spy.calledWithMatch({index: 'test'}));
+        spy.restore();
         done();
       });
   });

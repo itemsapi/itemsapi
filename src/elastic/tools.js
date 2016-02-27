@@ -17,7 +17,7 @@ var _ = require('lodash');
       force: true
     })
     .then(function(res) {
-      return res[0];
+      return res;
     });
   }
 }(exports));

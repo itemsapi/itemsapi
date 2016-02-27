@@ -29,4 +29,14 @@ if (process.env.SEARCHBOX_URL) {
   nconf.set('elasticsearch:host', process.env.ELASTICSEARCH_URL);
 }
 
-module.exports = nconf.get();
+exports.get = function() {
+  return nconf.get();
+}
+exports.merge = function(data) {
+  nconf.merge(data)
+}
+exports.set = function(key, value) {
+  nconf.set(key, value);
+}
+module.exports = exports;
+

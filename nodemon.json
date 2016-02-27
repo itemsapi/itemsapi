@@ -13,9 +13,11 @@
   },
   "watch": [
     "src/",
+    "config/",
     "hooks/",
     "routes/",
     "server.js",
+    "express.js",
     "app.js"
   ],
   "env": {
