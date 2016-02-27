@@ -22,7 +22,7 @@ var server;
   module.makeSuite = function addSuite(name, tests) {
 
     process.env.NODE_ENV = 'test';
-    var config = require('./../../config/index');
+    var config = require('./../../config/index').get();
 
     server  = require(__dirname + '/../../server.js');
 
@@ -40,8 +40,9 @@ var server;
       tests();
 
       after(function after(done) {
-        server.stop();
-        done();
+        server.stop(function(res) {
+          done();
+        });
       });
     });
   };

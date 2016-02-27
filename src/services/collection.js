@@ -1,7 +1,7 @@
 'use strict';
 var Promise = require('bluebird');
 var _ = require('lodash');
-var config = require('./../../config/index');
+var config = require('./../../config/index').get();
 var fs = Promise.promisifyAll(require('fs-extra'));
 
 (function(module) {

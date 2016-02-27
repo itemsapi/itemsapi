@@ -1,17 +1,9 @@
 'use strict';
 
-var nconf = require('nconf');
 var fs = require('fs');
-var configFile = './config/local.json';
 
-nconf.use('memory');
-if (fs.existsSync(configFile) !== false) {
-  nconf.file('overrides', {file: configFile})
-}
-
-nconf.file('defaults', {file: './config/root.json'});
-
-var server = require('./server');
+// should be deleted or refactored
+var itemsapi = require('./server');
 var importService = require('./src/services/import');
 var collectionService = require('./src/services/collection');
 var documentService = require('./src/services/data');

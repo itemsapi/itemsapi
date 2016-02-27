@@ -1,27 +1,39 @@
 'use strict';
 
-var server = null;
+var itemsapi = require('./server');
+var logger = require('./config/logger')
 
-var winston = require('winston');
-
-winston.loggers.add('query', {
-  console: {
-    level: 'info',
-    colorize: true,
-    prettyPrint: true,
-    label: 'query'
+itemsapi.init({
+  elasticsearch: {
+    host: "localhost:9200",
+    log: "error"
   },
-  file: {
-    json: true,
-    filename: './data/logs/query.log'
+  server: {
+    host: "http://127.0.0.1",
+    port: 3000
+  },
+  collections: {
+    db: "json",
+    filename:  "./config/collections.json"
   }
-});
+})
 
-server = require('./server');
-server.start(function serverStart(serverInstance) {
+
+// should be implemented in custom application not in itemsapi itself
+/*if (config.hooks && config.hooks.limiter && config.hooks.limiter.enabled === true) {
+  var client = require('redis').createClient(config.redis);
+  // limit requests per IP
+  var limiter = require('./hooks/limiter')(router, client);
+}*/
+
+var winston = require('winston')
+
+itemsapi.get('logger').info('it works!')
+
+itemsapi.start(function serverStart(serverInstance) {
   var host = serverInstance.address().address;
   var port = serverInstance.address().port;
 
-  console.log('server started');
-  console.log('Example app listening at http://%s:%s', host, port);
+  logger.info('server started');
+  logger.info('app listening at http://%s:%s', host, port);
 });

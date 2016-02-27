@@ -1,8 +1,8 @@
 {
   "name": "itemsapi",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "creating search application without spending time for backend",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test mocha tests/*",
     "start": "node app.js"
@@ -36,12 +36,13 @@
     "express-limiter": "^1.6.0",
     "fs-extra": "^0.26.2",
     "lodash": "^3.9.3",
+    "morgan": "^1.7.0",
     "nconf": "^0.7.1",
     "redis": "^2.2.5",
     "request": "^2.53.0",
     "underscore": "^1.8.3",
     "validate.js": "^0.4.0",
-    "winston": "^0.8.3"
+    "winston": "^2.2.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

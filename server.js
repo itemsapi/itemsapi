@@ -1,54 +1,24 @@
 'use strict';
 
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var gzip = require('compression');
-var config = require('./config/index');
-var _ = require('underscore');
-var router = express.Router();
-var cors = require('cors');
+var config = require('./config/index').get();
+var logger = require('./config/logger');
 var server;
-var httpNotFound = 404;
-var httpBadRequest = 400;
-var Promise = require('bluebird');
 
-app.locals.environment = process.env.NODE_ENV || 'development';
-app.disable('etag');
-app.disable('x-powered-by');
-app.use(gzip({treshold: 512}));
-app.use(bodyParser.json({
-  limit: '4mb'
-}));
+exports.init = function (data) {
+};
 
-app.use(cors());
-app.use('/api/v1', router);
+exports.get = function (name) {
+  if (name === 'config') {
+    return config;
+  } else if (name === 'logger') {
+    return logger;
+  }
+};
 
 var elastic = require('./src/connections/elastic');
 elastic.init(config.elasticsearch);
 
-
-if (config.hooks && config.hooks.limiter && config.hooks.limiter.enabled === true) {
-  var client = require('redis').createClient(config.redis);
-  // limit requests per IP
-  var limiter = require('./hooks/limiter')(router, client);
-}
-
-// all collections, stats
-var itemsRoutes = require('./routes/additional')(router);
-
-// manage collections (schema, aggregations options, sortings, etc)
-var collectionsRoutes = require('./routes/collections')(router);
-
-// get, put, post, delete, find, similar, autocomplete etc
-var itemsRoutes = require('./routes/items')(router);
-
-app.use(function errorRoute(err, req, res, next) {
-  console.log(err);
-  console.log(err.stack);
-  res.status(httpBadRequest).json(err);
-  next();
-});
+var app = require('./express')
 
 /**
  * start server
@@ -62,8 +32,11 @@ exports.start = function start(done) {
 /**
  * stop server
  */
-exports.stop = function start() {
-  server.close();
+exports.stop = function stop(done) {
+  server.close(function() {
+    done();
+  })
+  //server.close();
 };
 
-exports.app = app;
+module.exports = exports;

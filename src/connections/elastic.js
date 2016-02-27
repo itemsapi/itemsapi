@@ -3,8 +3,7 @@
 (function(module) {
 
   var elasticsearch = require('elasticsearch');
-  var winston = require('winston');
-  var nconf = require('nconf');
+  var logger = require('../../config/logger');
   var client;
 
   module.init = function(conf) {
@@ -14,8 +13,8 @@
         log: conf.log
       });
     } catch (err) {
-      winston.error('Unable to initialize elasticsearch! Error :' + err.message);
-      return callback(err);
+      logger.error('Unable to initialize elasticsearch! Error :' + err.message);
+      //return callback(err);
     }
 
     module.elastic = client;
