@@ -1,5 +1,4 @@
 var winston = require('winston')
-var util = require('util');
 
 var logger = new (winston.Logger)({
   transports: [
