@@ -8,9 +8,9 @@ var router = express.Router();
 var cors = require('cors');
 var httpNotFound = 404;
 var httpBadRequest = 400;
-var apiPrefix = '/api/v1';
 var logger = require('./config/logger')
-
+var config = require('./config/index').get()
+var apiPrefix = '/api/v1';
 var morgan = require('morgan')
 
 app.locals.environment = process.env.NODE_ENV || 'development';
@@ -22,7 +22,7 @@ app.use(bodyParser.json({
 }));
 
 app.use(cors());
-app.use(apiPrefix, router);
+app.use(config.server.prefix || apiPrefix, router);
 
 var winstonStream = {
   write: function(message, encoding){
@@ -30,12 +30,11 @@ var winstonStream = {
   }
 };
 
-// that needs to be place out of itemsapi
-router.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms', {stream: winstonStream}))
-router.use(function(req, res, next){
-  logger.info(req.method, req.url, "query", req.query, "body", JSON.stringify(req.body));
-  next();
-});
+if (config.server.logger !== false) {
+  router.use(morgan(config.server.logger, {
+    stream: winstonStream
+  }))
+}
 
 // all collections, stats
 var itemsRoutes = require('./routes/additional')(router);
@@ -53,6 +52,6 @@ app.use(function errorRoute(err, req, res, next) {
   next();
 });
 
-// should export object
-// app and api router and maybe another things in the future
-module.exports = app;
+exports.app = app;
+exports.router = router;
+module.exports = exports;

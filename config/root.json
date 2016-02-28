@@ -9,7 +9,9 @@
     "auth_pass": null
   },
   "server": {
-    "host": "http://127.0.0.1",
+    "host": "localhost",
+    "prefix": "/api/v1",
+    "logger": ":remote-addr - :remote-user [:date[clf]] ':method :url HTTP/:http-version' :status :res[content-length] ':referrer' ':user-agent' - :response-time ms",
     "port": 3000
   },
   "collections": {
