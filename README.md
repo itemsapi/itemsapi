@@ -99,11 +99,6 @@ Example collections:
 - [Cities](http://app.itemsapi.com/documents/name/city "Cities")
 - [NPM libraries](http://app.itemsapi.com/documents/name/npm "NPM libraries")
 
-## Community
-- <a href="https://twitter.com/itemsapi" target="_blank">Twitter @itemsapi</a>
-- ask directly <a href="https://github.com/cigolpl" target="_blank">@cigolpl</a>
-
-
 ## Tutorials
 - https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies
 
@@ -117,7 +112,7 @@ If you like ItemsAPI and want to help you can:
 ## Testing
 `npm test`
 
-## Long term inspiration
+## Inspiration
 - http://expressjs.com/resources/middleware.html (expressjs for simplicity)
 - http://neo4j.com/docs/stable/cypher-cookbook-similar-favorites.html (recommendation system)
 - https://www.algolia.com/ (very fast hosted search engine)
