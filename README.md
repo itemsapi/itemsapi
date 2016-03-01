@@ -16,7 +16,64 @@ This backend offers powerful functionality like:
 - geo searching
 
 ## Getting started
-<a href="https://www.itemsapi.com/docs/getting-started" target="_blank">Getting started</a>
+
+Starting ItemsAPI server:
+```js
+var itemsapi = require('itemsapi');
+
+itemsapi.init({
+  server: {
+    port: 5000
+  },
+  collections: {
+    db: 'json',
+    filename:  './collections.json'
+  },
+  elasticsearch: {
+    host: 'localhost:9200'
+  }
+})
+
+itemsapi.start(function serverStart(serverInstance) {
+  var host = serverInstance.address().address;
+  var port = serverInstance.address().port;
+  itemsapi.get('logger').info('ItemsAPI backend started on http://%s:%s', host, port)
+});
+```
+
+Searching items in your current `movie` collection 
+```js
+var ItemsAPI = require('itemsapi-node');
+var client = new ItemsAPI('http://localhost:5000/api/v1', 'movie');
+
+var facets = {
+  tags:['drama', 'war']
+};
+
+client.search({
+  sort: 'most_votes',
+  query: '',
+  page: 1,
+  aggs: JSON.stringify(facets),
+  per_page: 12
+}).then(function(res) {
+  console.log((res));
+})
+```
+
+Showing similar items (collaborative filtering):
+```js
+client.similar('item-id', {
+  fields: ['tags']
+}).then(function(res) {
+  console.log((res));
+})
+```
+
+(more information about client API - https://github.com/itemsapi/itemsapi-node)
+
+
+<a href="https://www.itemsapi.com/docs/getting-started" target="_blank">Installation</a>
 
 <a href="https://www.itemsapi.com" target="_blank">ItemsAPI website</a>
 
