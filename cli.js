@@ -4,6 +4,7 @@ var fs = require('fs');
 
 // should be deleted or refactored
 var itemsapi = require('./server');
+itemsapi.init()
 var importService = require('./src/services/import');
 var collectionService = require('./src/services/collection');
 var documentService = require('./src/services/data');

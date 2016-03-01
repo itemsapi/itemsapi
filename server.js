@@ -33,7 +33,7 @@ exports.get = function (name) {
  * start server
  */
 exports.start = function start(done) {
-  server = app.listen(config.get().server.port, config.get().server.host, function afterListen() {
+  server = app.listen(config.get().server.port, function afterListen() {
     done(server);
   });
 };
