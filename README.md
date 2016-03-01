@@ -82,19 +82,14 @@ client.similar('item-id', {
 ## Documentation
 
 To find out more go to the - <a href="https://itemsapi.readme.io" target="_blank">official documentation</a>.
+
 <a href="https://www.itemsapi.com/docs/getting-started" target="_blank">Getting started</a>
 
 <a href="https://www.itemsapi.com" target="_blank">ItemsAPI website</a>
 
 Deploy ItemsAPI server instantly to heroku:
+
 <a target="_blank" href="https://heroku.com/deploy?template=https://github.com/itemsapi/itemsapi"><img src="https://camo.githubusercontent.com/c0824806f5221ebb7d25e559568582dd39dd1170/68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e706e67" alt="Deploy" data-canonical-src="https://www.herokucdn.com/deploy/button.png"></a>
-
-
-
-## CLI
-You can import huge json collection within one command. i.e.
-
-`node cli.js --import --collection=movie --file ./data/documents.json`
 
 ## Demo
 - go to see <a href="http://app.itemsapi.com/" target="_blank">many different collections i.e. movies, quotes, libraries, etc</a> 
