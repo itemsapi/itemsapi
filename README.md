@@ -15,6 +15,11 @@ This backend offers powerful functionality like:
 - managing schema and indexes from command line or by API
 - geo searching
 
+## Requirement
+- node.js
+- java
+- elasticsearch > 1.4 < 2.0 
+
 ## Getting started
 
 Starting ItemsAPI server:
@@ -73,20 +78,18 @@ client.similar('item-id', {
 (more information about client API - https://github.com/itemsapi/itemsapi-node)
 
 
-<a href="https://www.itemsapi.com/docs/getting-started" target="_blank">Installation</a>
-
-<a href="https://www.itemsapi.com" target="_blank">ItemsAPI website</a>
-
-<a target="_blank" href="https://heroku.com/deploy?template=https://github.com/itemsapi/itemsapi"><img src="https://camo.githubusercontent.com/c0824806f5221ebb7d25e559568582dd39dd1170/68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e706e67" alt="Deploy" data-canonical-src="https://www.herokucdn.com/deploy/button.png"></a>
 
 ## Documentation
 
 To find out more go to the - <a href="https://itemsapi.readme.io" target="_blank">official documentation</a>.
+<a href="https://www.itemsapi.com/docs/getting-started" target="_blank">Getting started</a>
 
-## Requirement
-- node.js, npm
-- java8
-- elasticsearch > 1.4
+<a href="https://www.itemsapi.com" target="_blank">ItemsAPI website</a>
+
+Deploy ItemsAPI server instantly to heroku:
+<a target="_blank" href="https://heroku.com/deploy?template=https://github.com/itemsapi/itemsapi"><img src="https://camo.githubusercontent.com/c0824806f5221ebb7d25e559568582dd39dd1170/68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e706e67" alt="Deploy" data-canonical-src="https://www.herokucdn.com/deploy/button.png"></a>
+
+
 
 ## CLI
 You can import huge json collection within one command. i.e.
