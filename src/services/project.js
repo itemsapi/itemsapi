@@ -9,17 +9,11 @@ var collectionService = require('./collection');
 
 (function(module) {
 
-  /**
-   * add project (index)
-   */
-  module.addProjectAsync = function(data) {
-    return elastic.addIndexAsync({index: data.projectName});
-  },
 
   /**
-   * ensure if project exist, if not then create it
+   * ensure if index exist, if not then create it
    */
-  module.ensureProjectAsync = function(data) {
+  module.ensureIndexAsync = function(data) {
     return elastic.existsIndexAsync({index: data.projectName})
     .then(function(res) {
       if (res === false) {
@@ -33,23 +27,30 @@ var collectionService = require('./collection');
   },
 
   /**
+   * ensure if project exist, if not then create it
+   */
+  module.ensureProjectAsync = module.ensureIndexAsync,
+
+  /**
    * add mapping from collection schema
    */
   module.addMappingAsync = function(data) {
     var collection;
+    var helper;
     return collectionService.findCollectionAsync({
       name: data.collectionName
     })
-    .then(function(res) {
-      collection = res;
+    .then(function(_collection) {
+      collection = _collection;
+      helper = collectionHelper(collection);
       return module.ensureProjectAsync({
-        projectName: res.project
+        projectName: helper.getIndex()
       })
     })
     .then(function(res) {
       return elastic.addMappingAsync({
-        index: collection.project,
-        type: collection.name,
+        index: helper.getIndex(),
+        type: helper.getType(),
         body: {
           properties: collection.schema
         }
@@ -64,12 +65,13 @@ var collectionService = require('./collection');
     return collectionService.findCollectionAsync({
       name: data.collectionName
     })
-    .then(function(res) {
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
       return elastic.updateMappingAsync({
-        index: res.project,
-        type: res.name,
+        index: helper.getIndex(),
+        type: helper.getType(),
         body: {
-          properties: res.schema
+          properties: collection.schema
         }
       })
     })
@@ -82,11 +84,11 @@ var collectionService = require('./collection');
     return collectionService.findCollectionAsync({
       name: data.collectionName
     })
-    .then(function(res) {
-      var helper = collectionHelper(res);
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
       return elastic.getMappingAsync({
-        index: data.projectName,
-        type: data.collectionName
+        index: helper.getIndex(),
+        type: helper.getType()
       })
     })
   },
@@ -114,19 +116,20 @@ var collectionService = require('./collection');
     var name = data.collectionName;
     var result;
     var collection;
+    var helper;
 
     return collectionService.findCollectionAsync({
       name: name
     })
-    .then(function(res) {
-      collection = res;
+    .then(function(_collection) {
+      collection = _collection;
+      helper = collectionHelper(collection);
       return elasticData.countDocumentsAsync({
-        index: data.projectName,
-        type: data.collectionName
+        index: helper.getIndex(),
+        type: helper.getType()
       })
     })
     .then(function(res) {
-      var helper = collectionHelper(collection);
       var display_name = name;
       if (collection.meta && collection.meta.title) {
         display_name = collection.meta.title;
@@ -139,8 +142,8 @@ var collectionService = require('./collection');
         count: res
       };
     })
-    .catch(function(res) {
-      throw new Error('An error occured');
+    .catch(function(err) {
+      throw new Error('An error occured' + err);
     })
   }
 }(exports));
