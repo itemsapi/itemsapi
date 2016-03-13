@@ -7,6 +7,11 @@
                 "type": "string",
                 "store": true
             },
+            "key": {
+                "type": "string",
+                "index": "not_analyzed",
+                "store": true
+            },
             "tags": {
                 "type": "string",
                 "display": "array",
@@ -69,7 +74,8 @@
                 "year",
                 "votes"
             ]
-        }
+        },
+        "test": true
     },
     {
         "name": "city",

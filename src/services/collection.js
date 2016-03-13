@@ -40,12 +40,12 @@ var fs = Promise.promisifyAll(require('fs-extra'));
     })
     .then(function(res) {
       return _.findWhere(res, _.pick(where, function(value) {
-        return !_.isUndefined(value);
+        return !_.isUndefined(value) && value !== null;
       }));
     })
     .then(function(res) {
       if (!res) {
-        throw new Error('Not found');
+        throw new Error('Not found collection');
       }
       return res;
     });

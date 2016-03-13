@@ -5,6 +5,7 @@ var dataService = require('./../../src/services/data');
 var collectionService = require('./../../src/services/collection');
 var searchService = require('./../../src/services/search');
 var elasticMapping = require('./../../src/elastic/mapping');
+var collectionHelper = require('./../../src/helpers/collection');
 var _ = require('underscore');
 var fs = require('fs-extra');
 
@@ -38,10 +39,17 @@ var fs = require('fs-extra');
    * export collection
    */
   module.exportAsync = function(data) {
-    return searchService.searchAsync({
-      collectionName: data.collectionName,
-      projectName: data.projectName,
-      per_page: data.limit || 100
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+      project: data.projectName
+    })
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      return searchService.searchAsync({
+        index: helper.getIndex(),
+        type: helper.getType(),
+        per_page: data.limit || 100
+      })
     })
     .then(function(res) {
       return res.data.items;
@@ -63,6 +71,7 @@ var fs = require('fs-extra');
     .then(function(res) {
       return collectionService.addCollectionAsync({
         name: res.type,
+        // to refactoring
         project: res.index,
         schema: res.properties,
         table: {

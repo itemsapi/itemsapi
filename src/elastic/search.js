@@ -47,8 +47,8 @@ var _ = require('underscore');
     }
 
     elastic.search({
-      index: data.projectName,
-      type: data.collection.name,
+      index: data.index,
+      type: data.type,
       body: body,
       _source: data.fields || true
     }, function (err, res) {
@@ -65,8 +65,6 @@ var _ = require('underscore');
   module.generateAggregations = function(aggregations, filters, input) {
     var input = input || {};
     return _.map(aggregations, function(value, key) {
-
-
       var filterAggregation = ejs.FilterAggregation(key)
       .filter(ejs.AndFilter(_.values(_.omit(filters, key))));
 
@@ -215,8 +213,8 @@ var _ = require('underscore');
       //size: 5
     }
     elastic.search({
-      index: data.projectName,
-      type: data.collectionName,
+      index: data.index,
+      type: data.type,
       body: body,
     }, function (err, res) {
       if (err) {
@@ -238,7 +236,7 @@ var _ = require('underscore');
     //logger.info(body.toJSON());
 
     elastic.suggest({
-      index: data.projectName,
+      index: data.index,
       body: body
     }, function (err, res) {
       if (err) {
@@ -257,8 +255,8 @@ var _ = require('underscore');
     body.query(query);
 
     elastic.search({
-      index: data.projectName,
-      type: data.collectionName,
+      index: data.index,
+      type: data.type,
       body: body,
       _source: true
     }, function (err, res) {

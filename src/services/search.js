@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var elastic = Promise.promisifyAll(require('../elastic/search'));
 var _ = require('lodash');
 var searchHelper = require('../helpers/search');
+var collectionHelper = require('../helpers/collection');
 var collectionService = require('./collection');
 
 (function(module) {
@@ -17,9 +18,11 @@ var collectionService = require('./collection');
       name: data.collectionName,
       project: data.projectName,
     })
-    .then(function(res) {
-      data.collection = res;
-      data.projectName = res.project;
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      data.collection = collection;
+      data.index = helper.getIndex();
+      data.type = helper.getType();
       return elastic.searchAsync(data);
     })
     .then(function(res) {
@@ -35,10 +38,12 @@ var collectionService = require('./collection');
       name: data.collectionName,
       project: data.projectName,
     })
-    .then(function(res) {
-      data.collection = res;
-      data.projectName = res.project;
-      delete data.collection;
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      //data.collection = collection;
+      data.index = helper.getIndex();
+      data.type = helper.getType();
+      //delete data.collection;
       return elastic.similarAsync(data);
     })
     .then(function(res) {
