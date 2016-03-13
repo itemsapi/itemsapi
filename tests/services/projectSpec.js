@@ -9,7 +9,7 @@ setup.makeSuite('project service', function() {
   var statsService = require('./../../src/services/stats');
   var elasticClient = require('./../../src/connections/elastic');
 
-  it('should create project successfully', function(done) {
+  xit('should create project successfully', function(done) {
     projectService.addProjectAsync({
       projectName: 'test'
     }).then(function(res) {
