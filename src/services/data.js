@@ -6,6 +6,7 @@ var collectionService = require('../services/collection');
 var async = require('async');
 var _ = require('lodash');
 var dataHelper = require('../helpers/data');
+var collectionHelper = require('../helpers/collection');
 
 (function(module) {
 
@@ -17,11 +18,11 @@ var dataHelper = require('../helpers/data');
       name: data.collectionName,
       project: data.projectName
     })
-    .then(function(res) {
-      var collection = res || {};
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
       return elastic.addDocumentAsync({
-        index: collection.project,
-        type: data.collectionName,
+        index: helper.getIndex(),
+        type: helper.getType(),
         refresh: data.refresh,
         body: dataHelper.inputMapper(data.body, collection.schema),
         id: data.body.id
@@ -43,11 +44,12 @@ var dataHelper = require('../helpers/data');
       name: data.collectionName,
       project: data.projectName
     })
-    .then(function(res) {
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
       return elastic.updateDocumentAsync({
-        index: res.project,
-        type: data.collectionName,
-        body: dataHelper.inputMapper(data.body, res.schema),
+        index: helper.getIndex(),
+        type: helper.getType(),
+        body: dataHelper.inputMapper(data.body, collection.schema),
         id: data.id
       })
     }).then(function(res) {
@@ -63,10 +65,11 @@ var dataHelper = require('../helpers/data');
       name: data.collectionName,
       project: data.projectName
     })
-    .then(function(res) {
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
       return elastic.cleanDocumentsAsync({
-        index: res.project,
-        type: data.collectionName,
+        index: helper.getIndex(),
+        type: helper.getType()
       });
     })
   }
@@ -79,20 +82,13 @@ var dataHelper = require('../helpers/data');
       name: data.collectionName,
       project: data.projectName
     })
-    .then(function(res) {
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
       return elastic.deleteDocumentAsync({
-        index: res.project,
-        type: data.collectionName,
+        index: helper.getIndex(),
+        type: helper.getType(),
         id: data.id
       })
-    })
-
-    return elastic.deleteDocumentAsync({
-      index: data.projectName,
-      type: data.collectionName,
-      id: data.id
-    }).then(function(res) {
-      return res._source;
     })
   }
 
@@ -104,14 +100,21 @@ var dataHelper = require('../helpers/data');
       name: data.collectionName,
       project: data.projectName
     })
-    .then(function(res) {
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
       return elastic.getDocumentAsync({
-        index: res.project,
-        type: data.collectionName,
+        index: helper.getIndex(),
+        type: helper.getType(),
         id: data.id
       })
     })
     .then(function(res) {
+      var output = res._source;
+      //console.log(res);
+      //console.log(output);
+      if (output.body) {
+        output.body.id = res._id;
+      }
       return res._source;
     })
   }
@@ -128,22 +131,22 @@ var dataHelper = require('../helpers/data');
       name: data.collectionName,
       project: data.projectName
     })
-    .then(function(res) {
-      project = res.project;
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
       return elastic.addDocumentsAsync({
-        index: project,
-        type: data.collectionName,
+        index: helper.getIndex(),
+        type: helper.getType(),
         refresh: data.refresh,
-        body: dataHelper.inputMapper(data.body, res.schema),
+        body: dataHelper.inputMapper(data.body, collection.schema),
       })
     }).then(function(res) {
       return _.pick(_.extend(res, {
         ids: _.map(res.items, function(val) {
           return val.create._id;
         }),
-        project: project,
+        //project: project,
         collection: data.collectionName
-      }), 'took', 'errors', 'ids', 'project', 'collection');
+      }), 'took', 'errors', 'ids', 'collection');
     })
   }
 
@@ -165,6 +168,7 @@ var dataHelper = require('../helpers/data');
 
     var count = 0;
 
+    // needs to be refactored
     var projectName = data.projectName;
     var collectionName = data.collectionName;
 
@@ -174,6 +178,7 @@ var dataHelper = require('../helpers/data');
 
         var removed = documents.splice(0, batchSize);
         module.addDocumentsAsync({
+          // needs to be refactored
           projectName: projectName,
           collectionName: collectionName,
           refresh: data.refresh,

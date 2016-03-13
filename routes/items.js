@@ -241,11 +241,18 @@ module.exports = function(router) {
     var name = req.params.name;
     var project = req.query.project;
 
-    return elastic.findOneAsync({
-      projectName: project,
-      collectionName: name,
-      key: key,
-      val: val
+    return collectionService.findCollectionAsync({
+      name: name,
+      project: project
+    })
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      return elastic.findOneAsync({
+        index: helper.getIndex(),
+        type: helper.getType(),
+        key: key,
+        val: val
+      })
     })
     .then(function(result) {
       if (!result) {
@@ -296,14 +303,21 @@ module.exports = function(router) {
     var name = req.params.name;
     var project = req.query.project;
 
-    dataService.getDocumentAsync({
-      projectName: project,
-      collectionName: name,
-      id: id
-    }).then(function(result) {
-      return res.json(result);
-    }).catch(function(result) {
-      return next(result);
-    });
+    return collectionService.findCollectionAsync({
+      name: name,
+      project: project
+    })
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      return dataService.getDocumentAsync({
+        index: helper.getIndex(),
+        type: helper.getType(),
+        id: id
+      }).then(function(result) {
+        return res.json(result);
+      }).catch(function(result) {
+        return next(result);
+      });
+    })
   });
 }

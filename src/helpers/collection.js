@@ -29,6 +29,14 @@ module.exports = function(data) {
     return getSortings()[name] || null;
   }
 
+  var getType = function() {
+    return data.type || data.name;
+  }
+
+  var getIndex = function() {
+    return data.index || data.project || getType();
+  }
+
   var getMetadata = function() {
     var collection = data;
     return _.extend(_.clone(collection),
@@ -53,6 +61,8 @@ module.exports = function(data) {
     getAggregation: getAggregation,
     getSortings: getSortings,
     getSorting: getSorting,
+    getType: getType,
+    getIndex: getIndex,
     getMetadata: getMetadata
   }
 };
