@@ -8,10 +8,8 @@
 
   module.init = function(conf) {
     try {
-      client = new elasticsearch.Client({
-        host: conf.host || "localhost:9200",
-        log: conf.log
-      });
+      //https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/configuration.html
+      client = new elasticsearch.Client(conf);
     } catch (err) {
       logger.error('Unable to initialize elasticsearch! Error :' + err.message);
       //return callback(err);
