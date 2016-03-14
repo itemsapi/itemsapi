@@ -144,6 +144,24 @@ module.exports = function(router) {
   });
 
   /*
+   * reindex collection
+   * (create new mapping on custom index/type, copy data there, and update collection configuration)
+   */
+  router.put('/collections/:name/reindex', function (req, res, next) {
+    var name = req.params.name;
+    return projectService.reindexCollectionAsync({
+      collectionName: name,
+      new_type: req.query.new_type,
+      new_index: req.query.new_index
+    })
+    .then(function(result) {
+      return res.json(result);
+    }).catch(function(err) {
+      return res.status(500).json();
+    });
+  });
+
+  /*
    * update elasticsearch mapping
    */
   router.put('/collections/:name/mapping', function (req, res, next) {

@@ -9,6 +9,7 @@
   module.init = function(conf) {
     try {
       //https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/configuration.html
+      conf.apiVersion = '1.7';
       client = new elasticsearch.Client(conf);
     } catch (err) {
       logger.error('Unable to initialize elasticsearch! Error :' + err.message);

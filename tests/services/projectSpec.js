@@ -49,6 +49,21 @@ setup.makeSuite('project service', function() {
     });
   });
 
+  it('should reindex collection', function(done) {
+    var data = {
+      old_type: 'city',
+      old_index: 'test',
+      new_type: 'city_reindexed',
+      new_index: 'test'
+    }
+
+    projectService.reindexAsync(data)
+    .then(function(res) {
+      console.log(res);
+      done();
+    });
+  });
+
   it('should check collection info', function(done) {
     var data = {
       projectName: 'test',
