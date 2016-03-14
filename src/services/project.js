@@ -1,8 +1,7 @@
 'use strict';
 
 var Promise = require('bluebird');
-//const exec = Promise.promisifyAll(require('child_process').exec)
-const exec = require('child_process').exec
+var exec = require('child_process').exec
 var elastic = Promise.promisifyAll(require('../elastic/mapping'));
 var elasticData = require('../elastic/data');
 var searchService = Promise.promisifyAll(require('./search'));
