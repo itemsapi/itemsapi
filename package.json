@@ -1,6 +1,6 @@
 {
   "name": "itemsapi",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "creating search application without spending time for backend",
   "main": "server.js",
   "scripts": {
@@ -31,7 +31,8 @@
     "compression": "^1.5.0",
     "cors": "^2.7.1",
     "elastic.js": "^1.2.0",
-    "elasticsearch": "^8.2.0",
+    "elasticsearch": "^10.1.3",
+    "elasticsearch-reindex": "^1.1.12",
     "express": "^4.13.3",
     "express-init": "0.0.1",
     "express-limiter": "^1.6.0",
