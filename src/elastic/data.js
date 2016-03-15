@@ -137,7 +137,7 @@ var validate = require('validate.js');
    * clean documents
    * @param {Obj} data document
    */
-  module.cleanDocuments = function(data, callback) {
+  module.cleanDocumentsAsync = function(data, callback) {
     return elastic.deleteByQuery({
       index: data.index,
       type: data.type,
