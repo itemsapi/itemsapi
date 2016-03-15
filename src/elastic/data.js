@@ -1,7 +1,7 @@
 'use strict';
 
 var Promise = require('bluebird');
-var elastic = Promise.promisifyAll(require('../connections/elastic').getElastic());
+var elastic = require('../connections/elastic').getElastic();
 var validate = require('validate.js');
 
 (function(module) {
@@ -125,7 +125,7 @@ var validate = require('validate.js');
    * @param {Obj} data document
    */
   module.countDocumentsAsync = function(data, callback) {
-    return elastic.countAsync({
+    return elastic.count({
       index: data.index,
       type: data.type,
     }).then(function(res) {
@@ -137,8 +137,8 @@ var validate = require('validate.js');
    * clean documents
    * @param {Obj} data document
    */
-  module.cleanDocumentsAsync = function(data, callback) {
-    return elastic.deleteByQueryAsync({
+  module.cleanDocuments = function(data, callback) {
+    return elastic.deleteByQuery({
       index: data.index,
       type: data.type,
       body: {
