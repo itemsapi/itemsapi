@@ -1,9 +1,9 @@
 'use strict';
 
 var Promise = require('bluebird');
-var elastic = Promise.promisifyAll(require('../connections/elastic').getElastic());
-var indices = Promise.promisifyAll(require('../connections/elastic').getElastic().indices);
-var cat = Promise.promisifyAll(require('../connections/elastic').getElastic().cat);
+var elastic = require('../connections/elastic').getElastic();
+var indices = require('../connections/elastic').getElastic().indices;
+var cat = require('../connections/elastic').getElastic().cat;
 var _ = require('lodash');
 
 (function(module) {
@@ -12,7 +12,7 @@ var _ = require('lodash');
    */
   module.refreshAsync = function(data) {
     data = data || {};
-    return indices.refreshAsync({
+    return indices.refresh({
       index: data.index,
       force: true
     })

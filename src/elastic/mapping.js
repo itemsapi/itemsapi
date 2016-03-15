@@ -2,8 +2,8 @@
 
 var winston = require('winston');
 var Promise = require('bluebird');
-var elastic = Promise.promisifyAll(require('../connections/elastic').getElastic());
-var indices = Promise.promisifyAll(require('../connections/elastic').getElastic().indices);
+var elastic = require('../connections/elastic').getElastic();
+var indices = require('../connections/elastic').getElastic().indices;
 var _ = require('lodash');
 var validate = require('validate.js');
 
@@ -140,7 +140,7 @@ var validate = require('validate.js');
         }
       }
 
-      return indices.deleteMappingAsync(data)
+      return indices.deleteMapping(data)
       .then(function (res) {
         return res;
       })
@@ -168,7 +168,7 @@ var validate = require('validate.js');
    * get mapping for index / type
    */
   module.getMappingAsync = function(data) {
-    return elastic.indices.getMappingAsync(data)
+    return elastic.indices.getMapping(data)
     .then(function (res) {
       return res;
     })
