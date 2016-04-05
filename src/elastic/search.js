@@ -59,6 +59,17 @@ var _ = require('underscore');
     });
   }
 
+
+  /**
+   */
+  module._searchAsync = function(data) {
+    return elastic.search({
+      index: data.index,
+      type: data.type,
+      body: data.body
+    })
+  }
+
   /**
    * generate aggregations
    */
