@@ -191,6 +191,36 @@ module.exports = function(router) {
   });
 
   /*
+   * search items using native (prefiltered) elasticsearch /_search endpoint
+   */
+  router.post(['/items/:name/_search'], function searchItems(req, res, next) {
+
+    var name = req.params.name;
+    var body = req.body || {};
+
+    return collectionService.findCollectionAsync({
+      name: name
+    })
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      return elastic._searchAsync({
+        index: helper.getIndex(),
+        type: helper.getType(),
+        body: body
+      })
+    })
+    .then(function(result) {
+      return res.json(result);
+    })
+    .catch(function(result) {
+      console.log(result.stack);
+      return res.status(400).json({});
+    })
+  });
+
+
+
+  /*
    * mapping
    * @deprecated
    */

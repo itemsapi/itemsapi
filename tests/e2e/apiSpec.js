@@ -47,6 +47,17 @@ setup.makeSuite('creating items', function addSuite() {
       });
   });
 
+  it('should be able to make native search (elastic)', function test(done) {
+    request(setup.getServer())
+      .post('/api/v1/items/movie/_search')
+      .end(function afterRequest(err, res) {
+        res.status.should.equal(200);
+        res.body.hits.should.exists;
+        res.body.took.should.exists;
+        done();
+      });
+  });
+
   // doesnt work until mapping is not loaded
   xit('should be able to get movie by key val', function test(done) {
     request(setup.getServer())
