@@ -135,9 +135,6 @@ module.exports = function(router) {
     }
 
     var per_page = req.query.per_page || 10;
-    if (per_page > 100) {
-      per_page = 100;
-    }
 
     // max limit etc should goes to configuration files
     var page = req.query.page || 1;
