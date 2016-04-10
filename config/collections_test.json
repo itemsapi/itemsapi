@@ -97,6 +97,15 @@
                 "type": "geo_point"
             }
         },
+        "aggregations": [
+            {
+                "name": "country",
+                "type": "terms",
+                "field": "country",
+                "size": 10,
+                "title": "Countries"
+            }
+        ],
         "sortings": {
             "city": {
                 "title": "City",

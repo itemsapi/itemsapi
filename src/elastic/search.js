@@ -4,7 +4,7 @@ var elastic = require('../connections/elastic').getElastic();
 var ejs = require('elastic.js');
 var collectionHelper = require('./../helpers/collection');
 var geoHelper = require('./../helpers/geo');
-var _ = require('underscore');
+var _ = require('lodash');
 
 (function(module) {
 
@@ -76,6 +76,8 @@ var _ = require('underscore');
   module.generateAggregations = function(aggregations, filters, input) {
     var input = input || {};
     return _.map(aggregations, function(value, key) {
+      // we considering two different aggregations formatting (object | array)
+      key = value.name || key;
       var filterAggregation = ejs.FilterAggregation(key)
       .filter(ejs.AndFilter(_.values(_.omit(filters, key))));
 
@@ -184,13 +186,18 @@ var _ = require('underscore');
    * generate aggregation filters
    */
   module.generateAggregationFilters = function(aggregations, values) {
+
     var aggregation_filters = {};
     _.each(values, function(value, key) {
       if (value.length) {
-        if (aggregations[key].type === 'terms') {
-          aggregation_filters[key] = module.generateTermsFilter(aggregations[key], value)
-        } else if (aggregations[key].type === 'range') {
-          aggregation_filters[key] = module.generateRangeFilter(aggregations[key], value);
+        var aggregation = collectionHelper({
+          aggregations: aggregations
+        }).getAggregation(key);
+
+        if (aggregation.type === 'terms') {
+          aggregation_filters[key] = module.generateTermsFilter(aggregation, value)
+        } else if (aggregation.type === 'range') {
+          aggregation_filters[key] = module.generateRangeFilter(aggregation, value);
         }
       }
     });

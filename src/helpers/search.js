@@ -2,9 +2,61 @@
 var _ = require('underscore');
 var collectionHelper = require('./collection');
 
+/**
+ * export here should not be global
+ * should be refactored
+ */
 module.exports = function() {
+
+  var getAggregationsResponse = function(collection_aggregations, elastic_aggregations) {
+    var aggregations;
+    if (_.isArray(collection_aggregations)) {
+      // array response
+      aggregations = _.map(collection_aggregations, function(v, k) {
+        var output = _.extend(v, elastic_aggregations[v.name]);
+        if (elastic_aggregations[v.name][v.name]) {
+          output = _.extend(v, elastic_aggregations[v.name][v.name]);
+          delete output[v.name]
+        }
+        return output;
+      })
+    } else {
+      // object response
+      aggregations = _.extend(_.clone(elastic_aggregations), _.mapObject(elastic_aggregations, function(v, k) {
+        // supports filters in aggregations
+        if (!v.buckets && v[k]) {
+          _.extend(v, v[k]);
+          delete v[k];
+        }
+        return _.extend(v, {
+          title: collection_aggregations[k].title || k,
+          name: k,
+          type: collection_aggregations[k].type
+        });
+      }))
+    }
+
+    return aggregations;
+  }
+
   var searchConverter = function(input, data) {
     var helper = collectionHelper(input.collection);
+
+    var items = _.map(data.hits.hits, function(doc) {
+      return _.extend(
+        {id: doc._id, score: doc._score},
+        doc._source, doc.fields
+      );
+    })
+
+    var sortings = _.mapObject(helper.getSortings(), function(v, k) {
+      return {
+        name: k,
+        order: v.order,
+        title: v.title
+      };
+    })
+
     return {
       meta: {
         query: input.query,
@@ -16,30 +68,12 @@ module.exports = function() {
         total: data.hits.total
       },
       data: {
-        items: _.map(data.hits.hits, function(doc) {
-          return _.extend(
-            {id: doc._id, score: doc._score},
-            doc._source, doc.fields
-          );
-        }),
-        groups: [],
-        aggregations: _.extend(_.clone(data.aggregations), _.mapObject(data.aggregations, function(v, k) {
-          var aggregation = helper.getAggregations();
-
-          // supports filters in aggregations
-          if (!v.buckets && v[k]) {
-            _.extend(v, v[k]);
-            delete v[k];
-          }
-          return _.extend(v, {title: aggregation[k].title || k, name: k, type: aggregation[k].type });
-        })),
-        sortings: _.mapObject(helper.getSortings(), function(v, k) {
-          return {
-            name: k,
-            order: v.order,
-            title: v.title
-          };
-        })
+        items: items,
+        aggregations: getAggregationsResponse(
+          helper.getAggregations(),
+          data.aggregations
+        ),
+        sortings: sortings
       }
     }
   }
@@ -66,7 +100,9 @@ module.exports = function() {
       }
     }
   }
+
   return {
+    getAggregationsResponse: getAggregationsResponse,
     searchConverter: searchConverter,
     similarConverter: similarConverter
   }

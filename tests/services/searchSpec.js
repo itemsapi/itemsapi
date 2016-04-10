@@ -25,11 +25,28 @@ setup.makeSuite('search service', function() {
     }).then(function(res) {
       res.should.have.property('data')
       res.data.should.have.property('items');
+      res.data.should.have.property('aggregations');
+      res.data.aggregations.should.be.an.instanceOf(Object);
+      res.data.aggregations.should.not.be.an.instanceOf(Array);
+      res.data.aggregations.should.have.property('tags');
       res.should.have.property('pagination');
       res.pagination.should.have.property('page');
       res.pagination.should.have.property('total');
       res.pagination.should.have.property('per_page');
       res.should.have.property('meta');
+      done();
+    });
+  });
+
+  it('should search city and get aggregations as array', function(done) {
+    searchService.searchAsync({
+      collectionName: 'city'
+    }).then(function(res) {
+      res.should.have.property('data')
+      res.data.should.have.property('items');
+      res.data.should.have.property('aggregations');
+      res.data.aggregations.should.be.an.instanceOf(Array);
+      res.data.aggregations[0].should.have.property('name', 'country');
       done();
     });
   });
