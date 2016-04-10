@@ -187,21 +187,12 @@ var _ = require('lodash');
    */
   module.generateAggregationFilters = function(aggregations, values) {
 
-    var getAggregation = function(aggregations, key) {
-      return _.find(aggregations, {
-        name: key
-      });
-    }
-
     var aggregation_filters = {};
     _.each(values, function(value, key) {
       if (value.length) {
-        var aggregation;
-        if (_.isArray(aggregations)) {
-          aggregation = getAggregation(aggregations, key);
-        } else {
-          aggregation = aggregations[key]
-        }
+        var aggregation = collectionHelper({
+          aggregations: aggregations
+        }).getAggregation(key);
 
         if (aggregation.type === 'terms') {
           aggregation_filters[key] = module.generateTermsFilter(aggregation, value)

@@ -11,6 +11,7 @@ module.exports = function() {
   var getAggregationsResponse = function(collection_aggregations, elastic_aggregations) {
     var aggregations;
     if (_.isArray(collection_aggregations)) {
+      // array response
       aggregations = _.map(collection_aggregations, function(v, k) {
         var output = _.extend(v, elastic_aggregations[v.name]);
         if (elastic_aggregations[v.name][v.name]) {
@@ -20,6 +21,7 @@ module.exports = function() {
         return output;
       })
     } else {
+      // object response
       aggregations = _.extend(_.clone(elastic_aggregations), _.mapObject(elastic_aggregations, function(v, k) {
         // supports filters in aggregations
         if (!v.buckets && v[k]) {

@@ -17,7 +17,16 @@ module.exports = function(data) {
     return data.aggregations || {};
   }
 
+  /**
+   * be careful with using that
+   * especially that aggretations is now as array or object
+   */
   var getAggregation = function(name) {
+    if (_.isArray(data.aggregations)) {
+      return _.find(data.aggregations, {
+        name: name
+      });
+    }
     return data.aggregations[name] || null;
   }
 
