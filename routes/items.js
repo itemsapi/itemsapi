@@ -149,6 +149,8 @@ module.exports = function(router) {
       per_page: per_page,
       query: req.query.query || '',
       sort: req.query.sort || '',
+      key: req.query.key || '',
+      val: req.query.val || '',
       aggs: aggs,
       aroundLatLng: req.query.around_lat_lng,
       fields: fields

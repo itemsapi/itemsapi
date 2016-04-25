@@ -3,7 +3,7 @@
 var winston = require('winston');
 var Promise = require('bluebird');
 var elastic = require('../connections/elastic').getElastic();
-var indices = require('../connections/elastic').getElastic().indices;
+var indices = elastic.indices;
 var _ = require('lodash');
 var validate = require('validate.js');
 
@@ -73,6 +73,50 @@ var validate = require('validate.js');
       body: {presence: true},
     };
     return validate(data, constraints);
+  },
+
+  /**
+   * add get settings
+   */
+  module.getSettingsAsync = function(data) {
+    return elastic.indices.getSettings(data)
+  },
+
+  /**
+   * add settings
+   */
+  module.addSettingsAsync = function(data) {
+    console.log(data);
+    var indexconf = {
+      index: data.index
+    }
+    return elastic.indices.exists(indexconf)
+    .then(function (res) {
+      if (!res) {
+        return elastic.indices.create(indexconf)
+      }
+    })
+    .then(function (res) {
+      return elastic.cluster.health({
+        index: data.index,
+        waitForStatus: 'yellow'
+      })
+    })
+    .then(function (res) {
+      return elastic.indices.close({
+        index: data.index,
+        //ignoreUnavailable: true,
+        //allowNoIndices: true
+      })
+    })
+    .then(function (res) {
+      console.log('close');
+      return elastic.indices.putSettings(data)
+    })
+    .then(function (res) {
+      console.log('settings');
+      return elastic.indices.open(indexconf)
+    })
   },
 
   /**

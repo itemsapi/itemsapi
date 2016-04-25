@@ -7,6 +7,7 @@ var _ = require('lodash');
 var searchHelper = require('../helpers/search');
 var collectionHelper = require('../helpers/collection');
 var collectionService = require('./collection');
+var slugs = require('../libs/slugs');
 
 (function(module) {
 
@@ -20,10 +21,21 @@ var collectionService = require('./collection');
     })
     .then(function(collection) {
       var helper = collectionHelper(collection);
-      data.collection = collection;
-      data.index = helper.getIndex();
-      data.type = helper.getType();
-      return elastic.searchAsync(data);
+
+      console.log(data);
+
+      return slugs.getSlugAsync(
+        helper.getName(),
+        data.key,
+        data.val
+      ).then(function(res) {
+        //console.log(res);
+        data.val = res;
+        data.collection = collection;
+        data.index = helper.getIndex();
+        data.type = helper.getType();
+        return elastic.searchAsync(data);
+      })
     })
     .then(function(res) {
       return searchHelper().searchConverter(data, res);

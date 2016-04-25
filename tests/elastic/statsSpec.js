@@ -10,12 +10,13 @@ setup.makeSuite('elastic stats', function() {
   var stats = require('./../../src/elastic/stats');
 
   before(function(done) {
-    mapping.addIndex({
+    // not necessary anymore as indices are generated in setup
+    /*mapping.addIndex({
       index: 'test'
     }, function(err, res) {
       assert.equal(err, null);
-      done();
-    });
+    });*/
+    done();
   });
 
   it('should show stats', function(done) {

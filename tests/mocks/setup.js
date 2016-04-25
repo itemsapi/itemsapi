@@ -33,8 +33,22 @@ var server;
         server.start(function serverStart(serverInstance) {
           module.setServer(serverInstance);
           var elasticClient = require('./../../src/connections/elastic');
+          var projectService  = require('./../../src/services/project');
           elasticClient.flushdb({index: 'test'}, function(err, res) {
-            done();
+            // need to add mapping for all test collections
+
+            //require('./../../src/elastic/mapping').addSettingsAsync(settings)
+            //.then(function(res) {
+              projectService.addMappingAsync({
+                index: 'test',
+                type: 'movie'
+              })
+              .then(function(res) {
+                console.log('add mapping');
+                done();
+              })
+            //})
+            //})
           });
         });
       });

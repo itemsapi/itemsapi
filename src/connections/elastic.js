@@ -38,7 +38,7 @@
   };
 
   module.getElastic = function() {
-    return module.elastic;
+    return client;
   }
 
   module.flushdb = function(data, callback) {

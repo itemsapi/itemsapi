@@ -22,7 +22,7 @@ setup.makeSuite('elastic mapping', function() {
       });
     });
 
-    it('should not exists', function(done) {
+    xit('should not exists', function(done) {
       model.existsIndex({
         index: 'test'
       }, function(err, res) {
@@ -32,7 +32,7 @@ setup.makeSuite('elastic mapping', function() {
       });
     });
 
-    it('should create index in elastic successfully', function(done) {
+    xit('should create index in elastic successfully', function(done) {
       model.addIndex({
         index: 'test'
       }, function(err, res) {
@@ -50,6 +50,36 @@ setup.makeSuite('elastic mapping', function() {
         done();
       });
     });
+
+    it('adds settings', function(done) {
+      model.addSettingsAsync({
+        index: 'test2',
+        body: {
+          index: {
+            analysis: {
+              analyzer: {
+                analyzer_keyword: {
+                  tokenizer: "keyword",
+                  filter: "lowercase"
+                }
+              }
+            }
+          }
+        }
+      }).then(function(res) {
+        model.getSettingsAsync({
+          index: 'test2'
+        }).then(function(res) {
+          res.should.have.property('test2')
+          //console.log(JSON.stringify(res));
+          res.test2.settings.index.should.have.property('creation_date')
+          res.test2.settings.index.should.have.property('uuid')
+          res.test2.settings.index.analysis.analyzer.should.have.property('analyzer_keyword')
+          done();
+        })
+      })
+    });
+
 
     it('should delete index in elastic successfully', function(done) {
       model.deleteIndex({
