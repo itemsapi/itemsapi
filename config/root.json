@@ -6,7 +6,6 @@
   "redis": {
     "host": "127.0.0.1",
     "port": 6379,
-    "enabled": true,
     "auth_pass": null
   },
   "server": {

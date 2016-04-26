@@ -21,16 +21,15 @@ var slugs = require('../libs/slugs');
     })
     .then(function(collection) {
       var helper = collectionHelper(collection);
-
-      console.log(data);
-
       return slugs.getSlugAsync(
         helper.getName(),
         data.key,
         data.val
       ).then(function(res) {
         //console.log(res);
-        data.val = res;
+        if (res) {
+          data.val = res;
+        }
         data.collection = collection;
         data.index = helper.getIndex();
         data.type = helper.getType();

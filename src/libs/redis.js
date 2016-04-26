@@ -1,6 +1,8 @@
 // needs to provide custom configuration here
 var redis = require('redis');
-var client = redis.createClient();
+var config = require('./../../config/index').get();
+var client = redis.createClient(config.redis);
+
 var Promise = require('bluebird');
 var _ = require('lodash');
 Promise.promisifyAll(redis.RedisClient.prototype);
