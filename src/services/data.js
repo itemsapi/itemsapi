@@ -3,6 +3,7 @@
 var Promise = require('bluebird');
 var elastic = Promise.promisifyAll(require('../elastic/data'));
 var collectionService = require('../services/collection');
+var slugs = require('../libs/slugs');
 var async = require('async');
 var _ = require('lodash');
 var dataHelper = require('../helpers/data');
@@ -20,13 +21,21 @@ var collectionHelper = require('../helpers/collection');
     })
     .then(function(collection) {
       var helper = collectionHelper(collection);
-      return elastic.addDocumentAsync({
-        index: helper.getIndex(),
-        type: helper.getType(),
-        refresh: data.refresh,
-        body: dataHelper.inputMapper(data.body, collection.schema),
-        id: data.body.id
+
+      return slugs.setSlugsAsync(
+        helper.getType(),
+        helper.getSlugs(),
+        dataHelper.inputMapper(data.body, collection.schema)
+      ).then(function(res) {
+        return elastic.addDocumentAsync({
+          index: helper.getIndex(),
+          type: helper.getType(),
+          refresh: data.refresh,
+          body: dataHelper.inputMapper(data.body, collection.schema),
+          id: data.body.id
+        })
       })
+
     }).then(function(res) {
       return {
         id: res._id,
@@ -46,11 +55,17 @@ var collectionHelper = require('../helpers/collection');
     })
     .then(function(collection) {
       var helper = collectionHelper(collection);
-      return elastic.updateDocumentAsync({
-        index: helper.getIndex(),
-        type: helper.getType(),
-        body: dataHelper.inputMapper(data.body, collection.schema),
-        id: data.id
+      return slugs.setSlugsAsync(
+        helper.getType(),
+        helper.getSlugs(),
+        dataHelper.inputMapper(data.body, collection.schema)
+      ).then(function(res) {
+        return elastic.updateDocumentAsync({
+          index: helper.getIndex(),
+          type: helper.getType(),
+          body: dataHelper.inputMapper(data.body, collection.schema),
+          id: data.id
+        })
       })
     }).then(function(res) {
       return res;
@@ -133,11 +148,19 @@ var collectionHelper = require('../helpers/collection');
     })
     .then(function(collection) {
       var helper = collectionHelper(collection);
-      return elastic.addDocumentsAsync({
-        index: helper.getIndex(),
-        type: helper.getType(),
-        refresh: data.refresh,
-        body: dataHelper.inputMapper(data.body, collection.schema),
+
+      // adding slugs mapping to key value datastore
+      return slugs.setSlugsAsync(
+        helper.getType(),
+        helper.getSlugs(),
+        dataHelper.inputMapper(data.body, collection.schema)
+      ).then(function(res) {
+        return elastic.addDocumentsAsync({
+          index: helper.getIndex(),
+          type: helper.getType(),
+          refresh: data.refresh,
+          body: dataHelper.inputMapper(data.body, collection.schema),
+        })
       })
     }).then(function(res) {
       return _.pick(_.extend(res, {

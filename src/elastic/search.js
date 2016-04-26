@@ -42,9 +42,14 @@ var _ = require('lodash');
       body.aggregation(value);
     });
 
-    if (data.query) {
+    if (data.key && data.val) {
+      body.query(ejs.TermQuery(data.key, data.val));
+    } else if (data.query) {
       body.query(ejs.QueryStringQuery(data.query));
     }
+
+
+
 
     elastic.search({
       index: data.index,
@@ -267,25 +272,22 @@ var _ = require('lodash');
   /**
    * find one document
    */
-  module.findOne = function(data, callback) {
+  module.findOneAsync = function(data, callback) {
     var body = ejs.Request()
     var query = ejs.TermQuery(data.key, data.val)
     body.query(query);
 
-    elastic.search({
+    return elastic.search({
       index: data.index,
       type: data.type,
       body: body,
       _source: true
-    }, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
+    }).then(function(res) {
       var result = res.hits.hits;
       result = result.length ? _.extend({
         id: result[0]._id
       }, result[0]._source) : null;
-      callback(null, result);
+      return result;
     });
   }
 

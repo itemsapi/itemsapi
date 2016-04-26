@@ -1,6 +1,6 @@
 {
   "name": "itemsapi",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "creating search application without spending time for backend",
   "main": "server.js",
   "scripts": {
@@ -41,6 +41,7 @@
     "morgan": "^1.7.0",
     "nconf": "^0.7.1",
     "redis": "^2.2.5",
+    "slug": "^0.9.1",
     "underscore": "^1.8.3",
     "validate.js": "^0.4.0",
     "winston": "^2.2.0"

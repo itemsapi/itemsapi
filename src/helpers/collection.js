@@ -7,6 +7,10 @@ module.exports = function(data) {
     return data.schema || {};
   }
 
+  var getName = function() {
+    return data.name;
+  }
+
   var getElasticSchema = function() {
     return _.mapObject(getSchema(), function(val, key) {
       return _.pick(val, 'type', 'index', 'store')
@@ -28,6 +32,10 @@ module.exports = function(data) {
       });
     }
     return data.aggregations[name] || null;
+  }
+
+  var getSlugs = function() {
+    return data.slugs || [];
   }
 
   var getSortings = function() {
@@ -65,6 +73,7 @@ module.exports = function(data) {
 
   return {
     getSchema: getSchema,
+    getName: getName,
     getElasticSchema: getElasticSchema,
     getAggregations: getAggregations,
     getAggregation: getAggregation,
@@ -72,6 +81,7 @@ module.exports = function(data) {
     getSorting: getSorting,
     getType: getType,
     getIndex: getIndex,
+    getSlugs: getSlugs,
     getMetadata: getMetadata
   }
 };
