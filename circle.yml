@@ -5,6 +5,8 @@ machine:
 dependencies:
   cache_directories:
     - elasticsearch-1.7.4 # relative to the build directory
+  pre:
+    - sudo apt-get update; sudo apt-get install redis-server
   post:
     - if [[ ! -e elasticsearch-1.7.4 ]]; then wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.4.tar.gz && tar -xvf elasticsearch-1.7.4.tar.gz; fi
     - elasticsearch-1.7.4/bin/elasticsearch: {background: true}
