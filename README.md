@@ -86,12 +86,7 @@ Deploy ItemsAPI server instantly to heroku:
 <a target="_blank" href="https://heroku.com/deploy?template=https://github.com/itemsapi/itemsapi"><img src="https://camo.githubusercontent.com/c0824806f5221ebb7d25e559568582dd39dd1170/68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e706e67" alt="Deploy" data-canonical-src="https://www.herokucdn.com/deploy/button.png"></a>
 
 ## Demo
-- go to see <a href="http://app.itemsapi.com/" target="_blank">many different collections i.e. movies, quotes, libraries, etc</a> 
-
-Example collections:
-- [Movies](http://app.itemsapi.com/documents/name/movie "Movies")
-- [Cities](http://app.itemsapi.com/documents/name/city "Cities")
-- [NPM libraries](http://app.itemsapi.com/documents/name/npm "NPM libraries")
+- angular.js dashboard with <a href="http://app.itemsapi.com/" target="_blank">many different collections i.e. movies, quotes, libraries, etc</a> 
 
 ## Tutorials
 - https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies
