@@ -42,10 +42,6 @@
                 "display": "image"
             }
         },
-        "slugs": [
-            "name",
-            "tags"
-        ],
         "aggregations": {
             "tags": {
                 "type": "tags",
@@ -112,9 +108,6 @@
                 "type": "geo_point"
             }
         },
-        "slugs": [
-            "name"
-        ],
         "aggregations": [
             {
                 "name": "country",

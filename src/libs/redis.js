@@ -1,7 +1,15 @@
-// needs to provide custom configuration here
 var redis = require('redis');
 var config = require('./../../config/index').get();
 var client = redis.createClient(config.redis);
+var logger = require('./../../config/logger');
+
+var printed = false;
+client.on("error", function (err) {
+  if (!printed) {
+    logger.info('redis is not provided (it is optional)');
+    printed = true;
+  }
+});
 
 var Promise = require('bluebird');
 var _ = require('lodash');

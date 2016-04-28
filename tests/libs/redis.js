@@ -3,17 +3,30 @@ var async = require('async');
 var winston = require('winston');
 var should = require('should');
 var setup = require('./../mocks/setup');
+var sinon = require('sinon');
 
 setup.makeSuite('elastic data', function() {
 
   var redis = require('./../../src/libs/redis');
   var keymapper = require('./../../src/libs/slugs');
 
+  var is_skipped = false;
+  var client = require('redis').createClient();
+  client.on('error', function (err) {
+    is_skipped = true;
+  });
+
   before(function(done) {
     done();
   });
 
   describe('redis operations', function() {
+    before(function(done) {
+      if (is_skipped) {
+        this.skip();
+      }
+      done();
+    });
     it('should save json key', function(done) {
       redis.setKeyValAsync('abcd', {a: 'b'}).then(function(res){
         redis.getKeyValAsync('abcd').then(function(res){
@@ -43,6 +56,14 @@ setup.makeSuite('elastic data', function() {
   });
 
   describe('keymapper operations', function() {
+
+    before(function(done) {
+      if (is_skipped) {
+        this.skip();
+      }
+      done();
+    });
+
     it('should save string key for multi documents', function(done) {
       var documents = [{
         name: 'Matrix Reloaded',
@@ -58,13 +79,11 @@ setup.makeSuite('elastic data', function() {
 
       keymapper.setSlugsAsync('movie', ['name', 'actors', 'fake'], documents)
       .then(function(res){
-          redis.getKeyValAsync('movie_actors_keanu-reeves').then(function(res){
-            res.should.be.equal('Keanu Reeves')
-            keymapper.getSlugAsync('movie', 'name', 'the-butterfly-effect').then(function(res){
-              res.should.be.equal('The Butterfly Effect')
-              done();
-            });
-          });
+        keymapper.getSlugAsync('movie', 'name', 'the-butterfly-effect', ['name'])
+        .then(function(res){
+          res.should.be.equal('The Butterfly Effect')
+          done();
+        });
       });
     });
     it('should save string key for one document', function(done) {
@@ -72,13 +91,54 @@ setup.makeSuite('elastic data', function() {
         name: 'Fight Club',
         actors: ['Edward Norton', 'Brad Pitt']
       }
-
+      var spy = sinon.spy(redis, 'setKeyValAsync');
       keymapper.setSlugsAsync('movie', ['name', 'actors', 'fake'], document)
       .then(function(res){
-          redis.getKeyValAsync('movie_actors_brad-pitt').then(function(res){
-            res.should.be.equal('Brad Pitt')
-            done();
-          });
+        assert.equal(spy.callCount, 3);
+        redis.getKeyValAsync('movie_actors_brad-pitt').then(function(res){
+          res.should.be.equal('Brad Pitt')
+          spy.restore();
+          done();
+        });
+      });
+    });
+
+    it('should not save anything', function(done) {
+      var document = {
+        name: 'Fight Club',
+        actors: ['Edward Norton', 'Brad Pitt']
+      }
+      var spy = sinon.spy(redis, 'setKeyValAsync');
+      keymapper.setSlugsAsync('movie', [], document)
+      .then(function(res){
+        assert.equal(spy.callCount, 0);
+        spy.restore();
+        done();
+      });
+    });
+
+    it('should not save anything2', function(done) {
+      var spy = sinon.spy(redis, 'setKeyValAsync');
+      keymapper.setSlugsAsync('movie', [], [])
+      .then(function(res){
+        assert.equal(spy.callCount, 0);
+        spy.restore();
+        done();
+      });
+    });
+
+    it('should not find anything', function(done) {
+      var document = {
+        name: 'Fight Club',
+        actors: ['Edward Norton', 'Brad Pitt']
+      }
+      var spy = sinon.spy(redis, 'getKeyValAsync');
+      keymapper.getSlugAsync('movie', 'name', 'the-butterfly-effect', [])
+      .then(function(res){
+        assert.equal(spy.callCount, 0);
+        should(res).be.null
+        spy.restore();
+        done();
       });
     });
   });

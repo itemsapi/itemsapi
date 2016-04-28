@@ -24,9 +24,9 @@ var slugs = require('../libs/slugs');
       return slugs.getSlugAsync(
         helper.getName(),
         data.key,
-        data.val
+        data.val,
+        helper.getSlugs()
       ).then(function(res) {
-        //console.log(res);
         if (res) {
           data.val = res;
         }
