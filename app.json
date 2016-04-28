@@ -8,6 +8,7 @@
         "NODE_ENV": "production",
         "PORT": "3000"
     },
+    "logo": "https://pbs.twimg.com/profile_images/676506434629074946/FVScyObD.jpg",
     "repository": "https://github.com/itemsapi/itemsapi",
     "keywords": ["itemsapi", "elasticsearch", "node.js", "restful search backend"]
 }
