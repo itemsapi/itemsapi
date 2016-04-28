@@ -23,19 +23,15 @@ This backend offers powerful functionality like:
 ## Getting started
 
 Starting ItemsAPI server:
+
+`$ npm install itemsapi --save`
+
 ```js
 var itemsapi = require('itemsapi');
 
 itemsapi.init({
   server: {
     port: 5000
-  },
-  collections: {
-    db: 'json',
-    filename:  './collections.json'
-  },
-  elasticsearch: {
-    host: 'localhost:9200'
   }
 })
 
@@ -77,13 +73,9 @@ client.similar('item-id', {
 
 (more information about client API - https://github.com/itemsapi/itemsapi-node)
 
-
-
 ## Documentation
 
 To find out more go to the - <a href="https://itemsapi.readme.io" target="_blank">official documentation</a>.
-
-<a href="https://www.itemsapi.com/docs/getting-started" target="_blank">Getting started</a>
 
 <a href="https://www.itemsapi.com" target="_blank">ItemsAPI website</a>
 
@@ -111,11 +103,6 @@ If you like ItemsAPI and want to help you can:
 
 ## Testing
 `npm test`
-
-## Inspiration
-- http://expressjs.com/resources/middleware.html (expressjs for simplicity)
-- http://neo4j.com/docs/stable/cypher-cookbook-similar-favorites.html (recommendation system)
-- https://www.algolia.com/ (very fast hosted search engine)
 
 ## License
 ItemsAPI is licensed under the MIT Open Source license. For more information, see the LICENSE file in this repository.
