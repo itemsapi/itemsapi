@@ -29,6 +29,37 @@ var setSlugsAsync = function(collection, slugs, docs) {
 }
 
 /**
+ * get slug from aggs or key, val properties
+ * return null when sluggify is not required
+ */
+var getSlugInfo = function(data) {
+  if (!data) {
+    return null;
+  }
+
+  if (data.key && data.val) {
+    return {
+      key: data.key,
+      val: data.val
+    }
+  } else if (data.aggs && _.keys(data.aggs).length === 1) {
+    var key = _.keys(data.aggs)[0];
+    if (_.isString(data.aggs[key])) {
+      return {
+        key: key,
+        val: data.aggs[key]
+      }
+    } else if (data.aggs[key].length === 1) {
+      return {
+        key: key,
+        val: data.aggs[key][0]
+      }
+    }
+  }
+  return null;
+}
+
+/**
  * return original value for slug
  * i.e. fight-club -> Fight Club
  */
@@ -41,5 +72,6 @@ var getSlugAsync = function(collection, field, slug, slugs) {
 
 module.exports = {
   setSlugsAsync: setSlugsAsync,
+  getSlugInfo: getSlugInfo,
   getSlugAsync: getSlugAsync
 }

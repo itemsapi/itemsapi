@@ -142,4 +142,46 @@ setup.makeSuite('elastic data', function() {
       });
     });
   });
+  describe('get slug info from user input', function() {
+    it('should get info', function(done) {
+      var slug = keymapper.getSlugInfo({
+        key: 'actors',
+        val: 'brad-pitt'
+      })
+      slug.should.have.property('key', 'actors')
+      slug.should.have.property('val', 'brad-pitt')
+
+      var slug = keymapper.getSlugInfo({
+        aggs: { actors: [ 'brad-pitt' ] }
+      })
+      slug.should.have.property('key', 'actors')
+      slug.should.have.property('val', 'brad-pitt')
+
+      var slug = keymapper.getSlugInfo({
+        aggs: { actors: 'brad-pitt'}
+      })
+      slug.should.have.property('key', 'actors')
+      slug.should.have.property('val', 'brad-pitt')
+
+      var slug = keymapper.getSlugInfo({
+        aggs: { actors: ['Brad Pitt', 'Angelina Jolie']}
+      })
+      should(slug).be.null
+
+      var slug = keymapper.getSlugInfo({
+        aggs: { actors: ['Brad Pitt'], tags: ['Drama']}
+      })
+      should(slug).be.null
+
+      var slug = keymapper.getSlugInfo({
+        aggs: {}
+      })
+      should(slug).be.null
+
+      var slug = keymapper.getSlugInfo()
+      should(slug).be.null
+      done();
+    });
+  })
+
 });

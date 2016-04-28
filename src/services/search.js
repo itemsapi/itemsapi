@@ -21,14 +21,26 @@ var slugs = require('../libs/slugs');
     })
     .then(function(collection) {
       var helper = collectionHelper(collection);
-      return slugs.getSlugAsync(
+
+      // determine if we should lookup for slug value
+      var slug = slugs.getSlugInfo(data)
+
+      var getSlugAsync = slug ? slugs.getSlugAsync(
         helper.getName(),
-        data.key,
-        data.val,
+        slug.key,
+        slug.val,
         helper.getSlugs()
-      ).then(function(res) {
+      ) : Promise.resolve(null)
+
+      return getSlugAsync.then(function(res) {
+        // update user input (aggs or key, val)
+        // looks little bit dirty here but do the job with pretty url
         if (res) {
-          data.val = res;
+          if (data.key && data.val) {
+            data.val = res;
+          } else if (data.aggs && _.keys(data.aggs).length === 1) {
+            data.aggs[_.keys(data.aggs)[0]] = [res];
+          }
         }
         data.collection = collection;
         data.index = helper.getIndex();
