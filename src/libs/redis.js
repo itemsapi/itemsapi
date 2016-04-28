@@ -3,6 +3,10 @@ var redis = require('redis');
 var config = require('./../../config/index').get();
 var client = redis.createClient(config.redis);
 
+client.on("error", function (err) {
+  console.log('redis is not provided (optional)');
+});
+
 var Promise = require('bluebird');
 var _ = require('lodash');
 Promise.promisifyAll(redis.RedisClient.prototype);

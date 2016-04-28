@@ -32,7 +32,10 @@ var setSlugsAsync = function(collection, slugs, docs) {
  * return original value for slug
  * i.e. fight-club -> Fight Club
  */
-var getSlugAsync = function(collection, field, slug) {
+var getSlugAsync = function(collection, field, slug, slugs) {
+  if (!_.isArray(slugs) || slugs.indexOf(field) === -1) {
+    return Promise.resolve(null);
+  }
   return redis.getKeyValAsync(collection + '_' + field + '_' + slug)
 }
 
