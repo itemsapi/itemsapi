@@ -22,9 +22,11 @@ This backend offers powerful functionality like:
 
 ## Getting started
 
-Starting ItemsAPI server:
+Install itemsapi package
 
 `$ npm install itemsapi --save`
+
+Starting ItemsAPI server:
 
 ```js
 var itemsapi = require('itemsapi');
