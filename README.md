@@ -12,7 +12,8 @@ With ItemsAPI you can create very easily:
 This backend offers powerful functionality like:
 - full text searching
 - generating facets / aggregations out of the box
-- managing schema and indexes from command line or by API
+- showing similar items (based on collaborative filtering algorithm)
+- generating nice urls for fields (permalinks) out of the box
 - geo searching
 
 ## Requirement
@@ -86,17 +87,10 @@ Deploy ItemsAPI server instantly to heroku:
 <a target="_blank" href="https://heroku.com/deploy?template=https://github.com/itemsapi/itemsapi"><img src="https://camo.githubusercontent.com/c0824806f5221ebb7d25e559568582dd39dd1170/68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e706e67" alt="Deploy" data-canonical-src="https://www.herokucdn.com/deploy/button.png"></a>
 
 ## Demo
-- angular.js dashboard with <a href="http://app.itemsapi.com/" target="_blank">many different collections i.e. movies, quotes, libraries, etc</a> 
+- <a href="http://app.itemsapi.com/" target="_blank">angular.js dashboard</a> with many different collections i.e. movies, quotes, libraries, etc
 
 ## Tutorials
 - https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies
-
-## Contributions
-If you like ItemsAPI and want to help you can:
-- ask for new feature
-- make code review and suggest improvements
-- share your ideas
-- write clients for frameworks (angular, node.js, ror, php)
 
 ## Testing
 `npm test`
