@@ -65,16 +65,8 @@ client.search({
 })
 ```
 
-Showing similar items (collaborative filtering):
-```js
-client.similar('item-id', {
-  fields: ['tags']
-}).then(function(res) {
-  console.log((res));
-})
-```
+(more information about node.js client API - https://github.com/itemsapi/itemsapi-node)
 
-(more information about client API - https://github.com/itemsapi/itemsapi-node)
 
 ## Documentation
 
