@@ -20,6 +20,17 @@ var winston = require('winston')
 
 itemsapi.get('logger').info('it works!')
 
+
+// standard express syntax
+var express = itemsapi.get('express');
+express.get('/about-us', function(req, res) {
+  res.json({
+    name: 'itemsapi',
+    license: 'MIT'
+  });
+});
+
+
 itemsapi.start(function serverStart(serverInstance) {
   var host = serverInstance.address().address;
   var port = serverInstance.address().port;

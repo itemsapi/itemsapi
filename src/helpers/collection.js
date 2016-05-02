@@ -46,6 +46,36 @@ module.exports = function(data) {
     return getSortings()[name] || null;
   }
 
+  /**
+   * defaults properties or property
+   * i.e. sort
+   */
+  var getDefaults = function(option) {
+    if (option) {
+      return (data.defaults || {})[option];
+    } else {
+      return data.defaults || {};
+    }
+  }
+
+  /**
+   * default sorting option (key)
+   */
+  var getDefaultSorting = function() {
+    return getSortings()[getDefaults('sort')] || null;
+  }
+
+  /**
+   * chosen sorting key
+   */
+  var getChosenSortingKey = function(input) {
+    if (getSorting(input)) {
+      return input;
+    } else if (getDefaultSorting()) {
+      return getDefaults('sort');
+    }
+  }
+
   var getType = function() {
     return data.type || data.name;
   }
@@ -74,6 +104,9 @@ module.exports = function(data) {
   return {
     getSchema: getSchema,
     getName: getName,
+    getDefaults: getDefaults,
+    getDefaultSorting: getDefaultSorting,
+    getChosenSortingKey: getChosenSortingKey,
     getElasticSchema: getElasticSchema,
     getAggregations: getAggregations,
     getAggregation: getAggregation,

@@ -23,7 +23,7 @@ var _ = require('lodash');
 
     var helper = collectionHelper(data.collection);
 
-    var sortOptions = helper.getSorting(data.sort);
+    var sortOptions = helper.getSorting(data.sort) || helper.getDefaultSorting();
     var sort = module.generateSort(sortOptions, data);
     if (sort) {
       body.sort(sort);

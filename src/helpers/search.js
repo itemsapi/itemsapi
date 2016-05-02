@@ -60,7 +60,7 @@ module.exports = function() {
     return {
       meta: {
         query: input.query,
-        sort: input.sort
+        sort: helper.getChosenSortingKey(input.sort) || ''
       },
       pagination: {
         page: input.page,

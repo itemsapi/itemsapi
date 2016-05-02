@@ -1,6 +1,6 @@
 {
   "name": "itemsapi",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "creating search application without spending time for backend",
   "main": "server.js",
   "scripts": {
