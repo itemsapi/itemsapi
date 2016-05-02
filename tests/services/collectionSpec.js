@@ -58,28 +58,6 @@ setup.makeSuite('collection service', function() {
     })
   });
 
-  it('should test collection helpers', function(done) {
-    collectionService.findCollectionAsync({
-      name: 'movie'
-    })
-    .then(function(res) {
-      should(collectionHelper(res).getSortings()).be.instanceOf(Object);
-      should(collectionHelper(res).getSorting('favorites')).have.property('field', 'favorites');
-      should(collectionHelper(res).getSorting('wrong_value')).be.equal(null);
-
-      should(collectionHelper(res).getAggregations()).be.instanceOf(Object);
-      should(collectionHelper(res).getAggregation('actors_terms')).have.property('field', 'actors');
-      should(collectionHelper(res).getAggregation('wrong_value')).be.equal(null);
-
-      should(collectionHelper(res).getSchema()).have.property('name');
-      should(collectionHelper(res).getSchema()).have.property('image');
-      should(collectionHelper(res).getSchema().image).have.property('display');
-      should(collectionHelper(res).getElasticSchema()).have.property('image');
-      should(collectionHelper(res).getElasticSchema().image).have.property('type');
-      should(collectionHelper(res).getElasticSchema().image).not.have.property('display');
-      done();
-    })
-  });
 
   it('should find all collections', function(done) {
     collectionService.getCollectionsAsync()

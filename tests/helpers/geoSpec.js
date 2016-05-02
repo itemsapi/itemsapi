@@ -11,6 +11,8 @@ setup.makeSuite('geo helper', function() {
     geoHelper.getGeoPoint('51.30, 0.08').should.be.instanceOf(Array).and.have.lengthOf(2);
     geoHelper.getGeoPoint('51.30, 0.08')[0].should.be.equal(51.30);
     geoHelper.getGeoPoint('51.30, 0.08')[1].should.be.equal(0.08);
+    geoHelper.getGeoPoint('51.30,0.08')[1].should.be.equal(0.08);
+    geoHelper.getGeoPoint('51.30,   0.08')[1].should.be.equal(0.08);
 
     should(geoHelper.getGeoPoint()).be.equal(undefined);
     done();

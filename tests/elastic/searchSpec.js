@@ -85,44 +85,60 @@ setup.makeSuite('elastic data', function() {
     });
   })
 
-  it('should build sorting based on configuration', function(done) {
-    var options = {
-      title: 'Best rating',
-      type: 'normal',
-      order: 'desc',
-      field: 'rating'
-    };
-    var sort = search.generateSort(options);
-    sort.toJSON().should.have.property('rating', {order: 'desc'});
-    done();
-  });
+  describe('should build sorting options', function() {
 
-  it('should build sorting with different configuration', function(done) {
-    var options = {
-      title: 'Best rating',
-      type: 'normal',
-      order: 'asc',
-      field: 'rating'
-    };
-    var sort = search.generateSort(options);
-    sort.toJSON().should.have.property('rating', {order: 'asc'});
-    done();
-  });
+    it('should build sorting based on configuration', function(done) {
+      var options = {
+        title: 'Best rating',
+        type: 'normal',
+        order: 'desc',
+        field: 'rating'
+      };
+      var sort = search.generateSort(options);
+      sort.toJSON().should.have.property('rating', {order: 'desc'});
+      done();
+    });
 
-  it('should build geo sorting', function(done) {
-    var options = {
-      title: 'Distance',
-      type: 'geo',
-      order: 'asc',
-      field: 'geo'
-    };
+    it('should build sorting with different configuration', function(done) {
+      var options = {
+        title: 'Best rating',
+        type: 'normal',
+        order: 'asc',
+        field: 'rating'
+      };
+      var sort = search.generateSort(options);
+      sort.toJSON().should.have.property('rating', {order: 'asc'});
+      done();
+    });
 
-    var sort = search.generateSort(options);
-    sort.toJSON().should.have.property('_geo_distance');
-    sort.toJSON()._geo_distance.should.have.property('order', 'asc');
-    sort.toJSON()._geo_distance.should.have.property('unit', 'km');
-    sort.toJSON()._geo_distance.should.have.property('geo');
+    it('should build geo sorting', function(done) {
+      var options = {
+        title: 'Distance',
+        type: 'geo',
+        order: 'asc',
+        field: 'geo'
+      };
 
-    done();
-  });
+      var sort = search.generateSort(options, {
+        geoPoint: [51.30, 0.08]
+      });
+
+      // generates geo: [ 0.08, 51.3 ]
+      // should generate location: {lat: 51.30, lon: 0.08}
+      // but seems to be working
+      //console.log(sort.toJSON())
+      sort.toJSON().should.have.property('_geo_distance');
+      sort.toJSON()._geo_distance.should.have.property('order', 'asc');
+      sort.toJSON()._geo_distance.should.have.property('unit', 'km');
+      sort.toJSON()._geo_distance.should.have.property('geo');
+
+      done();
+    });
+
+    it('should not build sorting', function(done) {
+      var sort = search.generateSort();
+      should(sort).be.undefined
+      done();
+    });
+  })
 });
