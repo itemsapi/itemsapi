@@ -12,9 +12,14 @@ module.exports = function(data) {
   }
 
   var getElasticSchema = function() {
+    // omit non elasticsearch properties
+    // elasticsearch 2.x is more strict about non elasticsearch properties
     return _.mapObject(getSchema(), function(val, key) {
-      return _.pick(val, 'type', 'index', 'store')
+      return _.omit(val, 'display')
     });
+    /*return _.mapObject(getSchema(), function(val, key) {
+      return _.pick(val, 'type', 'index', 'store')
+    });*/
   }
 
   var getAggregations = function() {

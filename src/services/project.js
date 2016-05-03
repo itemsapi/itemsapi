@@ -55,7 +55,7 @@ var logger = require('./../../config/logger');
         index: data.index || helper.getIndex(),
         type: data.type || helper.getType(),
         body: {
-          properties: collection.schema
+          properties: helper.getElasticSchema()
         }
       })
     })

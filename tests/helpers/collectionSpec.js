@@ -67,13 +67,24 @@ setup.makeSuite('collection helper', function() {
     should(collectionHelper(collection).getAggregations()).be.instanceOf(Object);
     should(collectionHelper(collection).getAggregation('actors_terms')).have.property('field', 'actors');
     should(collectionHelper(collection).getAggregation('wrong_value')).be.equal(null);
+    done();
+  });
 
+  it('should test collection elasticsearch schema', function(done) {
     should(collectionHelper(collection).getSchema()).have.property('name');
     should(collectionHelper(collection).getSchema()).have.property('image');
     should(collectionHelper(collection).getSchema().image).have.property('display');
     should(collectionHelper(collection).getElasticSchema()).have.property('image');
     should(collectionHelper(collection).getElasticSchema().image).have.property('type');
     should(collectionHelper(collection).getElasticSchema().image).not.have.property('display');
+    done();
+  });
+
+  it('should test index and type name', function(done) {
+    var helper = collectionHelper(collection)
+    should(helper.getName()).be.equal('movie');
+    should(helper.getType()).be.equal('movie');
+    should(helper.getIndex()).be.equal('test');
     done();
   });
 });
