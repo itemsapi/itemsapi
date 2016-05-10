@@ -82,7 +82,8 @@ To find out more go to the - <a href="https://itemsapi.readme.io" target="_blank
 - <a href="http://app.itemsapi.com/" target="_blank">angular.js dashboard</a> with many different collections i.e. movies, quotes, libraries, etc
 
 ## Tutorials
-- https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies
+- https://www.itemsapi.com/docs/tutorials/search-backend-for-restaurants-itemsapi-elasticsearch-nodejs (May 2016)
+- https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies (November 2015)
 
 ## Testing
 `npm test`
