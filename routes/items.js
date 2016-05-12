@@ -330,23 +330,14 @@ module.exports = function(router) {
   router.get(['/items/:name/:id', '/:name/:id'], function getItem(req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
-    var project = req.query.project;
 
-    return collectionService.findCollectionAsync({
-      name: name,
-      project: project
-    })
-    .then(function(collection) {
-      var helper = collectionHelper(collection);
-      return dataService.getDocumentAsync({
-        index: helper.getIndex(),
-        type: helper.getType(),
-        id: id
-      }).then(function(result) {
-        return res.json(result);
-      }).catch(function(result) {
-        return next(result);
-      });
-    })
+    return dataService.getDocumentAsync({
+      collectionName: name,
+      id: id
+    }).then(function(result) {
+      return res.json(result);
+    }).catch(function(result) {
+      return next(result);
+    });
   });
 }
