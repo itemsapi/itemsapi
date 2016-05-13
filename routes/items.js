@@ -101,6 +101,26 @@ module.exports = function(router) {
   });
 
   /*
+   * enable / disable item
+   */
+  router.put(['/items/:name/:id/enable', '/items/:name/:id/disable'], function (req, res, next) {
+    var id = req.params.id;
+    var name = req.params.name;
+    var path = req.route.path;
+    var enabled = path.indexOf('enable') !== -1 ? true : false;
+
+    dataService.enableDocumentAsync({
+      name: name,
+      id: id,
+      enabled: enabled
+    }).then(function(result) {
+      return res.json(result);
+    }).catch(function(result) {
+      return next(result);
+    });
+  });
+
+  /*
    * update specific item
    */
   router.put(['/items/:name/:id', '/:name/:id'], function updateItem(req, res, next) {
