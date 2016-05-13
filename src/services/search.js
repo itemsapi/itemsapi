@@ -11,6 +11,31 @@ var slugs = require('../libs/slugs');
 
 (function(module) {
 
+  module.getFacetsAsync = function(data) {
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+    })
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      data.collection = collection;
+      data.index = helper.getIndex();
+      data.type = helper.getType();
+      return elastic.searchAsync(data);
+    })
+    .then(function(res) {
+      res = searchHelper().facetsConverter(data, res);
+      //console.log(res);
+      console.log(JSON.stringify(res));
+
+      return res;
+    })
+
+  }
+
+  module.getFacetAsync = function(data) {
+
+  }
+
   /**
    * search documents
    */

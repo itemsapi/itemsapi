@@ -189,6 +189,16 @@ module.exports = function(router) {
     });
   });
 
+  router.get(['/facets/:name'], function searchItems(req, res, next) {
+    var name = req.params.name;
+    return searchService.getFacetsAsync({
+      collectionName: name
+    })
+    .then(function(result) {
+      return res.json(result);
+    })
+  });
+
   /*
    * search items using native (prefiltered) elasticsearch /_search endpoint
    */

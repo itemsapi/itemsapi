@@ -126,9 +126,25 @@ setup.makeSuite('search service', function() {
     });
   });
 
+  it('should get all facets for movie (object)', function(done) {
+    searchService.getFacetsAsync({
+      collectionName: 'movie'
+    }).then(function(res) {
+      res.should.be.an.instanceOf(Array);
+      done();
+    });
+  });
 
+  it('should get all facets for city (array)', function(done) {
+    searchService.getFacetsAsync({
+      collectionName: 'city'
+    }).then(function(res) {
+      res.should.be.an.instanceOf(Array);
+      done();
+    });
+  });
 
-  it('should suggest items', function(done) {
+  xit('should suggest items', function(done) {
     searchService.suggestAsync({
       collectionName: 'movie',
       query: 'bat'
