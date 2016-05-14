@@ -37,13 +37,13 @@ setup.makeSuite('item crud request', function() {
 
   it('should get all aggregations', function(done) {
     request(setup.getServer())
-      .get('/api/v1/movie')
+      .get('/api/v1/items/movie')
       .end(function afterRequest(err, res) {
-        //console.log(res.body);
+        console.log(res.body);
         res.should.have.property('status', 200);
         res.body.pagination.should.have.property('total', 3);
         var aggregations = res.body.data.aggregations;
-        console.log(aggregations);
+        //console.log(aggregations);
         aggregations.should.have.property('tags');
         done();
       });

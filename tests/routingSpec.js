@@ -89,7 +89,7 @@ setup.makeSuite('routing', function addSuite() {
         });
     });
 
-    it('should be able to find nearest items', function test(done) {
+    xit('should be able to find nearest items', function test(done) {
         request(setup.getServer())
         .get('/api/v1/movie/near/address/52.512973,13.452529')
         .end(function afterRequest(err, res) {
