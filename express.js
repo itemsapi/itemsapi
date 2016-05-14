@@ -36,14 +36,8 @@ if (config.server.logger !== false) {
   }))
 }
 
-// all collections, stats
-var itemsRoutes = require('./routes/additional')(router);
-
-// manage collections (schema, aggregations options, sortings, etc)
-var collectionsRoutes = require('./routes/collections')(router);
-
-// get, put, post, delete, find, similar, autocomplete etc
-var itemsRoutes = require('./routes/items')(router);
+// initialize all routes
+var itemsRoutes = require('./routes/routes')(router);
 
 app.use(function errorRoute(err, req, res, next) {
   // need to test it out
