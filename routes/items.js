@@ -190,13 +190,28 @@ module.exports = function(router) {
   });
 
   router.get(['/facets/:name'], function searchItems(req, res, next) {
-    var name = req.params.name;
     return searchService.getFacetsAsync({
-      collectionName: name
+      collectionName: req.params.name,
+      size: req.query.size
     })
     .then(function(result) {
       return res.json(result);
+    }).catch(function(result) {
+      return next(result);
+    });
+  });
+
+  router.get(['/facets/:name/:facet'], function searchItems(req, res, next) {
+    return searchService.getFacetAsync({
+      collectionName: req.params.name,
+      facetName: req.params.facet,
+      size: req.query.size
     })
+    .then(function(result) {
+      return res.json(result);
+    }).catch(function(result) {
+      return next(result);
+    });
   });
 
   /*

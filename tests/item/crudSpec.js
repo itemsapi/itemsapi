@@ -77,7 +77,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should make successfull get (find) request', function(done) {
     //var spy = sinon.spy(elastic, 'search');
-    var spy = sinon.spy(searchElastic, 'search');
+    var spy = sinon.spy(searchElastic, 'searchAsync');
     request(setup.getServer())
       .get('/api/v1/movie')
       .end(function afterRequest(err, res) {

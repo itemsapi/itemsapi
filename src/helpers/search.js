@@ -17,6 +17,10 @@ module.exports = function() {
         var output = _.extend(v, elastic_aggregations[v.name]);
         if (elastic_aggregations[v.name][v.name]) {
           output = _.extend(v, elastic_aggregations[v.name][v.name]);
+
+          if (output.size) {
+            output.size = parseInt(output.size, 10)
+          }
           delete output[v.name]
         }
         return output;
@@ -32,6 +36,7 @@ module.exports = function() {
         return _.extend(v, {
           title: collection_aggregations[k].title || k,
           name: k,
+          size: parseInt(collection_aggregations[k].size, 10),
           type: collection_aggregations[k].type
         });
       }))

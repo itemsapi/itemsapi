@@ -2,7 +2,7 @@
 
 var async = require('async');
 var Promise = require('bluebird');
-var elastic = Promise.promisifyAll(require('../elastic/search'));
+var elastic = require('../elastic/search');
 var _ = require('lodash');
 var searchHelper = require('../helpers/search');
 var collectionHelper = require('../helpers/collection');
@@ -17,23 +17,72 @@ var slugs = require('../libs/slugs');
     })
     .then(function(collection) {
       var helper = collectionHelper(collection);
-      data.collection = collection;
       data.index = helper.getIndex();
       data.type = helper.getType();
-      return elastic.searchAsync(data);
+      var collection_temp = _.clone(collection)
+
+      if (data.size) {
+        if (_.isArray(collection_temp.aggregations)) {
+          collection_temp.aggregations = _.map(collection_temp.aggregations, function(val) {
+            val.size = data.size;
+            return val;
+          })
+        } else {
+          collection_temp.aggregations = _.mapValues(collection_temp.aggregations, function(val) {
+            val.size = data.size;
+            return val;
+          })
+        }
+      }
+
+      data.collection = collection_temp;
+      return elastic.searchAsync(data, collection_temp);
     })
     .then(function(res) {
       res = searchHelper().facetsConverter(data, res);
-      //console.log(res);
-      console.log(JSON.stringify(res));
-
       return res;
     })
-
   }
 
   module.getFacetAsync = function(data) {
+    return collectionService.findCollectionAsync({
+      name: data.collectionName,
+    })
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      data.index = helper.getIndex();
+      data.type = helper.getType();
+      var collection_temp = _.clone(collection)
 
+      if (data.size) {
+        if (_.isArray(collection_temp.aggregations)) {
+          var index = _.findIndex(collection_temp.aggregations, {
+            name: data.facetName
+          })
+          collection_temp.aggregations[index].size = data.size
+        } else {
+          collection_temp.aggregations[data.facetName].size = data.size
+        }
+      }
+
+      data.collection = collection_temp;
+      return elastic.searchAsync(data, collection_temp);
+    })
+    .then(function(res) {
+      res = searchHelper().facetsConverter(data, res);
+      return res;
+    })
+    .then(function(res) {
+      return _.find(res, {
+        name: data.facetName
+      })
+    })
+    .then(function(res) {
+      if (!res) {
+        throw new Error('facet doesnt exist')
+      }
+      return res;
+    })
   }
 
   /**
@@ -70,7 +119,7 @@ var slugs = require('../libs/slugs');
         data.collection = collection;
         data.index = helper.getIndex();
         data.type = helper.getType();
-        return elastic.searchAsync(data);
+        return elastic.searchAsync(data, collection);
       })
     })
     .then(function(res) {
@@ -102,10 +151,10 @@ var slugs = require('../libs/slugs');
   /**
    * suggest documents
    */
-  module.suggestAsync = function(data) {
+  /*module.suggestAsync = function(data) {
     return elastic.suggestAsync(data)
     .then(function(res) {
       return res;
     });
-  }
+  }*/
 }(exports));

@@ -144,6 +144,44 @@ setup.makeSuite('search service', function() {
     });
   });
 
+  it('should get city country facet', function(done) {
+    searchService.getFacetAsync({
+      collectionName: 'city',
+      facetName: 'country',
+      size: 100
+    }).then(function(res) {
+      res.should.be.an.instanceOf(Object);
+      res.should.have.property('name', 'country');
+      res.should.have.property('type', 'terms');
+      res.should.have.property('size', 100);
+      done();
+    });
+  });
+
+  it('should get movie actors_terms facet', function(done) {
+    searchService.getFacetAsync({
+      collectionName: 'movie',
+      facetName: 'actors_terms',
+      size: 100
+    }).then(function(res) {
+      res.should.be.an.instanceOf(Object);
+      res.should.have.property('name', 'actors_terms');
+      res.should.have.property('title', 'Actors');
+      res.should.have.property('type', 'terms');
+      res.should.have.property('size', 100);
+      done();
+    });
+  });
+
+  it('should not get movie notexistent_terms facet', function(done) {
+    searchService.getFacetAsync({
+      collectionName: 'movie',
+      facetName: 'notexistent_terms'
+    }).catch(function(res) {
+      done();
+    })
+  });
+
   xit('should suggest items', function(done) {
     searchService.suggestAsync({
       collectionName: 'movie',

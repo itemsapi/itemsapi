@@ -11,7 +11,7 @@ var _ = require('lodash');
   /**
    * search documents (on low level)
    */
-  module.search = function(data, callback) {
+  module.searchAsync = function(data, collection) {
     var page = data.page || 1;
     var per_page = data.per_page || 10;
     var offset = (page - 1) * per_page;
@@ -21,7 +21,7 @@ var _ = require('lodash');
       .size(per_page)
       .from(offset);
 
-    var helper = collectionHelper(data.collection);
+    var helper = collectionHelper(collection);
 
     var sortOptions = helper.getSorting(data.sort) || helper.getDefaultSorting();
     var sort = module.generateSort(sortOptions, data);
@@ -51,17 +51,12 @@ var _ = require('lodash');
 
 
 
-    elastic.search({
+    return elastic.search({
       index: data.index,
       type: data.type,
       body: body,
       _source: data.fields || true
-    }, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res);
-    });
+    })
   }
 
 
@@ -214,7 +209,7 @@ var _ = require('lodash');
    * similar documents
    * https://www.elastic.co/guide/en/elasticsearch/reference/1.3/query-dsl-mlt-query.html#query-dsl-mlt-query
    */
-  module.similar = function(data, callback) {
+  module.similarAsync = function(data) {
     //var body = ejs.Request()
     //var helper = collectionHelper(data.collection);
     //ejs.MoreLikeThisQuery('tags')
@@ -235,22 +230,17 @@ var _ = require('lodash');
       //from: 0,
       //size: 5
     }
-    elastic.search({
+    return elastic.search({
       index: data.index,
       type: data.type,
       body: body,
-    }, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res);
     });
   }
 
   /**
    * suggest documents (low level)
    */
-  module.suggest = function(data, callback) {
+  module.suggestAsync = function(data, callback) {
     var query = data.query || '';
     var body = ejs.TermSuggester('mysuggester')
       .text(data.query)
