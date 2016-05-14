@@ -84,32 +84,6 @@ module.exports = function(router) {
   router.delete(['/items/:name', '/:name'], items.clean);
 
   /*
-   * clean items
-   * @deprecated
-   * too delete
-   */
-  router.put(['/items/:name/recreate-mapping', '/:name/recreate-mapping'], function recreateMapping(req, res, next) {
-    var name = req.params.name;
-    var project = req.query.project;
-
-    elasticMapping.deleteMappingAsync({
-      index: project,
-      type: name
-    })
-    .then(function(result) {
-      return projectService.addMappingAsync({
-        projectName: project,
-        collectionName: name
-      })
-    })
-    .then(function(result) {
-      return res.json({});
-    }).catch(function(result) {
-      return next(result);
-    })
-  });
-
-  /*
    * delete specific item
    */
   router.delete(['/items/:name/:id', '/:name/:id'], items.delete);
