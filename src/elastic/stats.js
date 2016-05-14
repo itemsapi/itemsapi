@@ -6,18 +6,15 @@ var indices = require('../connections/elastic').getElastic().indices;
 var cat = require('../connections/elastic').getElastic().cat;
 var _ = require('lodash');
 
-(function(module) {
-
-  /**
-   */
-  module.getIndicesAsync = function(data) {
-    data = data || {};
-    return cat.indices({
-      v: data.v || true,
-      bytes: data.bytes || 'm'
-    })
-    .then(function(res) {
-      return res;
-    });
-  }
-}(exports));
+/**
+ */
+exports.getIndicesAsync = function(data) {
+  data = data || {};
+  return cat.indices({
+    v: data.v || true,
+    bytes: data.bytes || 'm'
+  })
+  .then(function(res) {
+    return res;
+  });
+}
