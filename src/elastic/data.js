@@ -160,7 +160,7 @@ var validate = require('validate.js');
       index: data.index,
       type: data.type,
       id: data.id,
-      //refresh: true,
+      refresh: data.refresh || false,
       body: {doc: data.body}
     }, function (err, res) {
       if (err) {

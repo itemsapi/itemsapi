@@ -25,13 +25,13 @@ var collectionHelper = require('../helpers/collection');
       return slugs.setSlugsAsync(
         helper.getType(),
         helper.getSlugs(),
-        dataHelper.inputMapper(data.body, collection.schema)
+        dataHelper.inputMapper(data.body, collection)
       ).then(function(res) {
         return elastic.addDocumentAsync({
           index: helper.getIndex(),
           type: helper.getType(),
           refresh: data.refresh,
-          body: dataHelper.inputMapper(data.body, collection.schema),
+          body: dataHelper.inputMapper(data.body, collection),
           id: data.body.id
         })
       })
@@ -58,12 +58,25 @@ var collectionHelper = require('../helpers/collection');
       return slugs.setSlugsAsync(
         helper.getType(),
         helper.getSlugs(),
-        dataHelper.inputMapper(data.body, collection.schema)
+        dataHelper.inputMapper(data.body, collection)
       ).then(function(res) {
+
+        // dirty hack
+        // should be enabled should be ignored as additional configuratoin
+        // i.e. ignoredFields object
+        /*var temp = _.clone(collection);
+        if (temp.extraSchema && temp.extraSchema.enabled) {
+          delete temp.extraSchema.enabled;
+        }*/
+
         return elastic.updateDocumentAsync({
           index: helper.getIndex(),
           type: helper.getType(),
-          body: dataHelper.inputMapper(data.body, collection.schema),
+          //body: data.body,
+          refresh: data.refresh,
+          body: dataHelper.inputMapper(data.body, collection, {
+            check_fields: ['array']
+          }),
           id: data.id
         })
       })
@@ -104,6 +117,33 @@ var collectionHelper = require('../helpers/collection');
         type: helper.getType(),
         id: data.id
       })
+    })
+  }
+
+  /**
+   * enable / disable item / document
+   */
+  module.enableDocumentAsync = function(data) {
+    if (!data.id) {
+      throw new Error('item id is missing')
+    }
+    return collectionService.findCollectionAsync({
+      name: data.name
+    })
+    .then(function(collection) {
+      var helper = collectionHelper(collection);
+      return elastic.updateDocumentAsync({
+        index: helper.getIndex(),
+        type: helper.getType(),
+        refresh: data.refresh,
+        body: {
+          enabled: data.enabled
+        },
+        id: data.id
+      })
+    })
+    .then(function(res) {
+      return res;
     })
   }
 
@@ -153,13 +193,13 @@ var collectionHelper = require('../helpers/collection');
       return slugs.setSlugsAsync(
         helper.getType(),
         helper.getSlugs(),
-        dataHelper.inputMapper(data.body, collection.schema)
+        dataHelper.inputMapper(data.body, collection)
       ).then(function(res) {
         return elastic.addDocumentsAsync({
           index: helper.getIndex(),
           type: helper.getType(),
           refresh: data.refresh,
-          body: dataHelper.inputMapper(data.body, collection.schema),
+          body: dataHelper.inputMapper(data.body, collection),
         })
       })
     }).then(function(res) {

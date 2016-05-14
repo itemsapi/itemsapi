@@ -32,7 +32,19 @@ var _ = require('lodash');
 
     var aggregationFilters = module.generateAggregationFilters(aggregationsOptions, data.aggs);
     // responsible for filtering items
-    body.filter(ejs.AndFilter(_.values(aggregationFilters)));
+    var filters = _.values(aggregationFilters);
+
+    // if field is missing we assume its default (true)
+    var enabledFilter = module.getEnabledFilter(data.collection, data)
+
+    if (enabledFilter) {
+      filters.push(enabledFilter)
+    }
+
+    body.filter(ejs.AndFilter(filters));
+    //body.filter(ejs.AndFilter(ejs.TermFilter('enabled', true)));
+
+    //console.log(JSON.stringify(body.toJSON()));
 
     // generate aggretations according to options
     var aggregations = module.generateAggregations(aggregationsOptions, aggregationFilters, data);
@@ -181,6 +193,24 @@ var _ = require('lodash');
     return ejs.OrFilter(rangeFilters);
   }
 
+  module.getEnabledFilter = function(collection, data) {
+    var enabledFilter
+
+    if (data.enabled === true) {
+      enabledFilter = ejs.AndFilter(
+        ejs.OrFilter([
+          ejs.TermFilter('enabled', 'T'),
+          ejs.MissingFilter('enabled')
+        ])
+      )
+    } else if (data.enabled === false) {
+      enabledFilter = ejs.AndFilter(
+        ejs.TermFilter('enabled', 'F')
+      )
+    }
+
+    return enabledFilter;
+  }
 
   /**
    * generate aggregation filters

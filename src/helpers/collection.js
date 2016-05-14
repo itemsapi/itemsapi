@@ -3,8 +3,18 @@ var _ = require('underscore');
 
 module.exports = function(data) {
 
+  data = data || {}
+
   var getSchema = function() {
     return data.schema || {};
+  }
+
+  var getExtraSchema = function() {
+    return data.extraSchema || {};
+  }
+
+  var getFullSchema = function() {
+    return _.merge(getExtraSchema(), getSchema());
   }
 
   var getName = function() {
@@ -81,6 +91,14 @@ module.exports = function(data) {
     }
   }
 
+  var enabledFieldDefaultValue = function(schema) {
+    var schema = schema || getExtraSchema()
+    if (!schema.enabled || schema.enabled.default === false || schema.enabled.null_value === false) {
+      return false;
+    }
+    return true;
+  }
+
   var getType = function() {
     return data.type || data.name;
   }
@@ -108,6 +126,9 @@ module.exports = function(data) {
 
   return {
     getSchema: getSchema,
+    getExtraSchema: getExtraSchema,
+    getFullSchema: getFullSchema,
+    enabledFieldDefaultValue: enabledFieldDefaultValue,
     getName: getName,
     getDefaults: getDefaults,
     getDefaultSorting: getDefaultSorting,

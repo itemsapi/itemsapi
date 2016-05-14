@@ -44,7 +44,7 @@ var server;
                 type: 'movie'
               })
               .then(function(res) {
-                console.log('add mapping');
+                //console.log('add mapping');
                 done();
               })
             //})

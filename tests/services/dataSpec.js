@@ -92,10 +92,10 @@ setup.makeSuite('add data service', function() {
 
     var spy = sinon.spy(elasticData, 'addDocument');
     dataService.addDocumentAsync({
-      projectName: 'test',
       collectionName: 'city',
       body: {rating: 5, name: 'Berlin', id: 5},
     }).then(function(res) {
+      //console.log(res);
       //assert.equal(err, null);
       assert.equal(spy.callCount, 1);
       assert(spy.firstCall.calledWithMatch({index: 'test'}));
@@ -115,7 +115,9 @@ setup.makeSuite('add data service', function() {
       collectionName: 'city',
       id: 5
     }).then(function(res) {
-      //assert.equal(err, null);
+      res.should.have.property('rating', 5);
+      res.should.have.property('name', 'Berlin');
+      res.should.have.property('id', 5);
       assert.equal(spy.callCount, 1);
       assert(spy.firstCall.calledWithMatch({index: 'test'}));
       assert(spy.firstCall.calledWithMatch({type: 'city'}));
