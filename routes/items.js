@@ -103,11 +103,17 @@ module.exports = function(router) {
   /*
    * enable / disable item
    */
-  router.put(['/items/:name/:id/enable', '/items/:name/:id/disable'], function (req, res, next) {
+  router.put(['/items/:name/:id/enable', '/items/:name/:id/disable', '/items/:name/:id/enabled/:enabled'], function (req, res, next) {
     var id = req.params.id;
     var name = req.params.name;
     var path = req.route.path;
-    var enabled = path.indexOf('enable') !== -1 ? true : false;
+
+    var enabled;
+    if (req.params.enabled) {
+      enabled = req.params.enabled
+    } else {
+      enabled = req.path.indexOf('enable') !== -1 ? true : false
+    }
 
     dataService.enableDocumentAsync({
       name: name,
