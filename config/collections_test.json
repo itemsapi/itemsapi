@@ -111,7 +111,7 @@
         "extraSchema": {
             "enabled": {
                 "type": "boolean",
-                "null_value": true
+                "default": true
             }
         },
         "aggregations": [

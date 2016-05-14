@@ -36,7 +36,11 @@ var _ = require('lodash');
 
     // if field is missing we assume its default (true)
     var enabledFilter = module.getEnabledFilter(data.collection, data)
-    filters.push(enabledFilter)
+
+    if (enabledFilter) {
+      filters.push(enabledFilter)
+    }
+
     body.filter(ejs.AndFilter(filters));
     //body.filter(ejs.AndFilter(ejs.TermFilter('enabled', true)));
 
@@ -190,14 +194,20 @@ var _ = require('lodash');
   }
 
   module.getEnabledFilter = function(collection, data) {
-    /*if (data.enabled === true) {
-    }*/
-    var enabledFilter = ejs.AndFilter(
-      ejs.OrFilter([
-        ejs.TermFilter('enabled', 'T'),
-        ejs.MissingFilter('enabled')
-      ])
-    )
+    var enabledFilter
+
+    if (data.enabled === true) {
+      enabledFilter = ejs.AndFilter(
+        ejs.OrFilter([
+          ejs.TermFilter('enabled', 'T'),
+          ejs.MissingFilter('enabled')
+        ])
+      )
+    } else if (data.enabled === false) {
+      enabledFilter = ejs.AndFilter(
+        ejs.TermFilter('enabled', 'F')
+      )
+    }
 
     return enabledFilter;
   }

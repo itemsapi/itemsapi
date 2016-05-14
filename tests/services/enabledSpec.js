@@ -2,6 +2,7 @@ var should = require('should');
 var sinon = require('sinon');
 var assert = require('assert');
 var setup = require('./../mocks/setup');
+var _ = require('lodash')
 
 setup.makeSuite('add data service', function() {
 
@@ -20,7 +21,12 @@ setup.makeSuite('add data service', function() {
   });
 
   it('should add document and be enabled', function(done) {
-    var doc = {
+    var doc1 = {
+      rating: 5,
+      id: 7,
+      name: 'Tokyo'
+    };
+    var doc2 = {
       rating: 6,
       id: 5,
       name: 'Berlin'
@@ -29,7 +35,15 @@ setup.makeSuite('add data service', function() {
     dataService.addDocumentAsync({
       collectionName: 'city',
       refresh: true,
-      body: doc,
+      body: doc2,
+    })
+    .then(function(res) {
+      elasticData.addDocumentAsync({
+        index: 'test',
+        type: 'city',
+        refresh: true,
+        body: doc1
+      })
     })
     .then(function(res) {
       done();
@@ -69,15 +83,39 @@ setup.makeSuite('add data service', function() {
     });
   });
 
-  it('should not find disabled items in search', function(done) {
+  it('should find all items in search', function(done) {
     searchService.searchAsync({
       collectionName: 'city',
       per_page: 10,
       page: 1
     }).then(function(res) {
-      res.data.items.should.lengthOf(0)
+      res.data.items.should.lengthOf(2)
       //console.log(res);
       //console.log(res.data.items)
+      done();
+    });
+  });
+
+  it('should find only enabled items in search', function(done) {
+    searchService.searchAsync({
+      collectionName: 'city',
+      per_page: 10,
+      enabled: true,
+      page: 1
+    }).then(function(res) {
+      res.data.items.should.lengthOf(1)
+      done();
+    });
+  });
+
+  it('should find only disabled items in search', function(done) {
+    searchService.searchAsync({
+      collectionName: 'city',
+      per_page: 10,
+      enabled: false,
+      page: 1
+    }).then(function(res) {
+      res.data.items.should.lengthOf(1)
       done();
     });
   });
@@ -130,7 +168,10 @@ setup.makeSuite('add data service', function() {
       per_page: 10,
       page: 1
     }).then(function(res) {
-      res.data.items.should.lengthOf(1)
+      /*res.data.items.should.matchEach(function(it) {
+        return it.enabled !== undefined;
+      })*/
+      res.data.items.should.lengthOf(2)
       done();
     });
   });
