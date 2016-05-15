@@ -7,6 +7,14 @@ setup.makeSuite('collection service', function() {
   var collectionService = require('./../../src/services/collection');
   var collectionHelper = require('./../../src/helpers/collection')
 
+  before(function(done) {
+    collectionService.removeCollectionAsync({
+      name: 'new-collection'
+    })
+    .then(function(res) {
+      done();
+    })
+  })
 
   it('should find collection', function(done) {
     collectionService.findCollectionAsync({
@@ -24,8 +32,7 @@ setup.makeSuite('collection service', function() {
 
   it('should find collection with defined project name', function(done) {
     collectionService.findCollectionAsync({
-      name: 'movie',
-      project: 'test'
+      name: 'movie'
     })
     .then(function(res) {
       should(res).not.be.undefined;
@@ -33,7 +40,7 @@ setup.makeSuite('collection service', function() {
     })
   });
 
-  it('should find collection with undefined project name', function(done) {
+  xit('should find collection with undefined project name', function(done) {
     collectionService.findCollectionAsync({
       name: 'movie',
       project: undefined
@@ -45,7 +52,7 @@ setup.makeSuite('collection service', function() {
     })
   });
 
-  it('should not find collection with not existent project', function(done) {
+  xit('should not find collection with not existent project', function(done) {
     collectionService.findCollectionAsync({
       name: 'movie',
       project: 'notexistent'
@@ -87,7 +94,6 @@ setup.makeSuite('collection service', function() {
   it('should add collection', function(done) {
     collectionService.addCollectionAsync({
       name: 'new-collection',
-      project: 'new-project',
       schema: {}
     })
     .then(function(res) {
@@ -97,9 +103,25 @@ setup.makeSuite('collection service', function() {
       .then(function(res) {
         res.should.have.property('schema');
         res.should.have.property('name');
-        res.should.have.property('project');
         done();
       });
+    })
+  });
+
+  it('should throw error if name not provided', function(done) {
+    collectionService.addCollectionAsync({})
+    .catch(function(err) {
+      done();
+    })
+  });
+
+  it('should forbid adding duplicate collection', function(done) {
+    collectionService.addCollectionAsync({
+      name: 'new-collection',
+      schema: {}
+    })
+    .catch(function(err) {
+      done();
     })
   });
 
@@ -118,7 +140,6 @@ setup.makeSuite('collection service', function() {
       })
       .then(function(res) {
         res.should.have.property('name', 'new-collection');
-        res.should.have.property('project', 'new-project');
         res.should.have.property('test', true);
         done();
       });
@@ -129,10 +150,7 @@ setup.makeSuite('collection service', function() {
     collectionService.updateCollectionAsync({
       test: true
     }, {
-      name: 'new-collection',
-      project: 'blackhole'
-    })
-    .then(function(res) {
+      name: 'new-collection-2'
     })
     .catch(function(err) {
       done();
@@ -141,8 +159,7 @@ setup.makeSuite('collection service', function() {
 
   it('should remove collection', function(done) {
     collectionService.removeCollectionAsync({
-      name: 'new-collection',
-      project: 'new-project',
+      name: 'new-collection'
     })
     .then(function(res) {
       collectionService.findCollectionAsync({
