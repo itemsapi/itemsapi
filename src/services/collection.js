@@ -17,7 +17,7 @@ exports.updateCollectionAsync = function(data, where) {
     }));
 
     if (index === -1) {
-      throw new Error('Not found');
+      throw new Error('Collection not found');
     }
     res[index] = _.assign(res[index], data);
     return fs.writeFileAsync(
@@ -51,14 +51,18 @@ exports.findCollectionAsync = function(where) {
 
 /**
  * add collection manually
- * we should switch to https://github.com/typicode/lowdb later
- * we should make data validation too
  */
 exports.addCollectionAsync = function(data) {
+  if (!data || !data.name) {
+    return Promise.reject(new Error('Collection name required'))
+  }
   return exports.getCollectionsAsync()
-  .then(function(res) {
-    res.push(data);
-    return res;
+  .then(function(collections) {
+    if (_.find(collections, {name: data.name})) {
+      throw new Error('Collection with given name already exists')
+    }
+    collections.push(data);
+    return collections;
   })
   .then(function(res) {
     return fs.writeFileAsync(
