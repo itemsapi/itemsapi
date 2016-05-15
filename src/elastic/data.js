@@ -4,170 +4,166 @@ var Promise = require('bluebird');
 var elastic = require('../connections/elastic').getElastic();
 var validate = require('validate.js');
 
-(function(module) {
+exports.addDocumentValidate = function(data) {
+  var constraints = {
+    id: {presence: false},
+    index: {presence: true},
+    body: {presence: true},
+    refresh: {presence: false},
+    type: {presence: true}
+  };
+  return validate(data, constraints);
+}
 
-  module.addDocumentValidate = function(data) {
-    var constraints = {
-      id: {presence: false},
-      index: {presence: true},
-      body: {presence: true},
-      refresh: {presence: false},
-      type: {presence: true}
-    };
-    return validate(data, constraints);
+/**
+ * add data to elastic
+ * @param {Obj} data document
+ */
+exports.addDocument = function(data, callback) {
+
+  var v = exports.addDocumentValidate(data);
+  if (v) {
+    return callback(v);
   }
 
-  /**
-   * add data to elastic
-   * @param {Obj} data document
-   */
-  module.addDocument = function(data, callback) {
-
-    var v = module.addDocumentValidate(data);
-    if (v) {
-      return callback(v);
+  elastic.index({
+    index: data.index,
+    type: data.type,
+    id: data.id,
+    //replication: 'async',
+    refresh: data.refresh || false,
+    body: data.body
+  }, function (err, res) {
+    if (err) {
+      return callback(err);
     }
+    callback(null, res);
+  });
+}
 
-    elastic.index({
-      index: data.index,
-      type: data.type,
-      id: data.id,
-      //replication: 'async',
-      refresh: data.refresh || false,
-      body: data.body
-    }, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res);
-    });
+exports.addDocumentsValidate = function(data) {
+  var constraints = {
+    index: {presence: true},
+    body: {presence: true},
+    type: {presence: true}
+  };
+  return validate(data, constraints);
+}
+
+/**
+ * add multiple data to elastic
+ * @param {Array} data documents
+ * @param {String} index
+ * @param {String} type
+ */
+exports.addDocuments = function(data, callback) {
+
+  var v = exports.addDocumentsValidate(data);
+  if (v) {
+    return callback(v);
   }
 
-  module.addDocumentsValidate = function(data) {
-    var constraints = {
-      index: {presence: true},
-      body: {presence: true},
-      type: {presence: true}
-    };
-    return validate(data, constraints);
+  var body = [];
+  for (var i = 0 ; i < data.body.length ; ++i) {
+    var o = { create: { _id: data.body[i] ? data.body[i].id : undefined } };
+    body.push(o);
+    body.push(data.body[i]);
   }
 
-  /**
-   * add multiple data to elastic
-   * @param {Array} data documents
-   * @param {String} index
-   * @param {String} type
-   */
-  module.addDocuments = function(data, callback) {
-
-    var v = module.addDocumentsValidate(data);
-    if (v) {
-      return callback(v);
+  elastic.bulk({
+    index: data.index,
+    type: data.type,
+    refresh: data.refresh || false,
+    consistency: 'one',
+    body: body
+  }, function (err, res) {
+    if (err) {
+      return callback(err);
     }
+    callback(null, res);
+  });
+}
 
-    var body = [];
-    for (var i = 0 ; i < data.body.length ; ++i) {
-      var o = { create: { _id: data.body[i] ? data.body[i].id : undefined } };
-      body.push(o);
-      body.push(data.body[i]);
+/**
+ * get item by id
+ * @param {Obj} data document
+ */
+exports.getDocument = function(data, callback) {
+  elastic.get({
+    index: data.index,
+    type: data.type,
+    id: data.id
+  }, function (err, res) {
+    if (err) {
+      return callback(err);
     }
+    callback(null, res);
+  });
+}
 
-    elastic.bulk({
-      index: data.index,
-      type: data.type,
-      refresh: data.refresh || false,
-      consistency: 'one',
-      body: body
-    }, function (err, res) {
-      if (err) {
-        return callback(err);
+/**
+ * delete item by id
+ * @param {Obj} data document
+ */
+exports.deleteDocument = function(data, callback) {
+  elastic.delete({
+    index: data.index,
+    type: data.type,
+    id: data.id
+  }, function (err, res) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, res);
+  });
+}
+
+/**
+ * count documents
+ * @param {Obj} data document
+ */
+exports.countDocumentsAsync = function(data, callback) {
+  return elastic.count({
+    index: data.index,
+    type: data.type,
+  }).then(function(res) {
+    return res.count;
+  });
+}
+
+/**
+ * clean documents
+ * @param {Obj} data document
+ */
+exports.cleanDocumentsAsync = function(data, callback) {
+  return elastic.deleteByQuery({
+    index: data.index,
+    type: data.type,
+    body: {
+      query: {
+        match_all: {}
       }
-      callback(null, res);
-    });
-  }
+    }
+  }).then(function(res) {
+    return res;
+  });
+}
 
-  /**
-   * get item by id
-   * @param {Obj} data document
-   */
-  module.getDocument = function(data, callback) {
-    elastic.get({
-      index: data.index,
-      type: data.type,
-      id: data.id
-    }, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res);
-    });
-  }
-
-  /**
-   * delete item by id
-   * @param {Obj} data document
-   */
-  module.deleteDocument = function(data, callback) {
-    elastic.delete({
-      index: data.index,
-      type: data.type,
-      id: data.id
-    }, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res);
-    });
-  }
-
-  /**
-   * count documents
-   * @param {Obj} data document
-   */
-  module.countDocumentsAsync = function(data, callback) {
-    return elastic.count({
-      index: data.index,
-      type: data.type,
-    }).then(function(res) {
-      return res.count;
-    });
-  }
-
-  /**
-   * clean documents
-   * @param {Obj} data document
-   */
-  module.cleanDocumentsAsync = function(data, callback) {
-    return elastic.deleteByQuery({
-      index: data.index,
-      type: data.type,
-      body: {
-        query: {
-          match_all: {}
-        }
-      }
-    }).then(function(res) {
-      return res;
-    });
-  }
-
-  /**
-   * partial update item by id
-   * @param {Obj} data document
-   */
-  module.updateDocument = function(data, callback) {
-    elastic.update({
-      index: data.index,
-      type: data.type,
-      id: data.id,
-      refresh: data.refresh || false,
-      body: {doc: data.body}
-    }, function (err, res) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, res);
-    });
-  }
-
-}(exports));
+/**
+ * partial update item by id
+ * @param {Obj} data document
+ */
+exports.updateDocument = function(data, callback) {
+  elastic.update({
+    index: data.index,
+    type: data.type,
+    id: data.id,
+    refresh: data.refresh || false,
+    body: {doc: data.body}
+  }, function (err, res) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, res);
+  });
+}
