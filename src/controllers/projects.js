@@ -8,7 +8,7 @@ exports.create = function createProject(req, res, next) {
   var data = req.query
   data.data = req.body
 
-  return projectService.createProjectAsync(req.query)
+  return projectService.createProjectAsync(data)
   .then(function(result) {
     return res.json(result);
   }).catch(function(result) {

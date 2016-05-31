@@ -148,4 +148,36 @@ setup.makeSuite('project service', function() {
       done();
     })
   });
+
+  it('should create project from scratch but using url', function(done) {
+    var data = {
+      name: 'movies-2',
+      auto: true,
+      url: 'https://raw.githubusercontent.com/itemsapi/itemsapi-example-data/master/items/movies.json'
+    }
+
+    projectService.createProjectAsync(data)
+    .then(function(res) {
+      res.should.have.property('name', 'movies-2');
+      return collectionService.findCollectionAsync({
+        name: 'movies-2'
+      })
+    })
+    .then(function(res) {
+      res.should.have.property('name', 'movies-2');
+      res.should.have.property('schema');
+      res.should.have.property('aggregations');
+      //res.aggregations.should.have.property('rating');
+      res.should.have.property('sortings');
+      return collectionService.removeCollectionAsync({
+        name: 'movies-2'
+      })
+    })
+    .then(function(res) {
+      done();
+    })
+  });
+
+
+
 });

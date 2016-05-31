@@ -17,32 +17,32 @@ var request = Promise.promisifyAll(require('request'));
  */
 exports.createProjectAsync = function(data) {
   var collection
-  if (data.auto) {
-    collection = configurationHelper.generateConfiguration(data.data);
-  }
 
-  //var url;
-  /*request.getAsync({
-    url: url,
+  return (data.url ? request.getAsync({
+    url: data.url,
     json: true,
     gzip: true
-  })
-  .then(function(result) {
-    return result.body
-  })*/
-
-  collection.name = data.name || collection.name
-
-  return collectionService.addCollectionAsync(collection)
+  }) : Promise.resolve())
   .then(function(res) {
-    return exports.addMappingAsync({
-      collectionName: collection.name
-    })
-  })
-  .then(function(res) {
-    return {
-      name: collection.name
+    if (data.url && res && res.body) {
+      data.data = res.body
     }
+    collection = data.collection
+    if (data.auto || !collection) {
+      collection = configurationHelper.generateConfiguration(data.data);
+    }
+    collection.name = data.name || collection.name
+    return collectionService.addCollectionAsync(collection)
+    .then(function(res) {
+      return exports.addMappingAsync({
+        collectionName: collection.name
+      })
+    })
+    .then(function(res) {
+      return {
+        name: collection.name
+      }
+    })
   })
 },
 

@@ -35,7 +35,7 @@ module.exports = function(router) {
   /*
    * generate collection based on items (read only)
    */
-  //router.post('/collections/generate', collections.generate);
+  router.post('/collections/generate', collections.generate);
 
   /*
    * update specific collection
