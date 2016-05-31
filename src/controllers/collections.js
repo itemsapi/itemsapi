@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var _ = require('underscore');
 var collectionHelper = require('./../helpers/collection');
+var configurationHelper = require('./../helpers/configuration');
 var projectService = Promise.promisifyAll(require('./../services/project'));
 var elasticMapping = Promise.promisifyAll(require('./../elastic/mapping'));
 var collectionService = require('./../services/collection');
@@ -139,3 +140,14 @@ exports.reindex = function (req, res, next) {
     return res.status(500).json();
   });
 };
+
+/*
+ * generate collection based on sample items
+ */
+exports.generate = function (req, res, next) {
+  var collection = configurationHelper.generateConfiguration(req.body, {
+    name: req.query.name
+  });
+  return res.json(collection);
+  //return res.status(500).json();
+}

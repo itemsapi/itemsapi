@@ -1,6 +1,6 @@
 {
   "name": "itemsapi",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "creating search application without spending time for backend",
   "main": "server.js",
   "scripts": {
@@ -37,10 +37,12 @@
     "express-init": "0.0.1",
     "express-limiter": "^1.6.0",
     "fs-extra": "^0.26.2",
-    "lodash": "^3.9.3",
+    "lodash": "^3.10.1",
     "morgan": "^1.7.0",
     "nconf": "^0.7.1",
+    "randomstring": "^1.1.5",
     "redis": "^2.6.0-1",
+    "request": "^2.72.0",
     "slug": "^0.9.1",
     "underscore": "^1.8.3",
     "validate.js": "^0.4.0",

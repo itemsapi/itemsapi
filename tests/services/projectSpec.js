@@ -6,6 +6,7 @@ var assert = require('assert');
 setup.makeSuite('project service', function() {
 
   var projectService = require('./../../src/services/project');
+  var collectionService = require('./../../src/services/collection');
   var statsService = require('./../../src/services/stats');
   var elasticClient = require('./../../src/connections/elastic');
 
@@ -103,4 +104,80 @@ setup.makeSuite('project service', function() {
       done();
     })
   });
+
+  it('should create project from scratch', function(done) {
+    var data = {
+      name: 'restaurants',
+      auto: true,
+      data: [{
+        geo: '82.30, 62.20',
+        city: 'Alert',
+        country_icon: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Flag_of_Canada.svg/23px-Flag_of_Canada.svg.png',
+        country: 'Canada',
+        rating: 3.41,
+        name: 'Ambrose Stream Restaurant',
+        likes: [
+          'tia',
+          'royal',
+          'maudie',
+          'doug',
+          'paul',
+          'roel'
+        ]
+      }]
+    }
+
+    projectService.createProjectAsync(data)
+    .then(function(res) {
+      res.should.have.property('name', 'restaurants');
+      return collectionService.findCollectionAsync({
+        name: 'restaurants'
+      })
+    })
+    .then(function(res) {
+      res.should.have.property('name', 'restaurants');
+      res.should.have.property('schema');
+      res.should.have.property('aggregations');
+      res.aggregations.should.have.property('rating');
+      res.should.have.property('sortings');
+      return collectionService.removeCollectionAsync({
+        name: 'restaurants'
+      })
+    })
+    .then(function(res) {
+      done();
+    })
+  });
+
+  it('should create project from scratch but using url', function(done) {
+    var data = {
+      name: 'movies-2',
+      auto: true,
+      url: 'https://raw.githubusercontent.com/itemsapi/itemsapi-example-data/master/items/movies.json'
+    }
+
+    projectService.createProjectAsync(data)
+    .then(function(res) {
+      res.should.have.property('name', 'movies-2');
+      return collectionService.findCollectionAsync({
+        name: 'movies-2'
+      })
+    })
+    .then(function(res) {
+      res.should.have.property('name', 'movies-2');
+      res.should.have.property('schema');
+      res.should.have.property('aggregations');
+      //res.aggregations.should.have.property('rating');
+      res.should.have.property('sortings');
+      return collectionService.removeCollectionAsync({
+        name: 'movies-2'
+      })
+    })
+    .then(function(res) {
+      done();
+    })
+  });
+
+
+
 });

@@ -10,6 +10,7 @@ var collectionService = require('./../src/services/collection');
 var items = require('./../src/controllers/items');
 var collections = require('./../src/controllers/collections');
 var mappings = require('./../src/controllers/mappings');
+var projects = require('./../src/controllers/projects');
 
 /**
  * the order of routes matter
@@ -30,6 +31,11 @@ module.exports = function(router) {
    * create collection
    */
   router.post('/collections', collections.create);
+
+  /*
+   * generate collection based on items (read only)
+   */
+  router.post('/collections/generate', collections.generate);
 
   /*
    * update specific collection
@@ -72,6 +78,11 @@ module.exports = function(router) {
    * add elasticsearch mapping
    */
   router.post('/collections/:name/mapping', mappings.create);
+
+  /*
+   * create project (collection + mapping + items)
+   */
+  router.post('/projects', projects.create);
 
   /*
    * create specific item
