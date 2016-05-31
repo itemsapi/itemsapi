@@ -6,9 +6,46 @@ var elastic = Promise.promisifyAll(require('../elastic/mapping'));
 var elasticData = require('../elastic/data');
 var searchService = Promise.promisifyAll(require('./search'));
 var collectionHelper = require('./../helpers/collection');
+var configurationHelper = require('./../helpers/configuration');
 var collectionService = require('./collection');
 var config = require('./../../config/index').get();
 var logger = require('./../../config/logger');
+var request = Promise.promisifyAll(require('request'));
+
+/**
+ * create project (collection + mapping + items)
+ */
+exports.createProjectAsync = function(data) {
+  var collection
+  if (data.auto) {
+    collection = configurationHelper.generateConfiguration(data.data);
+  }
+
+  //var url;
+  /*request.getAsync({
+    url: url,
+    json: true,
+    gzip: true
+  })
+  .then(function(result) {
+    return result.body
+  })*/
+
+  collection.name = data.name || collection.name
+
+  return collectionService.addCollectionAsync(collection)
+  .then(function(res) {
+    return exports.addMappingAsync({
+      collectionName: collection.name
+    })
+  })
+  .then(function(res) {
+    return {
+      name: collection.name
+    }
+  })
+},
+
 
 /**
  * ensure if index exist, if not then create it
@@ -34,7 +71,7 @@ exports.ensureProjectAsync = exports.ensureIndexAsync,
   /**
    * add mapping from collection schema
    */
-  exports.addMappingAsync = function(data) {
+exports.addMappingAsync = function(data) {
   var collection;
   var helper;
   return collectionService.findCollectionAsync({
