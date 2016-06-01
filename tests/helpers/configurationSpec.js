@@ -10,7 +10,9 @@ describe('configuration', function() {
   it('should generate conf', function test(done) {
     var data = [{
       name: 'Godfather',
+      name2: 'Godfather, godfather the movie',
       tags: ['Drama', 'Crime fiction'],
+      tags2: 'Drama, Crime, Fiction',
       rating: 10,
       rating2: 5.6,
       flag: false,
@@ -29,7 +31,12 @@ describe('configuration', function() {
     var schema = conf.schema;
     conf.schema.should.have.property('name');
     schema.name.should.have.property('type', 'string')
+    schema.name.should.have.property('type', 'string')
     schema.image.should.have.property('display', 'image')
+    schema.tags.should.have.property('type', 'string')
+    schema.tags.should.have.property('display', 'array')
+    schema.tags2.should.have.property('type', 'string')
+    schema.tags2.should.have.property('display', 'array')
     schema.date.should.have.property('type', 'date')
     //schema.date2.should.have.property('type', 'date')
     schema.rating.should.have.property('type', 'integer')
