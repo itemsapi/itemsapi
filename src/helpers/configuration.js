@@ -21,6 +21,17 @@ var detectFieldType = function(val) {
     //http://stackoverflow.com/a/30870755/659682
     return 'date'
   } else if (_.isString(val)) {
+    var tags = _.map(val.split(','), function(val) {
+      return val.trim();
+    })
+    var filter = _.filter(tags, function(val) {
+      return val.length <= 15
+    })
+
+    if (tags.length > 1 && filter.length === tags.length) {
+      return 'array'
+    }
+
     return 'string'
   }
 }
