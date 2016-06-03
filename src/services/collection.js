@@ -7,6 +7,28 @@ var fs = Promise.promisifyAll(require('fs-extra'));
 var filename = config.collections.filename;
 
 /**
+ * partial update collection
+ */
+exports.partialUpdateCollectionAsync = function(data, where) {
+  return exports.getCollectionsAsync()
+  .then(function(res) {
+    var index = _.findIndex(res, _.pick(where, function(value) {
+      return !_.isUndefined(value);
+    }));
+
+    if (index === -1) {
+      throw new Error('Collection not found');
+    }
+    res[index] = _.assign(res[index], data);
+    return fs.writeFileAsync(
+      filename,
+      JSON.stringify(res, null, 4),
+      {encoding: 'utf8'}
+    );
+  })
+}
+
+/**
  * update collection
  */
 exports.updateCollectionAsync = function(data, where) {
@@ -19,7 +41,8 @@ exports.updateCollectionAsync = function(data, where) {
     if (index === -1) {
       throw new Error('Collection not found');
     }
-    res[index] = _.assign(res[index], data);
+    // not assign but hard replace
+    res[index] = data;
     return fs.writeFileAsync(
       filename,
       JSON.stringify(res, null, 4),

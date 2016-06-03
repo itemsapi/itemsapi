@@ -39,12 +39,26 @@ exports.create = function postItem(req, res, next) {
 };
 
 /*
+ * partial update specific collection
+ */
+exports.partialUpdate = function updateItem(req, res, next) {
+  return collectionService.partialUpdateCollectionAsync(req.body, {
+    name: req.params.name
+  })
+  .then(function(result) {
+    return res.json(result);
+  }).catch(function(err) {
+    return res.status(404).json();
+    return next(err);
+  });
+};
+
+/*
  * update specific collection
  */
 exports.update = function updateItem(req, res, next) {
   return collectionService.updateCollectionAsync(req.body, {
-    name: req.params.name,
-    project: req.query.project
+    name: req.params.name
   })
   .then(function(result) {
     return res.json(result);
