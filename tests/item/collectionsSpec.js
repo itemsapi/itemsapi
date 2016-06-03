@@ -35,7 +35,7 @@ setup.makeSuite('collections management by api', function() {
 
   it('should update collection', function(done) {
     request(setup.getServer())
-      .put('/api/v1/collections/movie')
+      .post('/api/v1/collections/movie/partial')
       .send({test: true})
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
