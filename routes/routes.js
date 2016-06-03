@@ -43,6 +43,11 @@ module.exports = function(router) {
   router.put('/collections/:name', collections.update);
 
   /*
+   * partial update specific collection
+   */
+  router.post('/collections/:name/partial', collections.partialUpdate);
+
+  /*
    * get collection
    */
   router.get('/collections/:name', collections.get);

@@ -125,22 +125,41 @@ setup.makeSuite('collection service', function() {
     })
   });
 
-  it('should update collection', function(done) {
-    return collectionService.updateCollectionAsync({
+  it('should update collection partially', function(done) {
+    return collectionService.partialUpdateCollectionAsync({
       test: true
     }, {
       name: 'new-collection'
     })
     .then(function(res) {
-      //res.should.have.property('name', 'new-collection');
-      //res.should.have.property('project', 'new-project');
-      //res.should.have.property('test', true);
+      collectionService.findCollectionAsync({
+        name: 'new-collection'
+      })
+      .then(function(res) {
+        //console.log(res);
+        res.should.have.property('name', 'new-collection');
+        res.should.have.property('test', true);
+        res.should.have.property('schema');
+        done();
+      });
+    })
+  });
+
+  it('should update collection (replace)', function(done) {
+    return collectionService.updateCollectionAsync({
+      test: false,
+      name: 'new-collection'
+    }, {
+      name: 'new-collection'
+    })
+    .then(function(res) {
       collectionService.findCollectionAsync({
         name: 'new-collection'
       })
       .then(function(res) {
         res.should.have.property('name', 'new-collection');
-        res.should.have.property('test', true);
+        res.should.have.property('test', false);
+        res.should.not.have.property('schema');
         done();
       });
     })

@@ -8,6 +8,7 @@ var searchService = Promise.promisifyAll(require('./search'));
 var collectionHelper = require('./../helpers/collection');
 var configurationHelper = require('./../helpers/configuration');
 var collectionService = require('./collection');
+var dataService = require('./data');
 var config = require('./../../config/index').get();
 var logger = require('./../../config/logger');
 var request = Promise.promisifyAll(require('request'));
@@ -27,6 +28,8 @@ exports.createProjectAsync = function(data) {
     if (data.url && res && res.body) {
       data.data = res.body
     }
+
+    //console.log(data);
     collection = data.collection
     if (data.auto || !collection) {
       collection = configurationHelper.generateConfiguration(data.data);
@@ -37,6 +40,14 @@ exports.createProjectAsync = function(data) {
       return exports.addMappingAsync({
         collectionName: collection.name
       })
+    })
+    .then(function(res) {
+      if (data.data) {
+        return dataService.addDocumentsAsync({
+          collectionName: collection.name,
+          body: data.data
+        })
+      }
     })
     .then(function(res) {
       return {
@@ -256,6 +267,8 @@ exports.collectionInfoAsync = function(data) {
     return {
       name: name,
       project: collection.project,
+      index: collection.index,
+      type: collection.type,
       //visibility: collection.visibility,
       display_name: display_name,
       count: res
