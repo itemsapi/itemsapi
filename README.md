@@ -1,3 +1,7 @@
+[![NPM](https://nodei.co/npm/itemsapi.png?downloads=true&downloadRank=true)](https://nodei.co/npm/itemsapi/) [![NPM](https://nodei.co/npm-dl/itemsapi.png?months=6&height=3)](https://nodei.co/npm/itemsapi/)
+
+
+
 # ItemsAPI 
 
 <a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> is restful search backend written in express.js / node.js and elasticsearch.
