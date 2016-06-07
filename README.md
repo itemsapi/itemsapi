@@ -3,24 +3,22 @@
 ![CIRCLECI](https://circleci.com/gh/itemsapi/itemsapi.png?circle-token=935dec2ee54b75370c904d110cbda8b9272860ee&style=shield)
 
 
-
 # ItemsAPI 
 
-<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> is restful search backend written in express.js / node.js and elasticsearch.
+<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> is restful search api written in node.js and elasticsearch.
 
-The goal of this project is creating advanced search application without spending time for backend. You just provide configuration and data and your backend is ready to go. You don't need to be node.js developer to use it.
+The goal of this project is creating advanced search application without spending time for backend. You just provide json data and your backend is ready to go. You don't need to be node.js developer to use it.
 
 With ItemsAPI you can create very easily:
-- various catalogs (restaurants, gyms, doctors, foods)
-- autocomplete and simple recommendation system for ecommerce
-- songs and movies recommendation
+- various list and catalogs (restaurants, movies, gyms, doctors, places)
+- simple recommendation system (i.e. users who like this also like)
 
-This backend offers powerful functionality like:
+This backend offers functionality like:
 - full text searching
 - generating facets / aggregations out of the box
 - showing similar items (based on collaborative filtering algorithm)
 - generating nice urls for fields (permalinks) out of the box
-- geo searching
+- geo sorting
 
 ## Requirement
 - node.js
