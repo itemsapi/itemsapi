@@ -1,5 +1,7 @@
 [![NPM](https://nodei.co/npm/itemsapi.png?downloads=true&downloadRank=true)](https://nodei.co/npm/itemsapi/) [![NPM](https://nodei.co/npm-dl/itemsapi.png?months=6&height=3)](https://nodei.co/npm/itemsapi/)
 
+![CIRCLECI](https://circleci.com/gh/itemsapi/itemsapi.png?circle-token=935dec2ee54b75370c904d110cbda8b9272860ee&style=shield)
+
 
 
 # ItemsAPI 
