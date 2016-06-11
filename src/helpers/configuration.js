@@ -144,8 +144,8 @@ var generateSorting = function(key, val) {
   }
 }
 
-var generateAggregation = function(key, val) {
-  var type = detectFieldType(val)
+var generateAggregation = function(key, val, rows) {
+  var type = detectFieldType(val, rows)
 
   if (type === 'float' || type === 'integer') {
     return {
@@ -216,7 +216,8 @@ exports.generateConfiguration = function(data, options) {
   })
 
   var aggregations = _.mapValues(item, function(val, key) {
-    return generateAggregation(key, val);
+    var rows = _.map(data, key)
+    return generateAggregation(key, val, rows);
   })
 
   aggregations = _.pick(aggregations, function(val) {
