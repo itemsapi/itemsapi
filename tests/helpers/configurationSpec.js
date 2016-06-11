@@ -4,6 +4,7 @@ var should = require('should');
 var assert = require('assert');
 //var helper = require('../index');
 var helper = require('./../../src/helpers/configuration');
+var _ = require('lodash')
 
 describe('configuration', function() {
 
@@ -55,4 +56,27 @@ describe('configuration', function() {
     sortings.should.not.be.instanceOf(Array)
     done();
   });
+
+  it('should generate schema and detect array properly', function test(done) {
+    var data = [{
+      tags: 'a'
+    }, {
+      tags: 'a,b,c,d'
+    }, {
+      tags: 'c'
+    }, {
+      tags: undefined
+    }]
+
+    var singleArray = helper.rowsToSingleArray(_.map(data, 'tags'))
+    singleArray.length.should.be.equal(6)
+    //singleArray.should.equal(['a', 'a', 'b', 'c', 'd', 'c'])
+
+    var conf = helper.generateConfiguration(data);
+    var schema = conf.schema;
+    schema.tags.should.have.property('type', 'string')
+    schema.tags.should.have.property('display', 'array')
+    done();
+  });
+
 });
