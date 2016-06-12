@@ -1,6 +1,13 @@
 'use strict';
 var _ = require('lodash')
 var randomstring = require('randomstring')
+var moment = require('moment')
+
+var DATE_FORMATS = [
+  moment.ISO_8601,
+  'MM/DD/YYYY'
+];
+
 
 var rowsToSingleArray = function(rows) {
   return _.chain(rows)
@@ -21,6 +28,7 @@ exports.rowsToSingleArray = rowsToSingleArray
  */
 var detectFieldType = function(val, rows) {
   if (Number(val) === val && val % 1 !== 0) {
+    //http://stackoverflow.com/a/1830844/659682
     return 'float'
   } else if (val === false || val === true) {
     return 'boolean'
@@ -31,10 +39,12 @@ var detectFieldType = function(val, rows) {
   } else if (_.isString(val) && val.match(/\.(jpg|png|gif|jpeg)/)) {
     return 'image'
   } else if (_.isNumber(val)) {
+    //http://stackoverflow.com/a/1830844/659682
     return 'integer'
   } else if (_.isArray(val)) {
     return 'array'
-  } else if (new Date(val) !== 'Invalid Date' && !isNaN(new Date(val))) {
+  } else if (moment(val, DATE_FORMATS, true).isValid()) {
+  //} else if (new Date(val) !== 'Invalid Date' && !isNaN(new Date(val))) {
     //http://stackoverflow.com/a/30870755/659682
     return 'date'
 
