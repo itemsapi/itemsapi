@@ -86,6 +86,15 @@ describe('configuration', function() {
     var type = helper.detectFieldType('a', ['a', 'a', 'c']);
     type.should.be.equal('repeatable_string')
 
+    var type = helper.detectFieldType('a', ['a', 'b', 'c']);
+    type.should.be.equal('string')
+
+    var type = helper.detectFieldType('a', ['a', 'b', 'c', '', '', '']);
+    type.should.be.equal('string')
+
+    //var type = helper.detectFieldType('$90 million', ['$90 million','$65,000,000', '£1 billion']);
+    //type.should.be.equal('string')
+
     var type = helper.detectFieldType('81.36, 16.40');
     type.should.be.equal('geo')
 
