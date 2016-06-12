@@ -2,7 +2,24 @@
 var _ = require('lodash')
 var randomstring = require('randomstring')
 
-var detectFieldType = function(val) {
+var rowsToSingleArray = function(rows) {
+  return _.chain(rows)
+  .filter(_.isString)
+  .map(function(o) {
+    return _.map(o.split(','), function(val) {
+      return val.trim();
+    })
+  })
+  .flatten()
+  .value()
+}
+
+exports.rowsToSingleArray = rowsToSingleArray
+
+/**
+ * arguments list should be refactored soon
+ */
+var detectFieldType = function(val, rows) {
   if (Number(val) === val && val % 1 !== 0) {
     return 'float'
   } else if (val === false || val === true) {
@@ -20,6 +37,8 @@ var detectFieldType = function(val) {
   } else if (new Date(val) !== 'Invalid Date' && !isNaN(new Date(val))) {
     //http://stackoverflow.com/a/30870755/659682
     return 'date'
+
+    // that works but needs to be simplified
   } else if (_.isString(val)) {
     var tags = _.map(val.split(','), function(val) {
       return val.trim();
@@ -32,12 +51,41 @@ var detectFieldType = function(val) {
       return 'array'
     }
 
+    if (_.isArray(rows)) {
+      // if value is too long then string (not array)
+      for (var i = 0 ; i < rows.length ; ++i) {
+        if (_.isString(rows[i]) && rows[i].length > 100) {
+          return 'string'
+        }
+      }
+
+      var singleArray = rowsToSingleArray(rows)
+      var countBy = _.chain(singleArray)
+        .countBy()
+        .values()
+        .sortBy()
+        .reverse()
+        .value();
+
+      // if values are repeatable
+      if (countBy.length >= 1 && countBy[0] > 1) {
+        for (var i = 0 ; i < rows.length ; ++i) {
+          if (_.isString(rows[i]) && rows[i].split(',').length > 1) {
+            return 'array'
+          }
+        }
+        return 'repeatable_string'
+      }
+    }
+
     return 'string'
   }
 }
 
-var generateField = function(val) {
-  var type = detectFieldType(val)
+exports.detectFieldType = detectFieldType
+
+var generateField = function(val, rows) {
+  var type = detectFieldType(val, rows)
 
   if (type === 'float') {
     return {
@@ -62,6 +110,12 @@ var generateField = function(val) {
       type: 'integer',
       store: true
     }
+  } else if (type === 'repeatable_string') {
+    return {
+      type: 'string',
+      index: 'not_analyzed',
+      store: true
+    }
   } else if (type === 'array') {
     return {
       type: 'string',
@@ -82,10 +136,10 @@ var generateField = function(val) {
   }
 }
 
-var generateSorting = function(key, val) {
-  var type = detectFieldType(val)
+var generateSorting = function(key, val, rows) {
+  var type = detectFieldType(val, rows)
 
-  if (type === 'float' || type === 'integer' || type === 'date' || (type === 'string' && val.length <= 100)) {
+  if (type === 'float' || type === 'integer' || type === 'date' || type === 'repeatable_string' || (type === 'string' && val.length <= 100)) {
     return {
       title: key,
       type: 'normal',
@@ -102,8 +156,8 @@ var generateSorting = function(key, val) {
   }
 }
 
-var generateAggregation = function(key, val) {
-  var type = detectFieldType(val)
+var generateAggregation = function(key, val, rows) {
+  var type = detectFieldType(val, rows)
 
   if (type === 'float' || type === 'integer') {
     return {
@@ -153,7 +207,7 @@ var generateAggregation = function(key, val) {
       unit: 'km',
       title: 'Distance ranges [km]'
     }
-  } else if (type === 'array' || type === 'boolean') {
+  } else if (type === 'array' || type === 'boolean' || type === 'repeatable_string') {
     return {
       type: 'terms',
       size: 15,
@@ -169,11 +223,13 @@ var generateAggregation = function(key, val) {
 exports.generateConfiguration = function(data, options) {
   var item = _.first(data);
   var schema = _.mapValues(item, function(val, key) {
-    return generateField(val);
+    var rows = _.map(data, key)
+    return generateField(val, rows);
   })
 
   var aggregations = _.mapValues(item, function(val, key) {
-    return generateAggregation(key, val);
+    var rows = _.map(data, key)
+    return generateAggregation(key, val, rows);
   })
 
   aggregations = _.pick(aggregations, function(val) {
@@ -181,7 +237,8 @@ exports.generateConfiguration = function(data, options) {
   })
 
   var sortings = _.mapValues(item, function(val, key) {
-    return generateSorting(key, val);
+    var rows = _.map(data, key)
+    return generateSorting(key, val, rows);
   })
 
   sortings = _.pick(sortings, function(val) {
