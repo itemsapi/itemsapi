@@ -17,8 +17,7 @@ var rowsToSingleArray = function(rows) {
 exports.rowsToSingleArray = rowsToSingleArray
 
 /**
- * detect field type of val
- * rows is the list of val in all records (for detecting specific patterns like repeating)
+ * arguments list should be refactored soon
  */
 var detectFieldType = function(val, rows) {
   if (Number(val) === val && val % 1 !== 0) {
@@ -70,13 +69,20 @@ var detectFieldType = function(val, rows) {
 
       // if values are repeatable
       if (countBy.length >= 1 && countBy[0] > 1) {
-        return 'array'
+        for (var i = 0 ; i < rows.length ; ++i) {
+          if (_.isString(rows[i]) && rows[i].split(',').length > 1) {
+            return 'array'
+          }
+        }
+        return 'repeatable_string'
       }
     }
 
     return 'string'
   }
 }
+
+exports.detectFieldType = detectFieldType
 
 var generateField = function(val, rows) {
   var type = detectFieldType(val, rows)
@@ -104,6 +110,12 @@ var generateField = function(val, rows) {
       type: 'integer',
       store: true
     }
+  } else if (type === 'repeatable_string') {
+    return {
+      type: 'string',
+      index: 'not_analyzed',
+      store: true
+    }
   } else if (type === 'array') {
     return {
       type: 'string',
@@ -124,10 +136,10 @@ var generateField = function(val, rows) {
   }
 }
 
-var generateSorting = function(key, val) {
-  var type = detectFieldType(val)
+var generateSorting = function(key, val, rows) {
+  var type = detectFieldType(val, rows)
 
-  if (type === 'float' || type === 'integer' || type === 'date' || (type === 'string' && val.length <= 100)) {
+  if (type === 'float' || type === 'integer' || type === 'date' || type === 'repeatable_string' || (type === 'string' && val.length <= 100)) {
     return {
       title: key,
       type: 'normal',
@@ -195,7 +207,7 @@ var generateAggregation = function(key, val, rows) {
       unit: 'km',
       title: 'Distance ranges [km]'
     }
-  } else if (type === 'array' || type === 'boolean') {
+  } else if (type === 'array' || type === 'boolean' || type === 'repeatable_string') {
     return {
       type: 'terms',
       size: 15,
@@ -225,7 +237,8 @@ exports.generateConfiguration = function(data, options) {
   })
 
   var sortings = _.mapValues(item, function(val, key) {
-    return generateSorting(key, val);
+    var rows = _.map(data, key)
+    return generateSorting(key, val, rows);
   })
 
   sortings = _.pick(sortings, function(val) {

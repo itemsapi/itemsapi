@@ -79,4 +79,26 @@ describe('configuration', function() {
     done();
   });
 
+  it('should detect field type', function test(done) {
+    var type = helper.detectFieldType('a', ['a', 'a,b,c,d', 'c']);
+    type.should.be.equal('array')
+
+    var type = helper.detectFieldType('a', ['a', 'a', 'c']);
+    type.should.be.equal('repeatable_string')
+
+    var type = helper.detectFieldType('81.36, 16.40');
+    type.should.be.equal('geo')
+
+    var type = helper.detectFieldType(81.36);
+    type.should.be.equal('float')
+
+    var type = helper.detectFieldType(false);
+    type.should.be.equal('boolean')
+
+    var type = helper.detectFieldType('06/22/2015');
+    type.should.be.equal('date')
+
+    done();
+  });
+
 });
