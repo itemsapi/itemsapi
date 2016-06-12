@@ -61,6 +61,10 @@ var detectFieldType = function(val, rows) {
 
       var singleArray = rowsToSingleArray(rows)
       var countBy = _.chain(singleArray)
+        // ignore elements which are empty
+        .filter(function(o) {
+          return o.length >= 1
+        })
         .countBy()
         .values()
         .sortBy()
