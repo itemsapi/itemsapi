@@ -6,13 +6,29 @@ var server;
 var app;
 var router;
 
+/**
+ * it inits application
+ * start elasticsearch
+ * start mongoose if configured
+ */
 exports.init = function (data) {
   logger.info('app initialized');
   data = data || {};
   config.merge(data);
   require('./src/connections/elastic').init(config.get().elasticsearch);
-  //app = require('./app').app;
+  logger.info('connected to elasticsearch at: ', config.get().elasticsearch.host);
   app = require('./express').app;
+
+  if (config.get().mongodb) {
+    logger.info('connected to mongodb at: ', config.get().mongodb.uri);
+    var mongoose = require('mongoose')
+    mongoose.Promise = require('bluebird');
+    mongoose.connect(
+      config.get().mongodb.uri,
+      config.get().mongodb.options
+    );
+  }
+
   router = require('./express').router;
 };
 

@@ -21,6 +21,7 @@ var partialUpdateCollectionAsync = function(data, where) {
     if (index === -1) {
       throw new Error('Collection not found');
     }
+    data.updated_at = new Date()
     res[index] = _.assign(res[index], data);
     return fs.writeFileAsync(
       filename,
@@ -44,6 +45,7 @@ var updateCollectionAsync = function(data, where) {
       throw new Error('Collection not found');
     }
     // not assign but hard replace
+    data.updated_at = new Date()
     res[index] = data;
     return fs.writeFileAsync(
       filename,
@@ -86,6 +88,8 @@ var addCollectionAsync = function(data) {
     if (_.find(collections, {name: data.name})) {
       throw new Error('Collection with given name already exists')
     }
+    data.created_at = new Date()
+    data.updated_at = new Date()
     collections.push(data);
     return collections;
   })
