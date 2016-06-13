@@ -39,6 +39,7 @@
     "fs-extra": "^0.26.2",
     "lodash": "^3.10.1",
     "mongoose": "^4.4.20",
+    "moment": "^2.13.0",
     "morgan": "^1.7.0",
     "nconf": "^0.7.1",
     "randomstring": "^1.1.5",

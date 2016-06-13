@@ -153,7 +153,7 @@ setup.makeSuite('project service', function() {
     var data = {
       name: 'movies-2',
       auto: true,
-      url: 'https://raw.githubusercontent.com/itemsapi/itemsapi-example-data/master/items/movies.json'
+      url: 'https://raw.githubusercontent.com/itemsapi/itemsapi-example-data/master/items/movies-for-test.json'
     }
 
     projectService.createProjectAsync(data)

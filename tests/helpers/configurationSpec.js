@@ -4,8 +4,47 @@ var should = require('should');
 var assert = require('assert');
 //var helper = require('../index');
 var helper = require('./../../src/helpers/configuration');
+var _ = require('lodash')
 
 describe('configuration', function() {
+
+  it('should detect field type', function test(done) {
+    var type = helper.detectFieldType('a', ['a', 'a,b,c,d', 'c']);
+    type.should.be.equal('array')
+
+    var type = helper.detectFieldType('a', ['a', 'a', 'c']);
+    type.should.be.equal('repeatable_string')
+
+    var type = helper.detectFieldType('a', ['a', 'b', 'c']);
+    type.should.be.equal('string')
+
+    var type = helper.detectFieldType('a', ['a', 'b', 'c', '', '', '']);
+    type.should.be.equal('string')
+
+    //var type = helper.detectFieldType('$90 million', ['$90 million','$65,000,000', '£1 billion']);
+    //type.should.be.equal('string')
+
+    var type = helper.detectFieldType('81.36, 16.40');
+    type.should.be.equal('geo')
+
+    // should be detected as integer finally
+    var type = helper.detectFieldType('8.29');
+    type.should.be.equal('string')
+
+    var type = helper.detectFieldType('8888');
+    type.should.be.equal('string')
+
+    var type = helper.detectFieldType(81.36);
+    type.should.be.equal('float')
+
+    var type = helper.detectFieldType(false);
+    type.should.be.equal('boolean')
+
+    var type = helper.detectFieldType('06/22/2015');
+    type.should.be.equal('date')
+
+    done();
+  });
 
   it('should generate conf', function test(done) {
     var data = [{
@@ -37,7 +76,7 @@ describe('configuration', function() {
     schema.tags.should.have.property('display', 'array')
     schema.tags2.should.have.property('type', 'string')
     schema.tags2.should.have.property('display', 'array')
-    schema.date.should.have.property('type', 'date')
+    //schema.date.should.have.property('type', 'date')
     //schema.date2.should.have.property('type', 'date')
     schema.rating.should.have.property('type', 'integer')
     schema.rating2.should.have.property('type', 'float')
@@ -55,4 +94,28 @@ describe('configuration', function() {
     sortings.should.not.be.instanceOf(Array)
     done();
   });
+
+  it('should generate schema and detect array properly', function test(done) {
+    var data = [{
+      tags: 'a'
+    }, {
+      tags: 'a,b,c,d'
+    }, {
+      tags: 'c'
+    }, {
+      tags: undefined
+    }]
+
+    var singleArray = helper.rowsToSingleArray(_.map(data, 'tags'))
+    singleArray.length.should.be.equal(6)
+    //singleArray.should.equal(['a', 'a', 'b', 'c', 'd', 'c'])
+
+    var conf = helper.generateConfiguration(data);
+    var schema = conf.schema;
+    schema.tags.should.have.property('type', 'string')
+    schema.tags.should.have.property('display', 'array')
+    done();
+  });
+
+
 });
