@@ -18,17 +18,6 @@ exports.init = function (data) {
   require('./src/connections/elastic').init(config.get().elasticsearch);
   logger.info('connected to elasticsearch at: ', config.get().elasticsearch.host);
   app = require('./express').app;
-
-  if (config.get().mongodb) {
-    logger.info('connected to mongodb at: ', config.get().mongodb.uri);
-    var mongoose = require('mongoose')
-    mongoose.Promise = require('bluebird');
-    mongoose.connect(
-      config.get().mongodb.uri,
-      config.get().mongodb.options
-    );
-  }
-
   router = require('./express').router;
 };
 

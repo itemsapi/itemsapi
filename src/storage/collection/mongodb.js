@@ -3,10 +3,16 @@ var Promise = require('bluebird');
 var _ = require('lodash');
 var config = require('./../../../config/index').get();
 var Collection = require('./../../../src/models/collection');
+var logger = require('./../../../config/logger');
 
-var filename = config.collections.filename;
-
-// promise
+// if we have more mongodb usage then we can move it into server.js
+var mongoose = require('mongoose')
+mongoose.Promise = require('bluebird');
+mongoose.connect(
+  config.mongodb.uri,
+  config.mongodb.options
+);
+//logger.info('connected to mongodb at: ', config.mongodb.uri);
 
 /**
  * partial update collection
@@ -16,7 +22,19 @@ var partialUpdateCollectionAsync = function(data, where) {
     data.normalSchema = data.schema
     delete data.schema
   }
-  return Collection.update(where, { $set: data}).exec();
+
+  if (data.name && where.name !== data.name) {
+    return Promise.reject(new Error('Cannot change collection name'))
+  }
+
+  return Collection.findOne(where).exec()
+  .then(function(result) {
+    if (!result) {
+      throw new Error('Collection not found');
+    }
+
+    return Collection.update(where, { $set: data}).exec();
+  })
 }
 
 /**
@@ -27,6 +45,11 @@ var updateCollectionAsync = function(data, where) {
     data.normalSchema = data.schema
     delete data.schema
   }
+
+  if (data.name && where.name !== data.name) {
+    return Promise.reject(new Error('Cannot change collection name'))
+  }
+
   return Collection.findOne(where).exec()
   .then(function(result) {
     if (!result) {
@@ -34,7 +57,8 @@ var updateCollectionAsync = function(data, where) {
     }
   })
   .then(function(result) {
-    return Collection.update(where, { $set: data}).exec();
+    return Collection.update(where, data, {upsert: false}).exec()
+    //return Collection.update(where, { $set: data}).exec();
   })
 }
 
@@ -61,11 +85,18 @@ var addCollectionAsync = function(data) {
     data.normalSchema = data.schema
     delete data.schema
   }
-
-  var collection = new Collection(data)
-  return collection.save()
+  return Collection.findOne({name: data.name}).exec()
   .then(function(result) {
-    return data
+
+    if (result) {
+      throw new Error('Collection with given name already exists');
+    }
+
+    var collection = new Collection(data)
+    return collection.save()
+    .then(function(result) {
+      return data
+    })
   })
 }
 
@@ -77,10 +108,6 @@ var removeCollectionsAsync = function() {
   return Collection.remove().exec()
 }
 
-/**
- * get collections from json file
- * in the future it should supports other more scalable dbs like mongodb, mysql or redis
- */
 var getCollectionsAsync = function(data) {
   return Collection.find({}).sort({'created_at': -1}).exec()
   .then(function(res){
@@ -89,15 +116,13 @@ var getCollectionsAsync = function(data) {
       o.schema = o.normalSchema;
       delete o.normalSchema
       return o
-      //return o
-      //return o.toObject({ getters: false, virtuals: true })
     })
   });
 }
 
 module.exports = {
   partialUpdateCollectionAsync: partialUpdateCollectionAsync,
-  updateCollectionAsync: updateCollectionAsync,
+  //updateCollectionAsync: updateCollectionAsync,
   findCollectionAsync: findCollectionAsync,
   addCollectionAsync: addCollectionAsync,
   removeCollectionAsync: removeCollectionAsync,

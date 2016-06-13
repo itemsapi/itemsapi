@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Collection = new Schema({
-  name: String,
+  //name: {type: String, unique: true},
+  name: {type: String},
   type: String,
   index: String,
   // `schema` keyword is reserved :(
@@ -22,5 +23,7 @@ var Collection = new Schema({
 virtual.get(function () {
   return 'ok'
 });*/
+
+//Collection.index({ name: 1 })
 
 module.exports = mongoose.model('Collection', Collection);
