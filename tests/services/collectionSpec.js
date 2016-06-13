@@ -103,6 +103,8 @@ setup.makeSuite('collection service', function() {
       .then(function(res) {
         res.should.have.property('schema');
         res.should.have.property('name');
+        res.should.have.property('created_at');
+        res.should.have.property('updated_at');
         done();
       });
     })
@@ -140,6 +142,8 @@ setup.makeSuite('collection service', function() {
         res.should.have.property('name', 'new-collection');
         res.should.have.property('test', true);
         res.should.have.property('schema');
+        res.should.have.property('created_at');
+        res.should.have.property('updated_at');
         done();
       });
     })
