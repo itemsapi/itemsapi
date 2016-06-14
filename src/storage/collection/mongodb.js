@@ -68,12 +68,14 @@ var updateCollectionAsync = function(data, where) {
 var findCollectionAsync = function(where) {
   return Collection.findOne(where).exec()
   .then(function(result) {
+    if (!result) {
+      throw new Error('Not found collection');
+    }
     return result.toObject({ getters: false, virtuals: true })
   })
   .then(function(result) {
     result.schema = result.normalSchema;
-    delete result.normalSchema
-    return result
+    return _.omit(result, ['normalSchema', 'id', '_id', '__v'])
   })
 }
 
@@ -113,9 +115,8 @@ var getCollectionsAsync = function(data) {
   .then(function(res){
     return _.map(res, function(o) {
       o = o.toJSON()
-      o.schema = o.normalSchema;
-      delete o.normalSchema
-      return o
+      o.schema = o.normalSchema
+      return _.omit(o, ['normalSchema', 'id', '_id', '__v'])
     })
   });
 }

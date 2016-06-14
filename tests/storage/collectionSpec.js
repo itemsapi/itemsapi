@@ -56,20 +56,36 @@ setup.makeSuite('collections storage', function() {
         }
       })
       .then(function(res) {
-        storage.findCollectionAsync({
-          name: 'new-collection'
-        })
-        .then(function(res) {
-          res.should.have.property('schema');
-          res.schema.should.have.property('a', 'ok');
-          res.should.have.property('name');
-          res.should.have.property('type', 'type');
-          res.should.have.property('created_at');
-          res.should.have.property('updated_at');
-          done();
-        });
+        done();
       })
     });
+
+    it('should find collection', function(done) {
+      storage.findCollectionAsync({
+        name: 'new-collection'
+      })
+      .then(function(res) {
+        res.should.have.property('schema');
+        res.schema.should.have.property('a', 'ok');
+        res.should.have.property('name');
+        res.should.not.have.property('_id');
+        res.should.not.have.property('id');
+        res.should.not.have.property('__v');
+        res.should.have.property('type', 'type');
+        res.should.have.property('created_at');
+        res.should.have.property('updated_at');
+        done();
+      });
+    })
+
+    it('should not find unexistent collection', function(done) {
+      storage.findCollectionAsync({
+        name: 'new-collection-unexistent'
+      })
+      .catch(function(err) {
+        done();
+      });
+    })
 
     it('should not add collection with the same name', function(done) {
       storage.addCollectionAsync({
@@ -135,13 +151,17 @@ setup.makeSuite('collections storage', function() {
     it('should get collections list', function(done) {
       storage.getCollectionsAsync()
       .then(function(res) {
-        var collection = _.first(res)
+        var collection = _.head(res)
         collection.should.have.property('schema');
         collection.should.not.have.property('normalSchema');
         collection.schema.should.have.property('a', 'ok2');
         collection.should.have.property('name');
         collection.should.have.property('created_at');
         collection.should.have.property('updated_at');
+
+        collection.should.not.have.property('_id');
+        collection.should.not.have.property('id');
+        collection.should.not.have.property('__v');
         done()
       })
     });
