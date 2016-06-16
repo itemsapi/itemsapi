@@ -89,33 +89,64 @@ describe('configuration', function() {
     aggregations.should.have.property('rating');
     schema.should.have.property('name');
     schema.should.have.property('location');
-    //console.log(aggregations);
     var sortings = conf.sortings;
     sortings.should.not.be.instanceOf(Array)
     done();
   });
 
-  it('should generate schema and detect array properly', function test(done) {
-    var data = [{
-      tags: 'a'
-    }, {
-      tags: 'a,b,c,d'
-    }, {
-      tags: 'c'
-    }, {
-      tags: undefined
-    }]
+  it('should generate ranges', function test(done) {
+    var numbers = [1, 11]
 
-    var singleArray = helper.rowsToSingleArray(_.map(data, 'tags'))
-    singleArray.length.should.be.equal(6)
-    //singleArray.should.equal(['a', 'a', 'b', 'c', 'd', 'c'])
+    var ranges = helper.generateRanges(numbers, 5);
+    ranges.should.be.eql([1,3,5,7,9,11])
+    //console.log(helper.generateRangesForElastic(ranges));
 
-    var conf = helper.generateConfiguration(data);
-    var schema = conf.schema;
-    schema.tags.should.have.property('type', 'string')
-    schema.tags.should.have.property('display', 'array')
+    var numbers = [1,4]
+    var ranges = helper.generateRanges(numbers, 3)
+    ranges.should.be.eql([1,2,3,4])
+
+    var numbers = [1,10]
+    var ranges = helper.generateRanges(numbers, 4)
+    ranges.should.be.eql([1,3,5,7,10])
+
+    var numbers = [1950,2016]
+    var ranges = helper.generateRanges(numbers, 5)
+    ranges.should.be.eql([1950, 1963, 1976, 1989, 2002, 2016])
+
+    var numbers = [1930,2015]
+    var ranges = helper.generateRanges(numbers, 5)
+
+    var numbers = [1, 13333]
+    var ranges = helper.generateRanges(numbers, 5)
+
+    var numbers = [3, 10]
+    var ranges = helper.generateRanges(numbers)
+    ranges.should.be.eql([3, 4, 5, 6, 7, 8, 10])
+
+    var numbers = [2.5, 9.9]
+    var ranges = helper.generateRanges(numbers)
+    ranges.should.be.eql([2, 3, 4, 5, 6, 7, 8, 10])
+
+    var numbers = [2,4]
+    var ranges = helper.generateRanges(numbers);
+    ranges.should.be.eql([2, 3, 4])
     done();
   });
 
+  it('should generate range aggregation', function test(done) {
+    var data = [{
+      rating: 10
+    }, {
+      rating: 3
+    }, {
+      rating: 5
+    }]
+
+    var conf = helper.generateConfiguration(data);
+    var aggregations = conf.aggregations;
+    aggregations.should.have.property('rating');
+    //console.log(aggregations.rating.ranges);
+    done();
+  });
 
 });

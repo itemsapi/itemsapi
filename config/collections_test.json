@@ -86,7 +86,8 @@
                 "votes"
             ]
         },
-        "test": true
+        "test": true,
+        "updated_at": "2016-06-16T08:05:50.067Z"
     },
     {
         "name": "city",

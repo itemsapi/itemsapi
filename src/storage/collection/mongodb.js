@@ -123,7 +123,7 @@ var getCollectionsAsync = function(data) {
 
 module.exports = {
   partialUpdateCollectionAsync: partialUpdateCollectionAsync,
-  //updateCollectionAsync: updateCollectionAsync,
+  updateCollectionAsync: partialUpdateCollectionAsync,
   findCollectionAsync: findCollectionAsync,
   addCollectionAsync: addCollectionAsync,
   removeCollectionAsync: removeCollectionAsync,
