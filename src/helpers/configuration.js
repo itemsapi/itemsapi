@@ -170,34 +170,76 @@ var generateSorting = function(key, val, rows) {
   }
 }
 
+/**
+ * the easiest and simpliest algorithm
+ * it needs to be better
+ */
+var generateRanges = function(rows, count) {
+  count = count || 5
+  var min = _.floor(_.min(rows))
+  var max = _.ceil(_.max(rows))
+
+  if (max - min < count) {
+    count = max - min
+  }
+
+  //console.log(rows);
+  //console.log(min, max);
+  var step = parseInt(((max-min) / count))
+  //console.log(step);
+  var result = _.range(min, max, step)
+  //console.log(result);
+
+  if ((max-min) % count !== 0) {
+    result.pop()
+  }
+  result.push(max)
+  return result
+}
+
+exports.generateRanges = generateRanges
+
+/**
+ * the easiest and simpliest algorithm for generating number ranges
+ */
+var generateRangesForElastic = function(rows, count) {
+
+  var ranges = generateRanges(rows, count)
+  var output = []
+
+  for (var i = 0 ; i < ranges.length - 1 ; ++i) {
+    var obj = {
+      name: ranges[i] + ' - ' + ranges[i+1]
+    }
+
+    if (i === 0) {
+      obj.lte = ranges[i+1]
+    } else if (i === ranges.length - 2) {
+      obj.gte = ranges[i]
+    } else {
+      obj.lte = ranges[i+1]
+      obj.gte = ranges[i]
+    }
+
+    output.push(obj)
+  }
+  return output;
+}
+
+exports.generateRangesForElastic = generateRangesForElastic
+
 var generateAggregation = function(key, val, rows) {
   var type = detectFieldType(val, rows)
+
+  var ranges = generateRangesForElastic(rows)
+
 
   if (type === 'float' || type === 'integer') {
     return {
       type: 'range',
       field: key,
       title: key,
-      ranges: [
-        {
-          lte: 2,
-          name: '1 - 2'
-        },
-        {
-          lte: 3,
-          gte: 2,
-          name: '2 - 3'
-        },
-        {
-          gte: 3,
-          lte: 4,
-          name: '3 - 4'
-        },
-        {
-          gte: 4,
-          name: '4 - 5'
-        }
-      ]
+      ranges: ranges
     }
   } else if (type === 'geo') {
     return {
