@@ -183,12 +183,8 @@ var generateRanges = function(rows, count) {
     count = max - min
   }
 
-  //console.log(rows);
-  //console.log(min, max);
   var step = parseInt(((max-min) / count))
-  //console.log(step);
   var result = _.range(min, max, step)
-  //console.log(result);
 
   if ((max-min) % count !== 0) {
     result.pop()
