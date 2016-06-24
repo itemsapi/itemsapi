@@ -55,7 +55,7 @@ exports.searchAsync = function(data, collection) {
   if (data.key && data.val) {
     body.query(ejs.TermQuery(data.key, data.val));
   } else if (data.query) {
-    body.query(ejs.QueryStringQuery(data.query));
+    body.query(ejs.QueryStringQuery('"' + data.query + '"'));
   }
 
 

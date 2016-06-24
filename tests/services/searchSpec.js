@@ -5,16 +5,34 @@ var assert = require('assert');
 setup.makeSuite('search service', function() {
 
   var searchService = require('./../../src/services/search');
+  var dataService = require('./../../src/services/data');
   var projectService = require('./../../src/services/project');
   var importService = require('./../../src/services/import');
   var elasticTools = require('./../../src/elastic/tools');
   var fs = require('fs-extra');
 
   before(function(done) {
+
+    var data = [{
+      name: 'Godfather'
+    }, {
+      name: 'Fight club'
+    }, {
+      name: 'test/test'
+    }]
+
     projectService.ensureCollectionAsync({
       projectName: 'test',
       collectionName: 'movie'
-    }).delay(30).then(function(res) {
+    }).delay(30)
+    .then(function(res) {
+      dataService.addDocumentsAsync({
+        refresh: true,
+        collectionName: 'movie',
+        body: data
+      })
+    }).delay(100)
+    .then(function(res) {
       done();
     });
   });
@@ -24,7 +42,7 @@ setup.makeSuite('search service', function() {
       collectionName: 'movie'
     }).then(function(res) {
       res.should.have.property('data')
-      res.data.should.have.property('items');
+      res.data.should.have.property('items').and.lengthOf(3);
       res.data.should.have.property('aggregations');
       res.data.aggregations.should.be.an.instanceOf(Object);
       res.data.aggregations.should.not.be.an.instanceOf(Array);
@@ -34,6 +52,36 @@ setup.makeSuite('search service', function() {
       res.pagination.should.have.property('total');
       res.pagination.should.have.property('per_page');
       res.should.have.property('meta');
+      done();
+    });
+  });
+
+  it('should search godfather', function(done) {
+    searchService.searchAsync({
+      collectionName: 'movie',
+      query: 'godfather'
+    }).then(function(res) {
+      res.data.should.have.property('items').and.lengthOf(1);
+      done();
+    });
+  });
+
+  it('should search with not alphanumeric input', function(done) {
+    searchService.searchAsync({
+      collectionName: 'movie',
+      query: 'test/test'
+    }).then(function(res) {
+      res.data.should.have.property('items').and.lengthOf(1);
+      done();
+    });
+  });
+
+  it('should search in conjunctive way (AND instead of OR between query words)', function(done) {
+    searchService.searchAsync({
+      collectionName: 'movie',
+      query: 'godfather fight'
+    }).then(function(res) {
+      res.data.should.have.property('items').and.lengthOf(0);
       done();
     });
   });
