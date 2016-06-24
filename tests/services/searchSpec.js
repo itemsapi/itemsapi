@@ -31,7 +31,7 @@ setup.makeSuite('search service', function() {
         collectionName: 'movie',
         body: data
       })
-    })
+    }).delay(100)
     .then(function(res) {
       done();
     });
@@ -42,6 +42,7 @@ setup.makeSuite('search service', function() {
       collectionName: 'movie'
     }).then(function(res) {
       res.should.have.property('data')
+      console.log(res);
       res.data.should.have.property('items').and.lengthOf(3);
       res.data.should.have.property('aggregations');
       res.data.aggregations.should.be.an.instanceOf(Object);
