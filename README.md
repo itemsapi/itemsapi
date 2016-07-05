@@ -30,16 +30,11 @@ This backend offers functionality like:
 You can start with full stack package (itemsapi + dashboard) or with manual server installation. 
 More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_blank">getting started</a>.
 
-## Documentation
-
-To find out more go to the - <a href="https://itemsapi.readme.io" target="_blank">official documentation</a>.
-
-<a href="https://www.itemsapi.com" target="_blank">ItemsAPI website</a>
-
 ## Demo
 - <a href="http://app.itemsapi.com/" target="_blank">angular.js dashboard</a> with many different collections i.e. movies, quotes, libraries, etc
 
 ## Resources
+- https://itemsapi.readme.io (documentation)
 - https://blog.itemsapi.com
 - https://www.itemsapi.com/docs/tutorials/search-backend-for-restaurants-itemsapi-elasticsearch-nodejs (May 2016)
 - https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies (November 2015)
