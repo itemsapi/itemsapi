@@ -27,54 +27,8 @@ This backend offers functionality like:
 
 ## Getting started
 
-You can start with Heroku - it is one click deploy and easy backend creator:
-
-<a target="_blank" href="https://heroku.com/deploy?template=https://github.com/itemsapi/itemsapi-starter"><img src="https://camo.githubusercontent.com/c0824806f5221ebb7d25e559568582dd39dd1170/68747470733a2f2f7777772e6865726f6b7563646e2e636f6d2f6465706c6f792f627574746f6e2e706e67" alt="Deploy" data-canonical-src="https://www.herokucdn.com/deploy/button.png"></a>
-
-Install itemsapi package
-
-`$ npm install itemsapi --save`
-
-Starting ItemsAPI server:
-
-```js
-var itemsapi = require('itemsapi');
-
-itemsapi.init({
-  server: {
-    port: 5000
-  }
-})
-
-itemsapi.start(function serverStart(serverInstance) {
-  var host = serverInstance.address().address;
-  var port = serverInstance.address().port;
-  itemsapi.get('logger').info('ItemsAPI backend started on http://%s:%s', host, port)
-});
-```
-
-Searching items in your current `movie` collection 
-```js
-var ItemsAPI = require('itemsapi-node');
-var client = new ItemsAPI('http://localhost:5000/api/v1', 'movie');
-
-var facets = {
-  tags:['drama', 'war']
-};
-
-client.search({
-  sort: 'most_votes',
-  query: '',
-  page: 1,
-  aggs: JSON.stringify(facets),
-  per_page: 12
-}).then(function(res) {
-  console.log((res));
-})
-```
-
-(more information about node.js client API - https://github.com/itemsapi/itemsapi-node)
-
+You can start with full stack package (itemsapi + dashboard) or with manual server installation. 
+More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_blank">getting started</a>.
 
 ## Documentation
 
@@ -85,12 +39,10 @@ To find out more go to the - <a href="https://itemsapi.readme.io" target="_blank
 ## Demo
 - <a href="http://app.itemsapi.com/" target="_blank">angular.js dashboard</a> with many different collections i.e. movies, quotes, libraries, etc
 
-## Tutorials
+## Resources
+- https://blog.itemsapi.com
 - https://www.itemsapi.com/docs/tutorials/search-backend-for-restaurants-itemsapi-elasticsearch-nodejs (May 2016)
 - https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies (November 2015)
-
-## Testing
-`npm test`
 
 ## License
 ItemsAPI is licensed under the MIT Open Source license. For more information, see the LICENSE file in this repository.
