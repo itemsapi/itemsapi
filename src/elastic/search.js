@@ -5,6 +5,7 @@ var ejs = require('elastic.js');
 var collectionHelper = require('./../helpers/collection');
 var geoHelper = require('./../helpers/geo');
 var _ = require('lodash');
+var log = require('../../config/logger')
 
 /**
  * search documents (on low level)
@@ -58,8 +59,8 @@ exports.searchAsync = function(data, collection) {
     body.query(ejs.QueryStringQuery('"' + data.query + '"'));
   }
 
-
-
+  log.debug(JSON.stringify(body.toJSON(), null, 2));
+  //log.info(body.toJSON());
 
   return elastic.search({
     index: data.index,
