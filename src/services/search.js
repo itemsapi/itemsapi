@@ -83,6 +83,36 @@ exports.getFacetAsync = function(data) {
   })
 }
 
+exports.getProcessedFacetAsync = function(data) {
+  return exports.getFacetAsync(data)
+  .then(function(facet) {
+    var offset = data.per_page * (data.page - 1)
+    facet.data = {
+      buckets: facet.buckets.slice(
+        offset,
+        offset + data.per_page
+      )
+    }
+    facet.pagination = {
+      page: data.page,
+      per_page: data.per_page,
+      total: facet.doc_count
+    }
+
+    facet.meta = {
+      title: facet.title,
+      name: facet.name,
+      type: facet.type
+    }
+
+    facet = _.omit(facet, ['doc_count', 'size', 'title', 'name', 'type', 'buckets'])
+    return facet
+  })
+
+}
+
+
+
 /**
  * search documents
  */

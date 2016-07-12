@@ -210,10 +210,12 @@ exports.facets = function facets(req, res, next) {
 };
 
 exports.facet = function searchItems(req, res, next) {
-  return searchService.getFacetAsync({
+  return searchService.getProcessedFacetAsync({
     collectionName: req.params.name,
     facetName: req.params.facet,
-    size: req.query.size
+    size: parseInt(req.query.size || 100),
+    per_page: parseInt(req.query.per_page || 10),
+    page: parseInt(req.query.page || 1)
   })
   .then(function(result) {
     return res.json(result);
