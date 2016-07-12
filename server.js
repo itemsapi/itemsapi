@@ -1,27 +1,31 @@
 'use strict';
 
-var config = require('./config/index');
-var logger = require('./config/logger');
-var server;
-var app;
-var router;
+var config = require('./config/index')
+var logger
+var server
+var app
+var router
 
 /**
  * it inits application
+ * init logger
  * start elasticsearch
  * start mongoose if configured
  */
 exports.init = function (data) {
-  logger.info('app initialized');
   data = data || {};
   config.merge(data);
+  logger = require('./config/logger');
   require('./src/connections/elastic').init(config.get().elasticsearch);
   logger.info('connected to elasticsearch at: ', config.get().elasticsearch.host);
   app = require('./express').app;
   router = require('./express').router;
+  logger.info('app initialized');
 };
 
-
+/**
+ * any method should be called after init
+ */
 exports.get = function (name) {
   if (name === 'config') {
     return config.get();
