@@ -11,6 +11,7 @@
   "server": {
     "prefix": "/api/v1",
     "logger": ":remote-addr - :remote-user [:date[clf]] ':method :url HTTP/:http-version' :status :res[content-length] ':referrer' ':user-agent' - :response-time ms",
+    "logging_level": "info",
     "port": 3000
   },
   "collections": {
