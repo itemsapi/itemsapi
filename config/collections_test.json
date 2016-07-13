@@ -44,8 +44,8 @@
         },
         "aggregations": {
             "tags": {
-                "type": "tags",
-                "field": "actors",
+                "type": "terms",
+                "field": "tags",
                 "size": 10,
                 "title": "Tags"
             },
@@ -87,7 +87,7 @@
             ]
         },
         "test": true,
-        "updated_at": "2016-06-16T08:05:50.067Z"
+        "updated_at": "2016-07-12T20:29:13.990Z"
     },
     {
         "name": "city",
