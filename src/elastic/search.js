@@ -73,7 +73,7 @@ exports.searchAsync = function(data, collection) {
 
 /**
 */
-exports._searchasync = function(data) {
+exports._searchAsync = function(data) {
   return elastic.search({
     index: data.index,
     type: data.type,

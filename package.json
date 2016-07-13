@@ -1,6 +1,6 @@
 {
   "name": "itemsapi",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "description": "creating search application without spending time for backend",
   "main": "server.js",
   "scripts": {
@@ -52,9 +52,10 @@
   },
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-nodemon": "^0.4.0",
     "grunt-mocha-test": "^0.12.7",
+    "grunt-nodemon": "^0.4.0",
     "mocha": "^2.1.0",
+    "nock": "^8.0.0",
     "should": "^4.6.5",
     "sinon": "^1.15.3",
     "supertest": "^1.0.1"
