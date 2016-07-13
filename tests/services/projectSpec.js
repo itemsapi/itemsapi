@@ -2,6 +2,8 @@ var winston = require('winston');
 var should = require('should');
 var setup = require('./../mocks/setup');
 var assert = require('assert');
+var nock = require('nock');
+var fs = require('fs')
 
 setup.makeSuite('project service', function() {
 
@@ -9,6 +11,24 @@ setup.makeSuite('project service', function() {
   var collectionService = require('./../../src/services/collection');
   var statsService = require('./../../src/services/stats');
   var elasticClient = require('./../../src/connections/elastic');
+
+
+  before(function(done){
+    //nock.disableNetConnect();
+    //nock.enableNetConnect();
+    done();
+  });
+
+  beforeEach(function(done){
+    var cars = JSON.parse(
+      fs.readFileSync(__dirname + '/../fixtures/cars.json')
+    )
+    nock('https://raw.githubusercontent.com')
+    .get('/itemsapi/itemsapi-example-data/master/items/cars.json')
+    .reply(200, cars)
+    done();
+  });
+
 
   xit('should create project successfully', function(done) {
     projectService.addProjectAsync({
@@ -151,33 +171,31 @@ setup.makeSuite('project service', function() {
 
   it('should create project from scratch but using url', function(done) {
     var data = {
-      name: 'movies-2',
-      auto: true,
-      url: 'https://raw.githubusercontent.com/itemsapi/itemsapi-example-data/master/items/movies-for-test.json'
+      name: 'cars',
+      url: 'https://raw.githubusercontent.com/itemsapi/itemsapi-example-data/master/items/cars.json'
     }
 
     projectService.createProjectAsync(data)
     .then(function(res) {
-      res.should.have.property('name', 'movies-2');
+      res.should.have.property('name', 'cars');
       return collectionService.findCollectionAsync({
-        name: 'movies-2'
+        name: 'cars'
       })
     })
     .then(function(res) {
-      res.should.have.property('name', 'movies-2');
+      res.should.have.property('name', 'cars');
       res.should.have.property('schema');
       res.should.have.property('aggregations');
       //res.aggregations.should.have.property('rating');
       res.should.have.property('sortings');
       return collectionService.removeCollectionAsync({
-        name: 'movies-2'
+        name: 'cars'
       })
     })
     .then(function(res) {
       done();
     })
   });
-
 
 
 });

@@ -213,9 +213,11 @@ exports.facet = function searchItems(req, res, next) {
   return searchService.getProcessedFacetAsync({
     collectionName: req.params.name,
     facetName: req.params.facet,
-    size: parseInt(req.query.size || 100),
-    per_page: parseInt(req.query.per_page || 10),
-    page: parseInt(req.query.page || 1)
+    size: req.query.size,
+    per_page: req.query.per_page,
+    page: req.query.page,
+    sort: req.query.sort,
+    order: req.query.order
   })
   .then(function(result) {
     return res.json(result);

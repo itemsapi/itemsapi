@@ -1,5 +1,5 @@
 'use strict';
-var _ = require('underscore');
+var _ = require('lodash');
 
 module.exports = function(data) {
 
@@ -24,7 +24,7 @@ module.exports = function(data) {
   var getElasticSchema = function() {
     // omit non elasticsearch properties
     // elasticsearch 2.x is more strict about non elasticsearch properties
-    return _.mapObject(getSchema(), function(val, key) {
+    return _.mapValues(getSchema(), function(val, key) {
       return _.omit(val, 'display')
     });
     /*return _.mapObject(getSchema(), function(val, key) {
@@ -37,6 +37,28 @@ module.exports = function(data) {
   }
 
   /**
+   * update aggregation on fly
+   * by field, value or object with key value pairs
+   */
+  var updateAggregation = function(name, a, b) {
+    if (_.isArray(data.aggregations)) {
+      var index = _.findIndex(data.aggregations, {
+        name: name
+      })
+      if (!data.aggregations[index]) {
+        throw new Error('aggregation "' + name + '" doesnt exist')
+      }
+      data.aggregations[index][a] = b
+    } else {
+      if (!data.aggregations[name]) {
+        throw new Error('aggregation "' + name + '" doesnt exist')
+      }
+      data.aggregations[name][a] = b
+    }
+  }
+
+
+  /**
    * be careful with using that
    * especially that aggretations is now as array or object
    */
@@ -44,7 +66,7 @@ module.exports = function(data) {
     if (_.isArray(data.aggregations)) {
       return _.find(data.aggregations, {
         name: name
-      });
+      })
     }
     return data.aggregations[name] || null;
   }
@@ -99,6 +121,10 @@ module.exports = function(data) {
     return true;
   }
 
+  var getCollection = function() {
+    return data
+  }
+
   var getType = function() {
     return data.type || data.name;
   }
@@ -141,6 +167,8 @@ module.exports = function(data) {
     getType: getType,
     getIndex: getIndex,
     getSlugs: getSlugs,
-    getMetadata: getMetadata
+    getMetadata: getMetadata,
+    getCollection: getCollection,
+    updateAggregation: updateAggregation
   }
 };

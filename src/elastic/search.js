@@ -14,7 +14,7 @@ exports.searchAsync = function(data, collection) {
   var page = data.page || 1;
   var per_page = data.per_page || 10;
   var offset = (page - 1) * per_page;
-  data.geoPoint = geoHelper.getGeoPoint(data.aroundLatLng);
+  data.geoPoint = geoHelper.getGeoPoint(data.aroundLatLng)
 
   var body = ejs.Request()
   .size(per_page)
@@ -75,10 +75,10 @@ exports.searchAsync = function(data, collection) {
 */
 exports._searchAsync = function(data) {
   return elastic.search({
-index: data.index,
-type: data.type,
-body: data.body
-})
+    index: data.index,
+    type: data.type,
+    body: data.body
+  })
 }
 
 /**
@@ -99,16 +99,26 @@ exports.generateAggregations = function(aggregations, filters, input) {
 
     var aggregation = null;
     if (value.type === 'terms') {
+
+      value.sort = _.includes(['_count', '_term'], value.sort) ? value.sort : '_count'
+      value.order = _.includes(['asc', 'desc'], value.order) ? value.order : 'desc'
+      value.size = value.size || 10
+
+      log.debug(value)
+
       aggregation = ejs.TermsAggregation(key)
       .field(value.field)
       .size(value.size)
+      .order(value.sort, value.order)
 
-      if (value.order) {
+      // don't know what it was doing here..
+      // seems aggregation order by most common / mean values
+      /*if (value.order) {
         var avg_aggregation = ejs.AvgAggregation('visits_avg')
         .field('visits');
         aggregation.aggregation(avg_aggregation);
         aggregation.order('visits_avg', 'desc');
-      }
+      }*/
 
       if (value.exclude) {
         aggregation.exclude(value.exclude);
