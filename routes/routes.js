@@ -134,6 +134,11 @@ module.exports = function(router) {
    */
   router.get(['/facets/:name/:facet'], items.facet);
 
+  /**
+   * get facet with values (configured by size)
+   */
+  router.get(['/aggregations/:name/:facet'], items.facet);
+
   /*
    * search items using native (prefiltered) elasticsearch /_search endpoint
    */
