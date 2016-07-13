@@ -10,12 +10,19 @@ setup.makeSuite('collection helper', function() {
   var collectionHelper = require('./../../src/helpers/collection')
 
   var collection;
+  var cityCollection;
   before(function(done) {
     collectionService.findCollectionAsync({
       name: 'movie'
     })
     .then(function(res) {
       collection = res;
+      return collectionService.findCollectionAsync({
+        name: 'city'
+      })
+    })
+    .then(function(res) {
+      cityCollection = res;
       done();
     })
   });
@@ -87,4 +94,24 @@ setup.makeSuite('collection helper', function() {
     should(helper.getIndex()).be.equal('test');
     done();
   });
+
+  it('should update aggregation', function(done) {
+    // aggregations is object of object
+    var helper = collectionHelper(_.clone(collection))
+    helper.updateAggregation('tags', 'size', 15)
+    var aggregation = helper.getAggregation('tags')
+    aggregation.should.have.property('size', 15)
+    aggregation.should.have.property('type', 'terms')
+    aggregation.should.have.property('field', 'tags')
+
+    // aggregations is array of object
+    var helper = collectionHelper(_.clone(cityCollection))
+    helper.updateAggregation('country', 'size', 15)
+    var aggregation = helper.getAggregation('country')
+    aggregation.should.have.property('size', 15)
+    aggregation.should.have.property('type', 'terms')
+
+    done();
+  });
+
 });

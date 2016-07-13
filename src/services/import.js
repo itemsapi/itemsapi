@@ -8,6 +8,7 @@ var elasticMapping = require('./../../src/elastic/mapping');
 var collectionHelper = require('./../../src/helpers/collection');
 var _ = require('underscore');
 var fs = require('fs-extra');
+var Promise = require('bluebird');
 
 /**
  * import json and create full project
@@ -32,6 +33,8 @@ exports.import = function(data, callback) {
     });
   });
 }
+
+exports.importAsync = Promise.promisify(exports.import)
 
 /**
  * export collection

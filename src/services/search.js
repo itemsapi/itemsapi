@@ -43,6 +43,13 @@ exports.getFacetsAsync = function(data) {
 }
 
 exports.getFacetAsync = function(data) {
+
+  data.size = parseInt(data.size || 100),
+  data.per_page = parseInt(data.per_page || 10),
+  data.page = parseInt(data.page || 1),
+  data.order = data.order || '_count',
+  data.desc = data.desc || 'desc'
+
   return collectionService.findCollectionAsync({
     name: data.collectionName,
   })
@@ -50,23 +57,17 @@ exports.getFacetAsync = function(data) {
     var helper = collectionHelper(collection);
     data.index = helper.getIndex();
     data.type = helper.getType();
-    var collection_temp = _.clone(collection)
 
-    if (data.size) {
-      if (_.isArray(collection_temp.aggregations)) {
-        var index = _.findIndex(collection_temp.aggregations, {
-          name: data.facetName
-        })
-        collection_temp.aggregations[index].size = data.size
-      } else {
-        collection_temp.aggregations[data.facetName].size = data.size
-      }
-    }
+    var helper2 = collectionHelper(_.clone(collection))
+    helper2.updateAggregation(data.facetName, 'size', data.size)
+    helper2.updateAggregation(data.facetName, 'order', data.order)
+    helper2.updateAggregation(data.facetName, 'desc', data.desc)
 
-    data.collection = collection_temp;
-    return elastic.searchAsync(data, collection_temp);
+    data.collection = helper2.getCollection()
+    return elastic.searchAsync(data, helper2.getCollection())
   })
   .then(function(res) {
+    //console.log(res.aggregations.tags.tags);
     res = searchHelper().facetsConverter(data, res);
     return res;
   })

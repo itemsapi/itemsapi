@@ -1,0 +1,18 @@
+[
+    {
+      "name": "movie3",
+      "tags": ["a", "b", "c"]
+    },
+    {
+      "name": "movie4",
+      "tags": ["b", "c", "d"]
+    },
+    {
+      "name": "movie2",
+      "tags": ["b"]
+    },
+    {
+      "name": "movie1",
+      "tags": ["b", "c", "d"]
+    }
+]
