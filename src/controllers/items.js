@@ -216,8 +216,8 @@ exports.facet = function searchItems(req, res, next) {
     size: req.query.size,
     per_page: req.query.per_page,
     page: req.query.page,
-    order: req.query.order,
-    desc: req.query.desc
+    sort: req.query.sort,
+    order: req.query.order
   })
   .then(function(result) {
     return res.json(result);

@@ -100,13 +100,16 @@ exports.generateAggregations = function(aggregations, filters, input) {
     var aggregation = null;
     if (value.type === 'terms') {
 
-      value.order = _.includes(['_count', '_term'], value.order) ? value.order : '_count'
-      value.desc = _.includes(['asc', 'desc'], value.desc) ? value.desc : 'desc'
+      value.sort = _.includes(['_count', '_term'], value.sort) ? value.sort : '_count'
+      value.order = _.includes(['asc', 'desc'], value.order) ? value.order : 'desc'
+      value.size = value.size || 10
+
+      log.debug(value)
 
       aggregation = ejs.TermsAggregation(key)
       .field(value.field)
       .size(value.size)
-      .order(value.order, value.desc)
+      .order(value.sort, value.order)
 
       // don't know what it was doing here..
       // seems aggregation order by most common / mean values

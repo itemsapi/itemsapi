@@ -47,8 +47,8 @@ exports.getFacetAsync = function(data) {
   data.size = parseInt(data.size || 100),
   data.per_page = parseInt(data.per_page || 10),
   data.page = parseInt(data.page || 1),
-  data.order = data.order || '_count',
-  data.desc = data.desc || 'desc'
+  data.sort = data.sort || '_count',
+  data.order = data.order || 'desc'
 
   return collectionService.findCollectionAsync({
     name: data.collectionName,
@@ -60,8 +60,8 @@ exports.getFacetAsync = function(data) {
 
     var helper2 = collectionHelper(_.clone(collection))
     helper2.updateAggregation(data.facetName, 'size', data.size)
+    helper2.updateAggregation(data.facetName, 'sort', data.sort)
     helper2.updateAggregation(data.facetName, 'order', data.order)
-    helper2.updateAggregation(data.facetName, 'desc', data.desc)
 
     data.collection = helper2.getCollection()
     return elastic.searchAsync(data, helper2.getCollection())

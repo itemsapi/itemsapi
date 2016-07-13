@@ -97,8 +97,8 @@ setup.makeSuite('search service', function() {
       collectionName: 'movie',
       facetName: 'tags',
       per_page: 4,
-      order: '_term',
-      desc: 'asc'
+      sort: '_term',
+      order: 'asc'
     }).then(function(res) {
       res.should.have.properties(['data', 'pagination', 'meta'])
       res.pagination.should.have.properties({
@@ -118,8 +118,8 @@ setup.makeSuite('search service', function() {
       collectionName: 'movie',
       facetName: 'tags',
       per_page: 4,
-      order: '_term',
-      desc: 'desc'
+      sort: '_term',
+      order: 'desc'
     }).then(function(res) {
       res.should.have.properties(['data', 'pagination', 'meta'])
       res.pagination.should.have.properties({
