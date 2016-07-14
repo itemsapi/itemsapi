@@ -220,6 +220,7 @@ exports.facet = function searchItems(req, res, next) {
     sort: req.query.sort,
     order: req.query.order,
     aggs: req.query.aggs,
+    aggregation_query: req.query.aggregation_query,
     query: req.query.query
   })
   .then(function(result) {

@@ -44,13 +44,11 @@ exports.getFacetsAsync = function(data) {
 }
 
 exports.getFacetAsync = function(data) {
-
   data.size = parseInt(data.size || 100)
   data.per_page = parseInt(data.per_page || 10)
   data.page = parseInt(data.page || 1)
   data.sort = data.sort || '_count'
   data.order = data.order || 'desc'
-  data.query = data.query || ''
 
   if (data.aggs && _.isString(data.aggs)) {
     data.aggs = JSON.parse(data.aggs)
@@ -97,10 +95,19 @@ exports.getProcessedFacetAsync = function(data) {
   .then(function(facet) {
     var offset = data.per_page * (data.page - 1)
     facet.data = {
-      buckets: facet.buckets.slice(
+      buckets: _.chain(facet.buckets)
+      .filter(function(val) {
+        if (data.aggregation_query) {
+          return val.key.toLowerCase().indexOf(
+            data.aggregation_query.toLowerCase()
+          ) !== -1
+        }
+        return true
+      })
+      .slice(
         offset,
         offset + data.per_page
-      )
+      ).value()
     }
     facet.pagination = {
       page: data.page,
