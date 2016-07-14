@@ -1,7 +1,8 @@
 [
     {
       "name": "movie3",
-      "tags": ["a", "b", "c"]
+      "tags": ["a", "b", "c"],
+      "actors": ["a", "b"]
     },
     {
       "name": "movie4",
@@ -9,7 +10,8 @@
     },
     {
       "name": "movie2",
-      "tags": ["b"]
+      "tags": ["b"],
+      "actors": ["c"]
     },
     {
       "name": "movie1",

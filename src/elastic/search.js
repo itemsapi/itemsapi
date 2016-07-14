@@ -233,6 +233,10 @@ exports.generateAggregationFilters = function(aggregations, values) {
         aggregations: aggregations
       }).getAggregation(key);
 
+      if (!aggregation) {
+        throw new Error('aggregation "' + key + '" is not defined in conf')
+      }
+
       if (aggregation.type === 'terms') {
         aggregation_filters[key] = exports.generateTermsFilter(aggregation, value)
       } else if (aggregation.type === 'range') {
