@@ -134,7 +134,7 @@ setup.makeSuite('search service', function() {
     })
   })
 
-  it('should get processed aggregation and filtered by query', function(done) {
+  it('should get processed aggregation and filtered through items by query', function(done) {
     searchService.getProcessedFacetAsync({
       collectionName: 'movie',
       facetName: 'tags',
@@ -142,6 +142,19 @@ setup.makeSuite('search service', function() {
     }).then(function(res) {
       _.map(res.data.buckets, 'key').should.eql(
         ['b']
+      )
+      done();
+    })
+  })
+
+  it('should get processed aggregation and filtered through keys by query', function(done) {
+    searchService.getProcessedFacetAsync({
+      collectionName: 'movie',
+      facetName: 'tags',
+      aggregation_query: 'C'
+    }).then(function(res) {
+      _.map(res.data.buckets, 'key').should.eql(
+        ['c']
       )
       done();
     })
