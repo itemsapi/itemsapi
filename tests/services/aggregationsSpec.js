@@ -134,6 +134,50 @@ setup.makeSuite('search service', function() {
     })
   })
 
+  it('should get processed aggregation and filtered by query', function(done) {
+    searchService.getProcessedFacetAsync({
+      collectionName: 'movie',
+      facetName: 'tags',
+      query: 'movie2'
+    }).then(function(res) {
+      _.map(res.data.buckets, 'key').should.eql(
+        ['b']
+      )
+      done();
+    })
+  })
+
+  it('should get processed aggregation and filtered by aggs', function(done) {
+    searchService.getProcessedFacetAsync({
+      collectionName: 'movie',
+      facetName: 'tags',
+      aggs: {
+        actors_terms: ['a']
+      }
+    }).then(function(res) {
+      _.map(res.data.buckets, 'key').should.eql(
+        ['a', 'b', 'c']
+      )
+      done();
+    })
+  })
+
+  it('should get processed aggregation and filtered by aggs2', function(done) {
+    var aggs_stringified = JSON.stringify({
+      actors_terms: ['c']
+    })
+    searchService.getProcessedFacetAsync({
+      collectionName: 'movie',
+      facetName: 'tags',
+      aggs: aggs_stringified
+    }).then(function(res) {
+      _.map(res.data.buckets, 'key').should.eql(
+        ['b']
+      )
+      done();
+    })
+  })
+
   it('should not get movie notexistent_terms facet', function(done) {
     searchService.getFacetAsync({
       collectionName: 'movie',

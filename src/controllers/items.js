@@ -210,6 +210,7 @@ exports.facets = function facets(req, res, next) {
 };
 
 exports.facet = function searchItems(req, res, next) {
+
   return searchService.getProcessedFacetAsync({
     collectionName: req.params.name,
     facetName: req.params.facet,
@@ -217,7 +218,9 @@ exports.facet = function searchItems(req, res, next) {
     per_page: req.query.per_page,
     page: req.query.page,
     sort: req.query.sort,
-    order: req.query.order
+    order: req.query.order,
+    aggs: req.query.aggs,
+    query: req.query.query
   })
   .then(function(result) {
     return res.json(result);

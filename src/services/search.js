@@ -8,6 +8,7 @@ var searchHelper = require('../helpers/search');
 var collectionHelper = require('../helpers/collection');
 var collectionService = require('./collection');
 var slugs = require('../libs/slugs');
+var log = require('../../config/logger')
 
 exports.getFacetsAsync = function(data) {
   return collectionService.findCollectionAsync({
@@ -44,11 +45,18 @@ exports.getFacetsAsync = function(data) {
 
 exports.getFacetAsync = function(data) {
 
-  data.size = parseInt(data.size || 100),
-  data.per_page = parseInt(data.per_page || 10),
-  data.page = parseInt(data.page || 1),
-  data.sort = data.sort || '_count',
+  data.size = parseInt(data.size || 100)
+  data.per_page = parseInt(data.per_page || 10)
+  data.page = parseInt(data.page || 1)
+  data.sort = data.sort || '_count'
   data.order = data.order || 'desc'
+  data.query = data.query || ''
+
+  if (data.aggs && _.isString(data.aggs)) {
+    data.aggs = JSON.parse(data.aggs)
+  }
+
+  //log.debug(JSON.stringify(data));
 
   return collectionService.findCollectionAsync({
     name: data.collectionName,
