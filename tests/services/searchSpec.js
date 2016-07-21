@@ -90,7 +90,7 @@ setup.makeSuite('search service', function() {
   it('should search using the querystring language', function(done) {
     searchService.searchAsync({
       collectionName: 'movie',
-      querystring: 'name:FIG*'
+      query_string: 'name:FIG*'
     }).then(function(res) {
       res.data.should.have.property('items').and.lengthOf(1);
       done();
@@ -100,7 +100,7 @@ setup.makeSuite('search service', function() {
   it('should search using the querystring language 2', function(done) {
     searchService.searchAsync({
       collectionName: 'movie',
-      querystring: 'name:FIG* OR name:Godfather'
+      query_string: 'name:FIG* OR name:Godfather'
     }).then(function(res) {
       res.data.should.have.property('items').and.lengthOf(2);
       done();

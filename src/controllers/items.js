@@ -162,7 +162,7 @@ var searchItemsAsync = function(req, res, next) {
     page: page,
     per_page: per_page,
     query: req.query.query || '',
-    querystring: req.query.querystring || '',
+    query_string: req.query.query_string || '',
     sort: req.query.sort || '',
     key: req.query.key || '',
     val: req.query.val || '',
