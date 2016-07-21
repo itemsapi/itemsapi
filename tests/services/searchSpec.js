@@ -86,6 +86,27 @@ setup.makeSuite('search service', function() {
     });
   });
 
+  // https://www.elastic.co/guide/en/elasticsearch/reference/1.7/query-dsl-query-string-query.html
+  it('should search using the querystring language', function(done) {
+    searchService.searchAsync({
+      collectionName: 'movie',
+      querystring: 'name:FIG*'
+    }).then(function(res) {
+      res.data.should.have.property('items').and.lengthOf(1);
+      done();
+    });
+  });
+
+  it('should search using the querystring language 2', function(done) {
+    searchService.searchAsync({
+      collectionName: 'movie',
+      querystring: 'name:FIG* OR name:Godfather'
+    }).then(function(res) {
+      res.data.should.have.property('items').and.lengthOf(2);
+      done();
+    });
+  });
+
   it('should search city and get aggregations as array', function(done) {
     searchService.searchAsync({
       collectionName: 'city'

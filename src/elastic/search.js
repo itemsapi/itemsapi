@@ -55,7 +55,11 @@ exports.searchAsync = function(data, collection) {
 
   if (data.key && data.val) {
     body.query(ejs.TermQuery(data.key, data.val));
+  } else if (data.querystring) {
+    // i.e. 'actor:Pacino AND genre:Dram*'
+    body.query(ejs.QueryStringQuery(data.querystring));
   } else if (data.query) {
+    // i.e. 'Al Pacino'
     body.query(ejs.QueryStringQuery('"' + data.query + '"'));
   }
 
