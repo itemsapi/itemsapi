@@ -56,9 +56,7 @@ exports.searchAsync = function(data, collection) {
   if (data.key && data.val) {
     body.query(ejs.TermQuery(data.key, data.val));
   } else if (data.query_string && data.query) {
-    console.log('mix');
     var query_mix = '(' + data.query_string + ') AND "' + data.query + '"'
-    console.log(query_mix);
     body.query(
       ejs.QueryStringQuery(
         query_mix
