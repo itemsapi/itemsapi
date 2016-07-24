@@ -14,11 +14,14 @@ setup.makeSuite('search service', function() {
   before(function(done) {
 
     var data = [{
-      name: 'Godfather'
+      name: 'Godfather',
+      enabled: true
     }, {
-      name: 'Fight club'
+      name: 'Fight club',
+      enabled: false
     }, {
-      name: 'test/test'
+      name: 'test/test',
+      enabled: true
     }]
 
     projectService.ensureCollectionAsync({
@@ -103,6 +106,39 @@ setup.makeSuite('search service', function() {
       query_string: 'name:FIG* OR name:Godfather'
     }).then(function(res) {
       res.data.should.have.property('items').and.lengthOf(2);
+      done();
+    });
+  });
+
+  it('should search using the query and querystring language', function(done) {
+    searchService.searchAsync({
+      collectionName: 'movie',
+      query: 'fight',
+      query_string: 'name:FIG* OR name:Godfather'
+    }).then(function(res) {
+      res.data.should.have.property('items').and.lengthOf(1);
+      done();
+    });
+  });
+
+  it('should search using the query and querystring language 2', function(done) {
+    searchService.searchAsync({
+      collectionName: 'movie',
+      query: 'fight',
+      query_string: 'enabled:false'
+    }).then(function(res) {
+      res.data.should.have.property('items').and.lengthOf(1);
+      done();
+    });
+  });
+
+  it('should search using the query and querystring language 3', function(done) {
+    searchService.searchAsync({
+      collectionName: 'movie',
+      query: 'godfather',
+      query_string: 'enabled:false'
+    }).then(function(res) {
+      res.data.should.have.property('items').and.lengthOf(0);
       done();
     });
   });
