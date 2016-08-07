@@ -11,6 +11,7 @@ var Collection = new Schema({
   /*schema: {
     $type: String
   },*/
+  slugs: [String],
   extraSchema: Schema.Types.Mixed,
   aggregations: Schema.Types.Mixed,
   sortings: Schema.Types.Mixed,
