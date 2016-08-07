@@ -221,6 +221,7 @@ exports.facet = function searchItems(req, res, next) {
     sort: req.query.sort,
     order: req.query.order,
     aggs: req.query.aggs,
+    query_string: req.query.query_string,
     aggregation_query: req.query.aggregation_query,
     query: req.query.query
   })
