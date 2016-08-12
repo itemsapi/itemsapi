@@ -274,17 +274,6 @@ exports.similarAsync = function(data) {
   //http://okfnlabs.org/blog/2013/07/01/elasticsearch-query-tutorial.html
 
   var query = {
-    mlt:{
-      fields: data.fields,
-      ids: data.ids,
-      min_doc_freq: 0,
-      min_term_freq: 0
-    }, query_string: {
-      query: 'movie2'
-    }
-  }
-
-  var query = {
     filtered: {
       query: {
         mlt:{
