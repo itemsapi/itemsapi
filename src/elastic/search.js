@@ -269,6 +269,9 @@ exports.similarAsync = function(data) {
   //ejs.MoreLikeThisQuery('tags')
   //body.query(ejs.MoreLikeThisQuery('tags'));
   // elastic.js doesnt support `ids` so we need to write plain json query
+  //
+  // useful
+  //http://okfnlabs.org/blog/2013/07/01/elasticsearch-query-tutorial.html
 
   var query = {
     mlt:{
@@ -276,6 +279,31 @@ exports.similarAsync = function(data) {
       ids: data.ids,
       min_doc_freq: 0,
       min_term_freq: 0
+    }, query_string: {
+      query: 'movie2'
+    }
+  }
+
+  var query = {
+    filtered: {
+      query: {
+        mlt:{
+          fields: data.fields,
+          ids: data.ids,
+          min_doc_freq: 0,
+          min_term_freq: 0
+        }
+      }
+    }
+  }
+
+  if (data.query_string) {
+    query.filtered.filter = {
+      query: {
+        query_string: {
+          query: data.query_string
+        }
+      }
     }
   }
 
@@ -284,6 +312,7 @@ exports.similarAsync = function(data) {
     //from: 0,
     //size: 5
   }
+
   return elastic.search({
     index: data.index,
     type: data.type,

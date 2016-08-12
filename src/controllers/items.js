@@ -275,6 +275,7 @@ exports.similar = function similarItems(req, res, next) {
     collectionName: name,
     ids: [id],
     per_page: per_page,
+    query_string: req.query.query_string || '',
     fields: fields
   })
   .then(function(result) {

@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "name": "movie3",
+      "tags": ["a", "b", "c"],
+      "actors": ["a", "b"]
+    },
+    {
+      "id": 2,
+      "name": "movie4",
+      "tags": ["b", "c", "d"]
+    },
+    {
+      "id": 3,
+      "name": "movie2",
+      "tags": ["a", "b", "c"],
+      "actors": ["c"]
+    },
+    {
+      "id": 4,
+      "name": "movie1",
+      "tags": ["b"]
+    }
+]
