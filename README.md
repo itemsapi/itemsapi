@@ -30,8 +30,8 @@ This backend offers functionality like:
 You can start with full stack package (itemsapi + dashboard) or with manual server installation. 
 More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_blank">getting started</a>.
 
-## Demo
-- <a href="http://app.itemsapi.com/" target="_blank">angular.js dashboard</a> with many different collections i.e. movies, quotes, libraries, etc
+## Use cases
+- <a href="http://devteams.co/" target="_blank">Catalog of skilled software development companies from Europe</a>
 
 ## Resources
 - https://itemsapi.readme.io (documentation)
