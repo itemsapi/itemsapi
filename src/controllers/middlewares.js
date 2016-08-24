@@ -13,8 +13,7 @@ exports.checkAccess = function(req, res, next) {
       config.tokens.indexOf(token) === -1
     ) {
       return res.status(403).send({
-        success: false,
-        message: 'No token provided.'
+        message: 'No token provided'
       })
     }
 
