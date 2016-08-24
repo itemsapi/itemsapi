@@ -1,6 +1,3 @@
-var Promise = require('bluebird');
-var _ = require('underscore');
-//var helper = require('./../helpers/collection');
 var config = require('./../../config/index').get();
 
 /*

@@ -35,7 +35,7 @@ setup.makeSuite('creating items', function addSuite() {
       });
   });
 
-  /*it('should be able to get movie by id', function test(done) {
+  it('should be able to get movie by id', function test(done) {
     request(setup.getServer())
       .get('/api/v1/movie/' + id)
       .end(function afterRequest(err, res) {
@@ -94,5 +94,5 @@ setup.makeSuite('creating items', function addSuite() {
         res.status.should.equal(400);
         done();
       });
-  });*/
+  });
 })

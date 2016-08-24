@@ -23,7 +23,6 @@ setup.makeSuite('check access', function addSuite() {
   });
 
   it('should be authorized to query GET', function test(done) {
-    //console.log(setup.getServer().get('config'));
     request(setup.getServer())
     .get('/api/v1/privileged')
     .send({
@@ -35,10 +34,9 @@ setup.makeSuite('check access', function addSuite() {
   });
 
   it('should not be authorized to query DELETE', function test(done) {
-    var config = require('./../../config/index');
+    //var config = require('./../../config/index');
     //config.set('allowed_methods', ['GET'])
     //console.log(config.get());
-
     //console.log(setup.getConfig())
     //console.log(setup.a)
     //var a = setup.getConfig()
