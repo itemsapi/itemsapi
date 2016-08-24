@@ -95,4 +95,4 @@ setup.makeSuite('creating items', function addSuite() {
         done();
       });
   });
-});
+})

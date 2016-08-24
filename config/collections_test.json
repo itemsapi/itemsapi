@@ -87,7 +87,7 @@
             ]
         },
         "test": true,
-        "updated_at": "2016-07-12T20:29:13.990Z"
+        "updated_at": "2016-08-24T09:50:06.817Z"
     },
     {
         "name": "city",
@@ -138,5 +138,16 @@
                 "field": "geo"
             }
         }
+    },
+    {
+        "name": "privileged",
+        "project": "test",
+        "schema": {
+            "name": {
+                "type": "string",
+                "store": true
+            }
+        },
+        "updated_at": "2016-08-12T15:31:16.142Z"
     }
 ]
