@@ -8,7 +8,7 @@ exports.checkAccess = function(req, res, next) {
 
     if (
       config.allowed_methods &&
-      config.allowed_methods.length > 0 &&
+      config.allowed_methods !== '*' &&
       config.allowed_methods.indexOf(req.method) === -1 &&
       config.tokens.indexOf(token) === -1
     ) {

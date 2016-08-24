@@ -18,7 +18,7 @@
     "db": "json",
     "filename":  "./config/collections.json"
   },
-  "allowed_methods": [],
+  "allowed_methods": "*",
   "tokens": [],
   "hooks": {
     "limiter": {
