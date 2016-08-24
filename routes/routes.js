@@ -11,11 +11,17 @@ var items = require('./../src/controllers/items');
 var collections = require('./../src/controllers/collections');
 var mappings = require('./../src/controllers/mappings');
 var projects = require('./../src/controllers/projects');
+var middlewares = require('./../src/controllers/middlewares');
 
 /**
  * the order of routes matter
  */
 module.exports = function(router) {
+
+  /*
+   * check access by token
+   */
+  router.all('*', middlewares.checkAccess)
 
   /*
    * get stats

@@ -26,7 +26,17 @@ var server;
     var config = require('./../../config/index').get();
 
     server  = require(__dirname + '/../../server.js');
-    server.init();
+
+    // very dirty hack
+    // need to be fixed and more generic
+    if (name === 'check access') {
+      server.init({
+        allowed_methods: ['GET'],
+        tokens: ['abcdefgh']
+      });
+    } else {
+      server.init()
+    }
 
     describe(name, function describe() {
       before(function before(done) {
