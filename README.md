@@ -37,8 +37,8 @@ More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_bla
 
 ## Resources
 - https://itemsapi.readme.io (documentation)
-- https://blog.itemsapi.com
 - https://www.itemsapi.com/docs/tutorials/search-backend-for-restaurants-itemsapi-elasticsearch-nodejs (May 2016)
+- https://blog.itemsapi.com/visualize-data-with-angular-js-and-itemsapi-like-a-magician-461569670bb3
 - https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies (November 2015)
 
 ## License
