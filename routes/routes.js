@@ -176,23 +176,4 @@ module.exports = function(router) {
    * get specific item
    */
   router.get(['/items/:name/:id'], items.get);
-
-
-app.use(function errorRoute(err, req, res, next) {
-  logger.error(err, err.stack)
-
-  if (err.message) {
-    res.status(httpBadRequest).json({
-      error: err.message
-    })
-  } else {
-    res.status(httpBadRequest).json({
-      error: 'unknown error'
-    })
-  }
-  next();
-});
-
-
-
 }
