@@ -23,7 +23,7 @@ setup.makeSuite('item crud request', function() {
       collectionName: 'movie'
     }).then(function(res) {
       request(setup.getServer())
-      .post('/api/v1/movie')
+      .post('/api/v1/items/movie')
       .send(data)
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
@@ -48,5 +48,4 @@ setup.makeSuite('item crud request', function() {
         done();
       });
   });
-
 });

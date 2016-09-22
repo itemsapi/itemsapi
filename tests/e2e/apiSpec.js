@@ -18,7 +18,7 @@ setup.makeSuite('creating items', function addSuite() {
 
   it('should be able to post movie', function test(done) {
     request(setup.getServer())
-      .post('/api/v1/movie')
+      .post('/api/v1/items/movie')
       .send({
         body: {
           name: 'fight club',
@@ -60,7 +60,7 @@ setup.makeSuite('creating items', function addSuite() {
 
   it('should be able to get movie by id', function test(done) {
     request(setup.getServer())
-      .get('/api/v1/movie/' + id)
+    .get('/api/v1/items/movie/' + id)
       .end(function afterRequest(err, res) {
         //console.log(res.body);
         res.status.should.equal(200);
@@ -72,7 +72,7 @@ setup.makeSuite('creating items', function addSuite() {
 
   it('should not be able to get movie by id in not existent collection', function test(done) {
     request(setup.getServer())
-      .get('/api/v1/movie1000/' + id)
+      .get('/api/v1/items/movie1000/' + id)
       .end(function afterRequest(err, res) {
         should.exists(res.body.error);
         res.status.should.equal(400);
@@ -107,7 +107,7 @@ setup.makeSuite('creating items', function addSuite() {
   // temporary turned off
   it('should be able to post many movies', function test(done) {
     request(setup.getServer())
-      .post('/api/v1/movie')
+      .post('/api/v1/items/movie')
       .send([{name: 'god father 1'}, {name: 'god father 2'}])
       .end(function afterRequest(err, res) {
         res.body.ids.should.be.lengthOf(2);
@@ -120,7 +120,7 @@ setup.makeSuite('creating items', function addSuite() {
 
   it('should fail to post movie', function test(done) {
     request(setup.getServer())
-      .post('/api/v1/movie')
+      .post('/api/v1/items/movie')
       .send({
       })
       .end(function afterRequest(err, res) {
