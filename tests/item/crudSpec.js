@@ -27,7 +27,7 @@ setup.makeSuite('item crud request', function() {
   it('should make successfull post request', function(done) {
     var spy = sinon.spy(documentElastic, 'addDocumentAsync');
     request(setup.getServer())
-      .post('/api/v1/movie')
+      .post('/api/v1/items/movie')
       .send(data)
       .end(function afterRequest(err, res) {
         res.body.should.have.property('id', '100');
@@ -46,7 +46,7 @@ setup.makeSuite('item crud request', function() {
   it('should make successfull get request', function(done) {
     var spy = sinon.spy(documentElastic, 'getDocumentAsync');
     request(setup.getServer())
-      .get('/api/v1/movie/100')
+      .get('/api/v1/items/movie/100')
       .end(function afterRequest(err, res) {
         assert(spy.calledOnce);
         assert(spy.calledWithMatch({type: 'movie'}));
@@ -64,7 +64,7 @@ setup.makeSuite('item crud request', function() {
   xit('should make unsuccessfull get request to another project', function(done) {
     var spy = sinon.spy(documentElastic, 'getDocumentAsync');
     request(setup.getServer())
-      .get('/api/v1/movie/100?project=notexistent')
+      .get('/api/v1/items/movie/100?project=notexistent')
       .end(function afterRequest(err, res) {
         assert(spy.calledOnce);
         assert(spy.calledWithMatch({type: 'movie'}));
@@ -79,7 +79,7 @@ setup.makeSuite('item crud request', function() {
     //var spy = sinon.spy(elastic, 'search');
     var spy = sinon.spy(searchElastic, 'searchAsync');
     request(setup.getServer())
-      .get('/api/v1/movie')
+      .get('/api/v1/items/movie')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
         res.body.pagination.should.have.property('total', 1);
@@ -96,7 +96,7 @@ setup.makeSuite('item crud request', function() {
   it('should make successfull update request', function(done) {
     var spy = sinon.spy(documentElastic, 'updateDocumentAsync');
     request(setup.getServer())
-      .put('/api/v1/movie/100')
+      .put('/api/v1/items/movie/100')
       .send({rating: 6})
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
@@ -110,7 +110,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should make successfull get request', function(done) {
     request(setup.getServer())
-      .get('/api/v1/movie/100')
+      .get('/api/v1/items/movie/100')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
         res.body.should.have.property('rating', 6);
@@ -122,7 +122,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should make successfull delete request', function(done) {
     request(setup.getServer())
-      .delete('/api/v1/movie/100')
+      .delete('/api/v1/items/movie/100')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 200);
         done();
@@ -131,7 +131,7 @@ setup.makeSuite('item crud request', function() {
 
   it('should get not found response', function(done) {
     request(setup.getServer())
-      .get('/api/v1/movie/100')
+      .get('/api/v1/items/movie/100')
       .end(function afterRequest(err, res) {
         res.should.have.property('status', 400);
         done();
@@ -141,7 +141,7 @@ setup.makeSuite('item crud request', function() {
   it('should make successfull multi data post request', function(done) {
     var spy = sinon.spy(documentElastic, 'addDocumentsAsync');
     request(setup.getServer())
-      .post('/api/v1/movie')
+      .post('/api/v1/items/movie')
       .send(_.map([data, data, data], function(val) {
         return _.omit(val, 'id');
       }))

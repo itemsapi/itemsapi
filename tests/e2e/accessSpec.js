@@ -24,7 +24,7 @@ setup.makeSuite('check access', function addSuite() {
 
   it('should be authorized to query GET', function test(done) {
     request(setup.getServer())
-    .get('/api/v1/privileged')
+    .get('/api/v1/items/privileged')
     .send({
     })
     .end(function afterRequest(err, res) {
@@ -34,16 +34,8 @@ setup.makeSuite('check access', function addSuite() {
   });
 
   it('should not be authorized to query DELETE', function test(done) {
-    //var config = require('./../../config/index');
-    //config.set('allowed_methods', ['GET'])
-    //console.log(config.get());
-    //console.log(setup.getConfig())
-    //console.log(setup.a)
-    //var a = setup.getConfig()
-    //var spy = sinon.spy(setup.a, 'get');
-
     request(setup.getServer())
-    .delete('/api/v1/privileged')
+    .delete('/api/v1/items/privileged')
     .send({
     })
     .end(function afterRequest(err, res) {
@@ -56,7 +48,7 @@ setup.makeSuite('check access', function addSuite() {
 
   it('should be authorized to query POST because of provided token', function test(done) {
     request(setup.getServer())
-    .post('/api/v1/privileged')
+    .post('/api/v1/items/privileged')
     .send({
       token: 'abcdefgh'
     })
@@ -70,7 +62,7 @@ setup.makeSuite('check access', function addSuite() {
 
   it('should not be authorized to query POST because of wrong token', function test(done) {
     request(setup.getServer())
-    .post('/api/v1/privileged')
+    .post('/api/v1/items/privileged')
     .send({
       token: 'wrong'
     })
