@@ -35,6 +35,29 @@ setup.makeSuite('creating items', function addSuite() {
       });
   });
 
+  it('should be able to get movies', function test(done) {
+    request(setup.getServer())
+      .get('/api/v1/items/movie')
+      .end(function afterRequest(err, res) {
+        //console.log(res.body);
+        res.status.should.equal(200);
+        should.exists(res.body.meta);
+        should.exists(res.body.data);
+        should.exists(res.body.pagination);
+        done();
+      });
+  });
+
+  it('should not be able to get items from unexistent collection', function test(done) {
+    request(setup.getServer())
+      .get('/api/v1/items/movie1000')
+      .end(function afterRequest(err, res) {
+        res.status.should.equal(400);
+        should.exists(res.body.error);
+        done();
+      });
+  });
+
   it('should be able to get movie by id', function test(done) {
     request(setup.getServer())
       .get('/api/v1/movie/' + id)
@@ -43,6 +66,16 @@ setup.makeSuite('creating items', function addSuite() {
         res.status.should.equal(200);
         res.body.body.name.should.equal('fight club');
         res.body.body.key.should.equal('value');
+        done();
+      });
+  });
+
+  it('should not be able to get movie by id in not existent collection', function test(done) {
+    request(setup.getServer())
+      .get('/api/v1/movie1000/' + id)
+      .end(function afterRequest(err, res) {
+        should.exists(res.body.error);
+        res.status.should.equal(400);
         done();
       });
   });

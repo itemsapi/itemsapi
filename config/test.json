@@ -2,6 +2,10 @@
   "project": {
     "name": "test"
   },
+  "elasticsearch": {
+    "host": "localhost:9200",
+    "log": "error"
+  },
   "mongodb": {
     "uri": "mongodb://localhost:27017/itemsapi",
     "options": {}
