@@ -98,17 +98,17 @@ module.exports = function(router) {
   /*
    * create specific item
    */
-  router.post(['/items/:name', '/:name'], items.create);
+  router.post(['/items/:name'], items.create);
 
   /*
    * clean items
    */
-  router.delete(['/items/:name', '/:name'], items.clean);
+  router.delete(['/items/:name'], items.clean);
 
   /*
    * delete specific item
    */
-  router.delete(['/items/:name/:id', '/:name/:id'], items.delete);
+  router.delete(['/items/:name/:id'], items.delete);
 
   /*
    * enable / disable item
@@ -123,12 +123,12 @@ module.exports = function(router) {
   /*
    * search items
    */
-  router.get(['/items/:name', '/:name'], items.search);
+  router.get(['/items/:name'], items.search);
 
   /*
    * search items
    */
-  router.get(['/items/:name/export', '/:name/export'], items.export);
+  router.get(['/items/:name/export'], items.export);
 
   /**
    * get list of facets with values
@@ -175,5 +175,5 @@ module.exports = function(router) {
   /*
    * get specific item
    */
-  router.get(['/items/:name/:id', '/:name/:id'], items.get);
+  router.get(['/items/:name/:id'], items.get);
 }
