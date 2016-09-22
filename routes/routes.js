@@ -132,11 +132,13 @@ module.exports = function(router) {
 
   /**
    * get list of facets with values
+   * not specified in documentation. not recommended to use
    */
   router.get(['/facets/:name'], items.facets);
 
   /**
    * get facet with values (configured by size)
+   * not specified in documentation. not recommended to use
    */
   router.get(['/facets/:name/:facet'], items.facet);
 
@@ -144,6 +146,11 @@ module.exports = function(router) {
    * get facet with values (configured by size)
    */
   router.get(['/aggregations/:name/:facet'], items.facet);
+
+  /**
+   * get facet with values (configured by size)
+   */
+  router.get(['/aggregations/:name/field/:field_name'], items.facet);
 
   /*
    * search items using native (prefiltered) elasticsearch /_search endpoint

@@ -199,4 +199,36 @@ setup.makeSuite('search service', function() {
       done();
     })
   })
+
+  it('should get processed aggregation by field name (from schema)', function(done) {
+    searchService.getProcessedFacetAsync({
+      collectionName: 'movie',
+      fieldName: 'actors',
+      per_page: 4
+    }).then(function(res) {
+      res.should.have.properties(['data', 'pagination', 'meta'])
+      res.pagination.should.have.properties({
+        page: 1,
+        per_page: 4,
+        total: 4
+      })
+
+      _.map(res.data.buckets, 'key').should.eql(
+        ['a', 'b', 'c']
+      )
+      done();
+    })
+  })
+
+  it('should not get processed aggregation because of unexistent field', function(done) {
+    searchService.getProcessedFacetAsync({
+      collectionName: 'movie',
+      fieldName: 'actors_not_exist',
+      per_page: 4
+    }).catch(function(error) {
+      console.log(error.message);
+      done();
+    })
+  })
+
 })
