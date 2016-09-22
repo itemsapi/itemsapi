@@ -57,6 +57,18 @@ module.exports = function(data) {
     }
   }
 
+  /**
+   * add aggregation on fly (by field)
+   * by field, value or object with key value pairs
+   */
+  var addAggregation = function(name, obj) {
+    if (_.isArray(data.aggregations)) {
+      obj.name = name
+      data.aggregations.push(obj)
+    } else {
+      data.aggregations[name] = obj
+    }
+  }
 
   /**
    * be careful with using that
@@ -169,6 +181,7 @@ module.exports = function(data) {
     getSlugs: getSlugs,
     getMetadata: getMetadata,
     getCollection: getCollection,
-    updateAggregation: updateAggregation
+    updateAggregation: updateAggregation,
+    addAggregation: addAggregation
   }
 };

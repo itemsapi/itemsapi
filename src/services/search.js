@@ -65,9 +65,26 @@ exports.getFacetAsync = function(data) {
     data.type = helper.getType();
 
     var helper2 = collectionHelper(_.clone(collection))
-    helper2.updateAggregation(data.facetName, 'size', data.size)
-    helper2.updateAggregation(data.facetName, 'sort', data.sort)
-    helper2.updateAggregation(data.facetName, 'order', data.order)
+
+
+    if (data.facetName) {
+      helper2.updateAggregation(data.facetName, 'size', data.size)
+      helper2.updateAggregation(data.facetName, 'sort', data.sort)
+      helper2.updateAggregation(data.facetName, 'order', data.order)
+    } else if (data.fieldName) {
+
+      if (!helper.getSchema()[data.fieldName]) {
+        throw new Error('"' + data.fieldName + '" field is not supported in aggregation')
+      }
+
+      helper2.addAggregation(data.fieldName, {
+        size: data.size,
+        field: data.fieldName,
+        sort: data.sort,
+        type: 'terms',
+        order: data.order
+      })
+    }
 
     data.collection = helper2.getCollection()
     return elastic.searchAsync(data, helper2.getCollection())
@@ -78,13 +95,19 @@ exports.getFacetAsync = function(data) {
     return res;
   })
   .then(function(res) {
-    return _.find(res, {
-      name: data.facetName
-    })
+    if (data.facetName) {
+      return _.find(res, {
+        name: data.facetName
+      })
+    } else {
+      return _.find(res, {
+        name: data.fieldName
+      })
+    }
   })
   .then(function(res) {
     if (!res) {
-      throw new Error('facet doesnt exist')
+      throw new Error('Facet or field doesn\'t exist or is incorrect')
     }
     return res;
   })
