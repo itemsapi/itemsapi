@@ -180,8 +180,9 @@ exports.search = function(req, res, next) {
   return searchItemsAsync(req, res, next)
   .then(function(result) {
     return res.json(result);
-  }).catch(function(result) {
-    return next(result);
+  }).catch(function(error) {
+    //console.log('catch');
+    return next(error);
   });
 };
 

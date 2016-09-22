@@ -40,9 +40,17 @@ if (config.server.logger !== false) {
 var itemsRoutes = require('./routes/routes')(router);
 
 app.use(function errorRoute(err, req, res, next) {
-  // need to test it out
   logger.error(err, err.stack)
-  res.status(httpBadRequest).json(err);
+
+  if (err.message) {
+    res.status(httpBadRequest).json({
+      error: err.message
+    })
+  } else {
+    res.status(httpBadRequest).json({
+      error: 'unknown error'
+    })
+  }
   next();
 });
 
