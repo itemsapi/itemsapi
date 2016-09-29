@@ -41,5 +41,12 @@ More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_bla
 - https://blog.itemsapi.com/visualize-data-with-angular-js-and-itemsapi-like-a-magician-461569670bb3
 - https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies (November 2015)
 
+## Contribution rules
+- Code evolution is better than code revolution
+- It is good to have tests
+- Developer experience and solving real problems is more important than quality of code
+- Simplicity and easy to use is very important and we should make continuous improvement to achieve that 
+- https://www.itemsapi.com/docs/philosophy-and-methodology
+
 ## License
 ItemsAPI is licensed under the MIT Open Source license. For more information, see the LICENSE file in this repository.
