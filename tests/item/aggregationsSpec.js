@@ -39,12 +39,41 @@ setup.makeSuite('item crud request', function() {
     request(setup.getServer())
       .get('/api/v1/items/movie')
       .end(function afterRequest(err, res) {
-        console.log(res.body);
+        //console.log(res.body);
         res.should.have.property('status', 200);
         res.body.pagination.should.have.property('total', 3);
         var aggregations = res.body.data.aggregations;
         //console.log(aggregations);
         aggregations.should.have.property('tags');
+        aggregations.should.have.property('director_terms');
+        aggregations.should.have.property('actors_terms');
+        done();
+      });
+  });
+
+  it('should make search only with requested aggregations', function(done) {
+    request(setup.getServer())
+      .get('/api/v1/items/movie?load_aggs=tags,director_terms')
+      .end(function afterRequest(err, res) {
+        //console.log(res.body);
+        res.should.have.property('status', 200);
+        res.body.pagination.should.have.property('total', 3);
+        var aggregations = res.body.data.aggregations;
+        aggregations.should.have.property('tags');
+        aggregations.should.have.property('director_terms');
+        aggregations.should.not.have.property('actors_terms');
+        done();
+      });
+  });
+
+  it('should make search only with no aggregations', function(done) {
+    request(setup.getServer())
+      .get('/api/v1/items/movie?load_aggs=')
+      .end(function afterRequest(err, res) {
+        res.should.have.property('status', 200);
+        res.body.pagination.should.have.property('total', 3);
+        var aggregations = res.body.data.aggregations;
+        should.not.exist(aggregations);
         done();
       });
   });
