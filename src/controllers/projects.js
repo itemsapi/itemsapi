@@ -15,3 +15,15 @@ exports.create = function createProject(req, res, next) {
     return next(result);
   })
 };
+
+/*
+ * remove project (collection, mapping, items)
+ */
+exports.remove = function createProject(req, res, next) {
+  return projectService.removeProjectAsync(req.body)
+  .then(function(result) {
+    return res.json(result);
+  }).catch(function(result) {
+    return next(result);
+  })
+};

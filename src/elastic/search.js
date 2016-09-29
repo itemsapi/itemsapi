@@ -97,6 +97,12 @@ exports._searchAsync = function(data) {
  */
 exports.generateAggregations = function(aggregations, filters, input) {
   var input = input || {};
+
+  // load only desired aggregations
+  if (_.isArray(input.load_aggs)) {
+    aggregations = _.pick(aggregations, input.load_aggs)
+  }
+
   return _.map(aggregations, function(value, key) {
     // we considering two different aggregations formatting (object | array)
     key = value.name || key;
