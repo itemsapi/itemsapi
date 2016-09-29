@@ -151,13 +151,11 @@ var searchItemsAsync = function(req, res, next) {
   // it defines which aggregations should be loaded with search
   // empty load_aggs is best for performance but instead is not providing any aggregations
   var load_aggs = req.query.load_aggs;
-  console.log(load_aggs);
   if (load_aggs === '') {
     load_aggs = []
   } else if (load_aggs !== undefined) {
     load_aggs = load_aggs.split(',');
   }
-  console.log(load_aggs);
 
   var per_page = req.query.per_page || 10;
 

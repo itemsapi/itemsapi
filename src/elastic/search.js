@@ -103,8 +103,6 @@ exports.generateAggregations = function(aggregations, filters, input) {
     aggregations = _.pick(aggregations, input.load_aggs)
   }
 
-  console.log(aggregations);
-
   return _.map(aggregations, function(value, key) {
     // we considering two different aggregations formatting (object | array)
     key = value.name || key;

@@ -61,12 +61,7 @@ exports.createProjectAsync = function(data) {
  * remove project (collection + mapping + data)
  */
 exports.removeProjectAsync = function(data) {
-  var collection
-
 },
-
-
-
 
 /**
  * ensure if index exist, if not then create it
