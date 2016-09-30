@@ -5,20 +5,23 @@
 
 # ItemsAPI 
 
-<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> is restful search api written in node.js and elasticsearch.
+<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> - auto-generated search API in Node.js and Elasticsearch.
 
-The goal of this project is creating advanced search application without spending time for backend. You just provide json data and your backend is ready to go. You don't need to be node.js developer to use it.
+Best for:
+- lists and catalogs (restaurants, movies, gyms, doctors, places)
+- eCommerce
+- jobs search
+- booking systems
+- classifieds
+- recommendation systems (i.e. users who like this also like)
 
-With ItemsAPI you can create very easily:
-- various list and catalogs (restaurants, movies, gyms, doctors, places)
-- simple recommendation system (i.e. users who like this also like)
-
-This backend offers functionality like:
+Features:
 - full text searching
-- generating facets / aggregations out of the box
-- showing similar items (based on collaborative filtering algorithm)
-- generating nice urls for fields (permalinks) out of the box
+- aggregations / faceted search
+- similar items (collaborative filtering algorithm)
+- seo optimized - generating nice urls for fields (permalinks)
 - geo sorting
+- auto generating API based on your data
 
 ## Requirement
 - node.js
@@ -47,6 +50,12 @@ More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_bla
 - Developer experience and solving real problems is more important than quality of code
 - Simplicity and easy to use is very important and we should make continuous improvement to achieve that 
 - https://www.itemsapi.com/docs/philosophy-and-methodology
+
+## Credits
+- [@pilot](https://github.com/pilot), [@athlonU](https://github.com/athlonUA), [@pjedrzejewski](https://github.com/pjedrzejewski) for supporting and being first early adopters 
+
+## Author
+- ItemsAPI was originally created by [Matt Rzepa](http://matt89.com/).
 
 ## License
 ItemsAPI is licensed under the MIT Open Source license. For more information, see the LICENSE file in this repository.
