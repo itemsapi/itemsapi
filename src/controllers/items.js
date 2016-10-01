@@ -183,6 +183,8 @@ var searchItemsAsync = function(req, res, next) {
   .then(function(result) {
     result.meta.search_time = Date.now() - time;
     return result;
+  }).catch(function(error) {
+    return next(error);
   })
 };
 

@@ -206,7 +206,7 @@ exports.updateMappingAsync = function(data) {
       index: helper.getIndex(),
       type: helper.getType(),
       body: {
-        properties: collection.schema
+        properties: helper.getElasticSchema()
       }
     })
   })
