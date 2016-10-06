@@ -74,6 +74,34 @@
                 "type": "normal",
                 "order": "desc",
                 "field": "played"
+            },
+            "rating": {
+                "title": "Rating",
+                "type": "normal",
+                "order": "desc",
+                "field": "rating"
+            },
+            "mix": {
+                "title": "Rating",
+                "type": "normal",
+                "sort": [
+                    {
+                        "name": {
+                            "order": "asc"
+                        }
+                    },
+                    {
+                        "rating": {
+                            "order": "desc"
+                        }
+                    }
+                ]
+            },
+            "alphabetically": {
+                "title": "AZ",
+                "type": "normal",
+                "order": "asc",
+                "field": "name"
             }
         },
         "table": {

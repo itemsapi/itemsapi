@@ -1,0 +1,110 @@
+{
+    "name": "movie",
+    "project": "test",
+    "schema": {
+        "name": {
+            "type": "string",
+            "store": true
+        },
+        "permalink": {
+            "type": "string",
+            "store": true,
+            "index": "not_analyzed"
+        },
+        "key": {
+            "type": "string",
+            "index": "not_analyzed",
+            "store": true
+        },
+        "actors": {
+            "type": "string",
+            "display": "array",
+            "index": "not_analyzed",
+            "store": true
+        },
+        "tags": {
+            "type": "string",
+            "display": "array",
+            "index": "not_analyzed",
+            "store": true
+        },
+        "year": {
+            "type": "integer",
+            "store": true
+        },
+        "rating": {
+            "type": "string",
+            "store": true
+        },
+        "image": {
+            "type": "string",
+            "display": "image"
+        }
+    },
+    "aggregations": {
+        "tags": {
+            "type": "terms",
+            "field": "tags",
+            "size": 10,
+            "title": "Tags"
+        },
+        "actors_terms": {
+            "type": "terms",
+            "field": "actors",
+            "size": 10,
+            "title": "Actors"
+        },
+        "director_terms": {
+            "type": "terms",
+            "field": "director",
+            "size": 5,
+            "title": "Directors"
+        }
+    },
+    "sortings": {
+        "favorites": {
+            "title": "Favorites count",
+            "type": "normal",
+            "order": "desc",
+            "field": "favorites"
+        },
+        "played": {
+            "title": "Played count",
+            "type": "normal",
+            "order": "desc",
+            "field": "played"
+        },
+        "rating": {
+            "title": "Rating",
+            "type": "normal",
+            "order": "desc",
+            "field": "rating"
+        },
+        "mix": {
+            "title": "Rating",
+            "type": "normal",
+            "sort": [
+                { "name" : {"order" : "asc"}},
+                { "rating" : {"order" : "desc"}}
+            ]
+        },
+        "alphabetically": {
+            "title": "AZ",
+            "type": "normal",
+            "order": "asc",
+            "field": "name"
+        }
+    },
+    "table": {
+        "fields": [
+            "image",
+            "name",
+            "director",
+            "rating",
+            "year",
+            "votes"
+        ]
+    },
+    "test": true,
+    "updated_at": "2016-10-01T09:52:20.547Z"
+}
