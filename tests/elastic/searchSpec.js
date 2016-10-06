@@ -3,10 +3,103 @@ var async = require('async');
 var winston = require('winston');
 var should = require('should');
 var setup = require('./../mocks/setup');
+var fs = require('fs-extra');
 
 setup.makeSuite('elastic data', function() {
 
   var search = require('./../../src/elastic/search');
+
+
+  // this test should be extended
+  describe('should build search query', function() {
+
+    var collection = JSON.parse(
+      fs.readFileSync(__dirname + '/../fixtures/movie_collection.json')
+    )
+
+    it('generates search query', function(done) {
+      var body = search.searchBuilder({
+        page: 1,
+      }, collection)
+      var json = body
+      json.should.have.property('size');
+      json.should.have.property('from');
+      json.should.have.property('aggs');
+      // it exists but it is empty
+      json.should.have.property('filter');
+      done();
+    });
+
+    it('generates search query without aggregations', function(done) {
+      var body = search.searchBuilder({
+        page: 1,
+        load_aggs: []
+      }, collection)
+      var json = body
+      json.should.have.property('size');
+      json.should.have.property('from');
+      json.should.not.have.property('aggs');
+      // it exists but it is empty
+      json.should.have.property('filter');
+      done();
+    });
+
+    it('generates search query with sort', function(done) {
+      var body = search.searchBuilder({
+        page: 1,
+        sort: 'rating',
+        load_aggs: []
+      }, collection)
+      var json = body
+      json.should.have.property('size');
+      json.should.have.property('from');
+      json.should.not.have.property('aggs');
+      json.should.have.property('sort');
+      done();
+    });
+
+    it('generates search query with multi-field sort', function(done) {
+      var body = search.searchBuilder({
+        page: 1,
+        sort: 'mix',
+        load_aggs: []
+      }, collection)
+      var json = body
+      console.log(JSON.stringify(json.sort))
+      json.should.have.property('size');
+      json.should.have.property('from');
+      json.should.not.have.property('aggs');
+      json.should.have.property('sort');
+      done();
+    });
+  })
+
+  describe('should build range filter for aggregations', function() {
+    var options = {
+      //name: 'actors_terms',
+      type: 'terms',
+      field: 'actors',
+      size: 10,
+      title: 'Actors'
+    };
+
+    it('generates terms filter', function(done) {
+      var filter = search.generateTermsFilter(options, ['drama', 'fantasy']).toJSON();
+      console.log(filter);
+      filter.should.have.property('terms');
+      filter.terms.actors[0].should.be.equal('drama');
+      filter.terms.actors.should.be.instanceOf(Array).and.have.lengthOf(2);
+      done();
+    });
+
+    it('generates conjunctive terms filter', function(done) {
+      options.conjunction = true;
+      var filter = search.generateTermsFilter(options, ['drama', 'fantasy']).toJSON();
+      filter.should.have.property('and');
+      filter.and.should.have.property('filters').and.have.lengthOf(2);
+      done();
+    });
+  });
 
   describe('should build range filter for aggregations', function() {
     var options = {
@@ -132,6 +225,23 @@ setup.makeSuite('elastic data', function() {
       sort.toJSON()._geo_distance.should.have.property('unit', 'km');
       sort.toJSON()._geo_distance.should.have.property('geo');
 
+      done();
+    });
+
+    it('should build multi field sorting', function(done) {
+      var options = {
+        title: 'Rating',
+        //type: 'normal',
+        sort: [
+          { name : {order: 'asc'}},
+          { rating : {order: 'desc'}}
+        ]
+      };
+
+      var sort = search.generateSort(options);
+      // sort is not elastic.js object here
+      //sort.toJSON().should.be.instanceOf(Array).and.have.lengthOf(2);
+      //console.log(sort.toJSON());
       done();
     });
 

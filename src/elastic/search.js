@@ -7,10 +7,11 @@ var geoHelper = require('./../helpers/geo');
 var _ = require('lodash');
 var log = require('../../config/logger')
 
+
 /**
- * search documents (on low level)
+ * ItemsAPI search builder
  */
-exports.searchAsync = function(data, collection) {
+exports.searchBuilder = function(data, collection) {
   var page = data.page || 1;
   var per_page = data.per_page || 10;
   var offset = (page - 1) * per_page;
@@ -24,7 +25,9 @@ exports.searchAsync = function(data, collection) {
 
   var sortOptions = helper.getSorting(data.sort) || helper.getDefaultSorting();
   var sort = exports.generateSort(sortOptions, data);
-  if (sort) {
+
+  //console.log(sort.toJSON())
+  if (sort && !_.isArray(sort)) {
     body.sort(sort);
   }
   var aggregationsOptions = helper.getAggregations();
@@ -71,8 +74,29 @@ exports.searchAsync = function(data, collection) {
   }
 
   log.debug(JSON.stringify(body.toJSON(), null, 2));
-  //log.info(body.toJSON());
 
+  // we return json object instead of elastic.js object
+  // because elastic.js is not flexible in many cases
+  body = body.toJSON()
+
+  // elastic.js doesn't support custom array like in
+  // https://www.elastic.co/guide/en/elasticsearch/reference/1.5/search-request-sort.html
+  // so we need to hack body query
+  if (_.isArray(sort)) {
+    body['sort'] = sort
+  }
+
+  return body
+
+}
+
+/**
+ * search documents (on low level)
+ */
+exports.searchAsync = function(data, collection) {
+  var body = exports.searchBuilder(data, collection)
+
+  //console.log(body);
   return elastic.search({
     index: data.index,
     type: data.type,
@@ -167,7 +191,15 @@ exports.generateSort = function(sortOptions, input) {
   var input = input || {};
 
   if (sortOptions) {
+
     var sort = ejs.Sort(sortOptions.field)
+    // dont use query builder but directly return array of sorted fields
+    // it is multi field sorting
+    if (sortOptions.sort) {
+      return sortOptions.sort
+    }
+
+
     if (!sortOptions.type || sortOptions.type === 'normal') {
     } else if (sortOptions.type === 'geo') {
       sort.geoDistance(ejs.GeoPoint(input.geoPoint)).unit('km')
