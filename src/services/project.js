@@ -12,6 +12,7 @@ var dataService = require('./data');
 var config = require('./../../config/index').get();
 var logger = require('./../../config/logger');
 var request = Promise.promisifyAll(require('request'));
+var randomstring = require('randomstring')
 
 /**
  * create project (collection + mapping + items)
@@ -61,6 +62,27 @@ exports.createProjectAsync = function(data) {
  * remove project (collection + mapping + data)
  */
 exports.removeProjectAsync = function(data) {
+
+  var helper
+  var collection
+  return collectionService.findCollectionAsync({
+    name: data.name
+  })
+  .then(function(_collection) {
+    collection = _collection
+    helper = collectionHelper(collection)
+
+    return collectionService.removeCollectionAsync({
+      name: data.name
+    })
+  })
+  .then(function(res) {
+    return elastic.deleteMappingAsync({
+      index: helper.getIndex(),
+      type: helper.getType(),
+      masterTimeout: 1
+    })
+  })
 },
 
 /**
@@ -121,6 +143,8 @@ exports.reindexAsync = function(data) {
   var new_type = data.new_type
   var new_index = data.new_index
 
+
+
   if (!new_type || !new_index || !old_type || !old_index) {
     throw new Error('Provide data value for reindexing')
   }
@@ -161,11 +185,14 @@ exports.reindexCollectionAsync = function(data) {
       host: config.elasticsearch.host,
       old_index: helper.getIndex(),
       old_type: helper.getType(),
-      new_type: data.new_type,
+      new_type: data.new_type || randomstring.generate({
+        charset: 'abcdefghijklmnoprstuwxyz',
+        length: 8
+      }),
       new_index: data.new_index || helper.getIndex()
     }
 
-    if (reindex_data.old_type === reindex_data.new_type || reindex_data.old_index === reindex_data.new_index) {
+    if (reindex_data.old_type === reindex_data.new_type && reindex_data.old_index === reindex_data.new_index) {
       throw new Error('there should be provided new_type or new_index different then current one')
     }
 
@@ -180,7 +207,7 @@ exports.reindexCollectionAsync = function(data) {
   })
   .then(function(res) {
     logger.info('reindexed data')
-    return collectionService.updateCollectionAsync({
+    return collectionService.partialUpdateCollectionAsync({
       index: reindex_data.new_index,
       type: reindex_data.new_type
     }, {

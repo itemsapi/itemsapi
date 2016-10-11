@@ -308,6 +308,17 @@ setup.makeSuite('elastic mapping', function() {
       })
     });
 
+    it('should delete not existent mapping successfully', function(done) {
+      model.deleteMappingAsync({
+        index: 'test',
+        type: 'city_not_exists'
+      }).then(function (res) {
+        res.should.have.property('acknowledged', true);
+        res.should.have.property('notExisted', true);
+        done();
+      })
+    });
+
     it('should not find mapping', function(done) {
       model.getMappingForType({
         index: 'test',

@@ -12,7 +12,7 @@ var Promise = require('bluebird');
 
 /**
  * import json and create full project
- * ensure project
+ * ensure index
  * ensure mapping
  * add documents
  */
@@ -22,6 +22,10 @@ exports.import = function(data, callback) {
   })
   .then(function(res) {
     data.projectName = res.project;
+    //data.index = 'test'
+    //console.log(data);
+    // @important should get index from collection
+    // `project` is deprecated
     return projectService.ensureCollectionAsync(data)
   })
   .then(function(res) {

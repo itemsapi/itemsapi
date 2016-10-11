@@ -46,19 +46,13 @@ var server;
           var projectService  = require('./../../src/services/project');
           elasticClient.flushdb({index: 'test'}, function(err, res) {
             // need to add mapping for all test collections
-
-            //require('./../../src/elastic/mapping').addSettingsAsync(settings)
-            //.then(function(res) {
-              projectService.addMappingAsync({
-                index: 'test',
-                type: 'movie'
-              })
-              .then(function(res) {
-                //console.log('add mapping');
-                done();
-              })
-            //})
-            //})
+            projectService.addMappingAsync({
+              index: 'test',
+              type: 'movie'
+            })
+            .then(function(res) {
+              done();
+            })
           });
         });
       });
