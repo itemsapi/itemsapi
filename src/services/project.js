@@ -62,7 +62,6 @@ exports.createProjectAsync = function(data) {
  * remove project (collection + mapping + data)
  */
 exports.removeProjectAsync = function(data) {
-
   var helper
   var collection
   return collectionService.findCollectionAsync({
@@ -79,8 +78,7 @@ exports.removeProjectAsync = function(data) {
   .then(function(res) {
     return elastic.deleteMappingAsync({
       index: helper.getIndex(),
-      type: helper.getType(),
-      masterTimeout: 1
+      type: helper.getType()
     })
   })
 },
