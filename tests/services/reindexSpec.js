@@ -17,7 +17,7 @@ setup.makeSuite('project service', function() {
   var elasticData = require('./../../src/elastic/data');
   var mapping = Promise.promisifyAll(require('./../../src/elastic/mapping'));
 
-  var is_skipped = true;
+  /*var is_skipped = true;
   before(function(done) {
     if (is_skipped) {
       this.skip();
@@ -208,5 +208,5 @@ setup.makeSuite('project service', function() {
       res.permalink.should.have.property('index', 'not_analyzed');
       done()
     })
-  })
+  })*/
 });
