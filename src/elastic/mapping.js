@@ -86,7 +86,6 @@ exports.getSettingsAsync = function(data) {
  * add settings
  */
 exports.addSettingsAsync = function(data) {
-  console.log(data);
   var indexconf = {
     index: data.index
   }
@@ -110,11 +109,9 @@ exports.addSettingsAsync = function(data) {
     })
   })
   .then(function (res) {
-    console.log('close');
     return elastic.indices.putSettings(data)
   })
   .then(function (res) {
-    console.log('settings');
     return elastic.indices.open(indexconf)
   })
 },
@@ -197,8 +194,6 @@ exports.deleteMappingAsync = function(data) {
  */
 exports.getMappingForType = function(data, callback) {
   elastic.indices.getMapping(data, function(err, res, status) {
-    console.log(res);
-    console.log(status);
     if (err) {
       winston.error(err);
       return callback(err);

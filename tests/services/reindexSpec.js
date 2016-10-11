@@ -17,7 +17,6 @@ setup.makeSuite('project service', function() {
   var elasticData = require('./../../src/elastic/data');
   var mapping = Promise.promisifyAll(require('./../../src/elastic/mapping'));
 
-
   // force delete
   before(function(done){
     return collectionService.removeCollectionAsync({
@@ -55,12 +54,6 @@ setup.makeSuite('project service', function() {
 
   after(function(done){
     done();
-    /*projectService.removeProjectAsync({
-      name: 'reindex'
-    })
-    .then(function(res) {
-      done()
-    })*/
   })
 
   it('should reindex index / type', function(done) {
@@ -154,10 +147,8 @@ setup.makeSuite('project service', function() {
       })
     })
     .then(function(res) {
-      console.log(res);
       res.should.have.property('index');
       res.should.have.property('name');
-      //res.should.have.property('name');
       done()
     })
   })
@@ -172,7 +163,6 @@ setup.makeSuite('project service', function() {
       name: data.collectionName
     })
     .then(function(res) {
-      console.log(res.schema);
       res.schema.permalink = {
         type: 'string',
         store: true,
@@ -197,6 +187,7 @@ setup.makeSuite('project service', function() {
     .then(function(res) {
       return elasticTools.refreshAsync()
     })
+    .delay(500)
     .then(function(res) {
       return mapping.getMappingForTypeAsync({
         index: 'reindex',
@@ -204,10 +195,9 @@ setup.makeSuite('project service', function() {
       })
     })
     .then(function(res) {
-      console.log(res);
-      //res.should.have.property('index');
-      //res.should.have.property('name');
-      //res.should.have.property('name');
+      res.should.have.property('city');
+      res.should.have.property('permalink');
+      res.permalink.should.have.property('index', 'not_analyzed');
       done()
     })
   })
