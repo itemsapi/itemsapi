@@ -61,6 +61,8 @@ exports.deleteIndex = function(data, callback) {
   })
 },
 
+exports.deleteIndexAsync = Promise.promisify(exports.deleteIndex);
+
 /**
  * validation for adding mapping (collection schema)
  */
@@ -84,7 +86,6 @@ exports.getSettingsAsync = function(data) {
  * add settings
  */
 exports.addSettingsAsync = function(data) {
-  console.log(data);
   var indexconf = {
     index: data.index
   }
@@ -108,11 +109,9 @@ exports.addSettingsAsync = function(data) {
     })
   })
   .then(function (res) {
-    console.log('close');
     return elastic.indices.putSettings(data)
   })
   .then(function (res) {
-    console.log('settings');
     return elastic.indices.open(indexconf)
   })
 },
@@ -172,7 +171,7 @@ exports.existsTypeAsync = exports.existsMappingAsync,
   /**
    * delete mapping
    */
-  exports.deleteMappingAsync = function(data) {
+exports.deleteMappingAsync = function(data) {
   return exports.existsMappingAsync(data)
   .then(function (res) {
     if (!res) {
@@ -205,6 +204,8 @@ exports.getMappingForType = function(data, callback) {
     callback(null, res[data.index].mappings[data.type].properties);
   })
 }
+
+exports.getMappingForTypeAsync = Promise.promisify(exports.getMappingForType)
 
 /**
  * get mapping for index / type

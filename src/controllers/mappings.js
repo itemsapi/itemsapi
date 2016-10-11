@@ -14,9 +14,10 @@ exports.get = function getCollectionInfo(req, res, next) {
     name: name
   })
   .then(function(collection) {
+    var helper = collectionHelper(collection);
     return elasticMapping.getMappingAsync({
-      type: collection.name,
-      index: collection.project
+      index: helper.getIndex(),
+      type: helper.getType()
     })
   })
   .then(function(mapping) {

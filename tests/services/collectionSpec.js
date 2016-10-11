@@ -120,7 +120,12 @@ setup.makeSuite('collection service', function() {
   it('should forbid adding duplicate collection', function(done) {
     collectionService.addCollectionAsync({
       name: 'new-collection',
-      schema: {}
+      schema: {
+        name: {
+          type: 'string',
+          store: true
+        }
+      }
     })
     .catch(function(err) {
       done();
@@ -144,6 +149,32 @@ setup.makeSuite('collection service', function() {
         res.should.have.property('schema');
         res.should.have.property('created_at');
         res.should.have.property('updated_at');
+        done();
+      });
+    })
+  });
+
+  it('should update schema in collection partially', function(done) {
+    return collectionService.partialUpdateCollectionAsync({
+      schema: {
+        permalink: {
+          type: 'string',
+          store: true
+        }
+      }
+    }, {
+      name: 'new-collection'
+    })
+    .then(function(res) {
+      collectionService.findCollectionAsync({
+        name: 'new-collection'
+      })
+      .then(function(res) {
+        res.should.have.property('name', 'new-collection');
+        res.should.have.property('test', true);
+        res.should.have.property('schema');
+        res.schema.should.have.property('permalink');
+        res.schema.should.not.have.property('name');
         done();
       });
     })
