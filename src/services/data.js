@@ -21,7 +21,7 @@ exports.addDocumentAsync = function(data) {
     var helper = collectionHelper(collection);
 
     return slugs.setSlugsAsync(
-      helper.getType(),
+      helper.getName(),
       helper.getSlugs(),
       dataHelper.inputMapper(data.body, collection)
     ).then(function(res) {
@@ -54,7 +54,7 @@ exports.updateDocumentAsync = function(data) {
   .then(function(collection) {
     var helper = collectionHelper(collection);
     return slugs.setSlugsAsync(
-      helper.getType(),
+      helper.getName(),
       helper.getSlugs(),
       dataHelper.inputMapper(data.body, collection)
     ).then(function(res) {
@@ -189,7 +189,7 @@ exports.addDocumentsAsync = function(data) {
 
     // adding slugs mapping to key value datastore
     return slugs.setSlugsAsync(
-      helper.getType(),
+      helper.getName(),
       helper.getSlugs(),
       dataHelper.inputMapper(data.body, collection)
     ).then(function(res) {
