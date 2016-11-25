@@ -17,10 +17,8 @@ exports.init = function (data) {
   config.merge(data);
   logger = require('./config/logger');
   require('./src/connections/elastic').init(config.get().elasticsearch);
-  logger.info('connected to elasticsearch at: ', config.get().elasticsearch.host);
   app = require('./express').app;
   router = require('./express').router;
-  logger.info('app initialized');
 };
 
 /**
