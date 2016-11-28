@@ -4,7 +4,36 @@ The most used Elasticsearch version for ItemsAPI is 1.7.x so it is also recommen
 
 ## Manual installation
 
-- Ubuntu 14.04 https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-elasticsearch-on-ubuntu-14-04
+### Installation
+
+`$ sudo add-apt-repository -y ppa:webupd8team/java`
+`sudo apt-get update`
+`sudo apt-get -y install oracle-java8-installer`
+`wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb`
+`sudo dpkg -i elasticsearch-1.7.2.deb`
+`sudo service elasticsearch start`
+
+### Testing
+`curl -X GET 'http://localhost:9200'`
+
+```js
+Output of curl
+{
+  "status" : 200,
+  "name" : "Harry Leland",
+  "cluster_name" : "elasticsearch",
+  "version" : {
+    "number" : "1.7.2",
+    "build_hash" : "e43676b1385b8125d647f593f7202acbd816e8ec",
+    "build_timestamp" : "2015-09-14T09:49:53Z",
+    "build_snapshot" : false,
+    "lucene_version" : "4.10.4"
+  },
+  "tagline" : "You Know, for Search"
+}
+```
+
+You'll find more informations here https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-elasticsearch-on-ubuntu-14-04
 
 ## Start with docker
 
@@ -15,8 +44,8 @@ The most used Elasticsearch version for ItemsAPI is 1.7.x so it is also recommen
 
 ## Cloud version
 
-- https://aws.amazon.com/elasticsearch-service/ - if you have AWS account this is the easiest way to start ES. 
-It is also paid per hour so great for experimenting.
+- https://aws.amazon.com/elasticsearch-service/ - if you have AWS account this is very easy way to start ES. 
+It is also paid per hour so great for testing & experimenting.
 - https://www.digitalocean.com/ - there is no Elasticsearch package but it is relatively easy to create new server (i.e. Ubuntu 14.04).
 You can also make tests, experiments and make server snapshot for further use   
 - https://www.elastic.co/cloud
