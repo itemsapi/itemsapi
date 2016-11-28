@@ -6,12 +6,12 @@ The most used Elasticsearch version for ItemsAPI is 1.7.x so it is also recommen
 
 ### Installation
 
-`$ sudo add-apt-repository -y ppa:webupd8team/java`
-`sudo apt-get update`
-`sudo apt-get -y install oracle-java8-installer`
-`wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb`
-`sudo dpkg -i elasticsearch-1.7.2.deb`
-`sudo service elasticsearch start`
+1. `sudo add-apt-repository -y ppa:webupd8team/java`
+2. `sudo apt-get update`
+3. `sudo apt-get -y install oracle-java8-installer`
+4. `wget https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.2.deb`
+5. `sudo dpkg -i elasticsearch-1.7.2.deb`
+5. `sudo service elasticsearch start`
 
 ### Testing
 `curl -X GET 'http://localhost:9200'`
