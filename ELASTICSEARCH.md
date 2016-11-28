@@ -10,6 +10,7 @@ The most used Elasticsearch version for ItemsAPI is 1.7.x so it is also recommen
 
 - `docker run -p 127.0.0.1:9250:9200 elasticsearch:1.7.6` (it creates elasticsearch 1.7.6 instance on 127.0.0.1:9250)
 - `docker run -p 127.0.0.1:9250:9200 elasticsearch:1.7.6` (it creates elasticsearch 1.7.6 instance on 127.0.0.1:9250)
+
 (if you have docker installed on your localhost and have even very basic understanding, it can be the easiest way to start ES) 
 
 ## Cloud version
