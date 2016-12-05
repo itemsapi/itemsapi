@@ -37,7 +37,7 @@ You'll find more informations here https://www.digitalocean.com/community/tutori
 
 ## Start with docker
 
-- `docker run -p 127.0.0.1:9250:9200 elasticsearch:1.7.6` (it creates elasticsearch 1.7.6 instance on 127.0.0.1:9250)
+- `docker run -p 9200:9200 elasticsearch:1.7.6` (it creates elasticsearch 1.7.6 instance on 9200 port)
 - `docker run -p 127.0.0.1:9250:9200 elasticsearch:1.7.6` (it creates elasticsearch 1.7.6 instance on 127.0.0.1:9250)
 - `docker run -d -p 127.0.0.1:9250:9200 elasticsearch:1.7.6` (it runs ES in background. You can see process here `docker ps`)
 
