@@ -48,8 +48,7 @@ More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_bla
 ## Contribution rules
 - Code evolution is better than code revolution
 - It is good to have tests
-- Developer experience and solving real problems is more important than quality of code
-- Simplicity and easy to use is very important and we should make continuous improvement to achieve that 
+- Quality of code is important but developer experience (DX) is a top! 
 - https://www.itemsapi.com/docs/philosophy-and-methodology
 
 ## Credits
