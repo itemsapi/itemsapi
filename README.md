@@ -51,11 +51,5 @@ More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_bla
 - Quality of code is important but developer experience (DX) is a top! 
 - https://www.itemsapi.com/docs/philosophy-and-methodology
 
-## Credits
-- [@pilot](https://github.com/pilot), [@athlonU](https://github.com/athlonUA), [@pjedrzejewski](https://github.com/pjedrzejewski) for supporting and being first early adopters 
-
-## Author
-- ItemsAPI was originally created by [Matt Rzepa](http://matt89.com/).
-
 ## License
-ItemsAPI is licensed under the MIT Open Source license. For more information, see the LICENSE file in this repository.
+ItemsAPI is created by Mateusz Rzepa and licensed under the Apache 2.0. For more information, see the LICENSE file in this repository.
