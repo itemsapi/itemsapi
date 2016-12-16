@@ -1,7 +1,7 @@
 {
   "name": "itemsapi",
   "version": "1.0.56",
-  "description": "creating search application without spending time for backend",
+  "description": "Search API designed for creating marketplaces and vertical search applications",
   "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test mocha tests/*",
@@ -9,10 +9,9 @@
   },
   "author": "Mateusz Rzepa",
   "repository": "itemsapi/itemsapi",
-  "license": "MIT",
+  "license": "Apache 2.0",
   "keywords": [
     "faceted",
-    "algolia",
     "aggregations",
     "items",
     "autocomplete",

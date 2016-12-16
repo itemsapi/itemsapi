@@ -13,6 +13,7 @@ var config = require('./../../config/index').get();
 var logger = require('./../../config/logger');
 var request = Promise.promisifyAll(require('request'));
 var randomstring = require('randomstring')
+var fs = require('fs')
 
 /**
  * create project (collection + mapping + items)
@@ -154,6 +155,11 @@ exports.reindexAsync = function(data) {
 
   return new Promise(function(resolve, reject) {
     var command = `${__dirname}/../../node_modules/elasticsearch-reindex/bin/elasticsearch-reindex.js -f ${host}/${old_index}/${old_type} -t ${host}/${new_index}/${new_type}`;
+
+    if (!fs.existsSync(command)) {
+      command = `node_modules/elasticsearch-reindex/bin/elasticsearch-reindex.js -f ${host}/${old_index}/${old_type} -t ${host}/${new_index}/${new_type}`;
+    }
+
     logger.info(command);
     exec(command, (error, stdout, stderr) => {
       console.log(stdout);

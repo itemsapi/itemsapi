@@ -9,6 +9,7 @@ var searchService = Promise.promisifyAll(require('./../src/services/search'));
 var collectionService = require('./../src/services/collection');
 var items = require('./../src/controllers/items');
 var collections = require('./../src/controllers/collections');
+var slugs = require('./../src/controllers/slugs');
 var mappings = require('./../src/controllers/mappings');
 var projects = require('./../src/controllers/projects');
 var middlewares = require('./../src/controllers/middlewares');
@@ -27,6 +28,16 @@ module.exports = function(router) {
    * get stats
    */
   router.get('/stats', items.stats);
+
+  /*
+   * reindex slugs
+   */
+  router.put('/slugs/:name/reindex', slugs.reindex);
+
+  /*
+   * get value for slug key
+   */
+  router.get('/slugs/:name/:field/:key', slugs.get);
 
   /*
    * delete collection
