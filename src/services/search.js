@@ -214,3 +214,10 @@ exports.similarAsync = function(data) {
     return searchHelper().similarConverter(data, res);
   })
 }
+
+exports.countAsync = function(data) {
+  return exports.searchAsync(data)
+  .then(function(results) {
+    return results.pagination.total
+  })
+}

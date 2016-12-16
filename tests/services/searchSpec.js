@@ -191,6 +191,15 @@ setup.makeSuite('search service', function() {
       });
     });
 
+    it('should return results count', function(done) {
+      searchService.countAsync({
+        collectionName: 'city'
+      }).then(function(res) {
+        assert.equal(res, 6)
+        done();
+      });
+    });
+
     it('should sort by geolocation (london)', function(done) {
       searchService.searchAsync({
         collectionName: 'city',

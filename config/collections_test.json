@@ -42,6 +42,9 @@
                 "display": "image"
             }
         },
+        "slugs": [
+            "tags"
+        ],
         "aggregations": {
             "tags": {
                 "type": "terms",
@@ -115,7 +118,7 @@
             ]
         },
         "test": true,
-        "updated_at": "2016-10-11T14:21:06.868Z"
+        "updated_at": "2016-12-16T15:10:39.858Z"
     },
     {
         "name": "city",
