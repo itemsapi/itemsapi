@@ -142,9 +142,8 @@ exports.metadata = function getCollectionInfo(req, res, next) {
  * (create new mapping on custom index/type, copy data there, and update collection configuration)
  */
 exports.reindex = function (req, res, next) {
-  var name = req.params.name;
   return projectService.reindexCollectionAsync({
-    collectionName: name,
+    collectionName: req.params.name,
     new_type: req.query.new_type,
     new_index: req.query.new_index
   })

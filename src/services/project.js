@@ -142,8 +142,6 @@ exports.reindexAsync = function(data) {
   var new_type = data.new_type
   var new_index = data.new_index
 
-
-
   if (!new_type || !new_index || !old_type || !old_index) {
     throw new Error('Provide data value for reindexing')
   }
@@ -160,14 +158,16 @@ exports.reindexAsync = function(data) {
       command = `node_modules/elasticsearch-reindex/bin/elasticsearch-reindex.js -f ${host}/${old_index}/${old_type} -t ${host}/${new_index}/${new_type}`;
     }
 
-    logger.info(command);
+    logger.info('Reindexing started.. Please wait..')
+    logger.profile('collection reindexing')
     exec(command, (error, stdout, stderr) => {
-      console.log(stdout);
+      logger.profile('collection reindexing')
+      logger.info(stdout)
       if (error !== null) {
         logger.error(`exec error: ${error}`);
         return reject(error)
       }
-      return resolve(stdout)
+      return resolve()
     });
   })
 },

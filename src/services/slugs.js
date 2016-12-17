@@ -4,6 +4,7 @@ var searchService = require('./../../src/services/search');
 var Promise = require('bluebird');
 var _ = require('lodash')
 var slugs = require('../libs/slugs');
+var logger = require('./../../config/logger');
 
 /**
  * reindex slugs for collection
@@ -20,6 +21,8 @@ exports.reindexAsync = function(data) {
     return searchService.countAsync({
       collectionName: data.collectionName,
     }).then(function(count) {
+      logger.info('Reindexing started.. Please wait..')
+      logger.profile('slugs reindexing')
       return Promise.map(_.range(Math.ceil(count / per_page)), function(i) {
         return searchService.searchAsync({
           collectionName: data.collectionName,
@@ -36,7 +39,9 @@ exports.reindexAsync = function(data) {
           ).then(function(res) {
           })
         }, {concurrency: 100})
-      }, {concurrency: 1}).then(function() {
+      }, {concurrency: 1})
+      .then(function() {
+        logger.profile('slugs reindexing')
       });
     })
 
