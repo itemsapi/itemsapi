@@ -263,6 +263,7 @@ var generateAggregation = function(key, val, rows) {
     return {
       type: 'terms',
       size: 15,
+      conjunction: true,
       field: key,
       title: key
     }
