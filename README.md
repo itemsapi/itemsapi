@@ -26,8 +26,7 @@ Features:
 
 ## Requirement
 - node.js
-- java
-- elasticsearch > 1.4 < 2.0 
+- elasticsearch 1.5.x or 1.7.x
 
 ## Getting started
 
