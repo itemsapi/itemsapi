@@ -1,6 +1,6 @@
 {
   "name": "itemsapi",
-  "version": "1.0.60",
+  "version": "1.0.61",
   "description": "Search API designed for creating marketplaces and vertical search applications",
   "main": "server.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "bluebird": "^3.3.3",
     "body-parser": "^1.13.1",
     "cli": "^0.8.0",
+    "colors": "^1.1.2",
     "compression": "^1.5.0",
     "cors": "^2.7.1",
     "elastic.js": "^1.2.0",
@@ -37,8 +38,8 @@
     "express-limiter": "^1.6.0",
     "fs-extra": "^0.26.2",
     "lodash": "^3.10.1",
-    "mongoose": "^4.4.20",
     "moment": "^2.13.0",
+    "mongoose": "^4.4.20",
     "morgan": "^1.7.0",
     "nconf": "^0.7.1",
     "randomstring": "^1.1.5",
