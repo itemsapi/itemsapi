@@ -1,5 +1,7 @@
 'use strict';
 var _ = require('lodash');
+var ipaddr = require('ipaddr.js');
+
 
 exports.checkAccess = function(input, config) {
   input = input || {}
@@ -16,7 +18,9 @@ exports.checkAccess = function(input, config) {
   }
 
   // check ip
-  if (config.allowed_ips && config.allowed_ips.indexOf(input.ip) === -1) {
+  if (config.allowed_ips && input.ip && _.findIndex(config.allowed_ips, function(ip) {
+    return _.isEqual(ipaddr.process(input.ip), ipaddr.process(ip)) === true
+  }) === -1) {
     return false
   }
 

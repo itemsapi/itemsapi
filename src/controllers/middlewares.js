@@ -7,7 +7,7 @@ var helper = require('./../helpers/security')
 exports.checkAccess = function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
-    if (helper.checkAccess({
+    if (!helper.checkAccess({
       token: token,
       method: req.method,
       ip: req.ip

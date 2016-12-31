@@ -37,6 +37,7 @@
     "express-init": "0.0.1",
     "express-limiter": "^1.6.0",
     "fs-extra": "^0.26.2",
+    "ipaddr.js": "^1.2.0",
     "lodash": "^3.10.1",
     "moment": "^2.13.0",
     "mongoose": "^4.4.20",

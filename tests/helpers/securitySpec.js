@@ -21,6 +21,18 @@ setup.makeSuite('security helper', function() {
       allowed_ips: ['127.0.0.1']
     }))
 
+    assert.equal(false, helper.checkAccess({
+      ip: '127.0.0.1'
+    }, {
+      allowed_ips: ['127']
+    }))
+
+    assert.equal(true, helper.checkAccess({
+      ip: '::ffff:127.0.0.1'
+    }, {
+      allowed_ips: ['127.0.0.1']
+    }))
+
     assert.equal(true, helper.checkAccess({
       ip: '127.0.0.1'
     }, {
