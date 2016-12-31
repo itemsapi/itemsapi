@@ -24,6 +24,8 @@ app.use(bodyParser.json({
 app.use(cors());
 app.use(config.server.prefix || apiPrefix, router);
 
+app.set('trust proxy', true)
+
 var winstonStream = {
   write: function(message, encoding){
     logger.info(message);
