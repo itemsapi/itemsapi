@@ -1,4 +1,5 @@
 var config = require('./../../config/index').get();
+var helper = require('./../helpers/security')
 
 /*
  * delete collection
@@ -6,14 +7,13 @@ var config = require('./../../config/index').get();
 exports.checkAccess = function(req, res, next) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
-    if (
-      config.allowed_methods &&
-      config.allowed_methods !== '*' &&
-      config.allowed_methods.indexOf(req.method) === -1 &&
-      config.tokens.indexOf(token) === -1
-    ) {
+    if (helper.checkAccess({
+      token: token,
+      method: req.method,
+      ip: req.ip
+    }, config)) {
       return res.status(403).send({
-        message: 'No token provided'
+        message: 'Access denied'
       })
     }
 
