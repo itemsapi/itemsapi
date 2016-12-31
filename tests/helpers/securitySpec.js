@@ -18,25 +18,25 @@ setup.makeSuite('security helper', function() {
     assert.equal(true, helper.checkAccess({
       ip: '127.0.0.1'
     }, {
-      ips: ['127.0.0.1']
+      allowed_ips: ['127.0.0.1']
     }))
 
     assert.equal(true, helper.checkAccess({
       ip: '127.0.0.1'
     }, {
-      ips: ['0.0.0.0']
+      allowed_ips: ['0.0.0.0']
     }))
 
     assert.equal(true, helper.checkAccess({
       ip: '8.8.8.8'
     }, {
-      ips: ['127.0.0.1', '8.8.8.8']
+      allowed_ips: ['127.0.0.1', '8.8.8.8']
     }))
 
     assert.equal(false, helper.checkAccess({
       ip: '8.8.8.8'
     }, {
-      ips: ['127.0.0.1']
+      allowed_ips: ['127.0.0.1']
     }))
 
     assert.equal(true, helper.checkAccess({

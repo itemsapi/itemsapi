@@ -11,12 +11,12 @@ exports.checkAccess = function(input, config) {
   }
 
   // clean restriction on ip
-  if (config.ips && config.ips.indexOf('0.0.0.0') !== -1) {
-    delete config.ips
+  if (config.allowed_ips && config.allowed_ips.indexOf('0.0.0.0') !== -1) {
+    delete config.allowed_ips
   }
 
   // check ip
-  if (config.ips && config.ips.indexOf(input.ip) === -1) {
+  if (config.allowed_ips && config.allowed_ips.indexOf(input.ip) === -1) {
     return false
   }
 
