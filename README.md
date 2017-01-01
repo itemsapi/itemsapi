@@ -35,8 +35,6 @@ More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_bla
 
 ## Use cases
 - <a href="http://devteams.co/" target="_blank">Catalog of skilled software development companies from Europe</a>
-- <a href="http://app.itemsapi.com/" target="_blank">A few example collections (ItemsAPI + Angular.js)</a>
-
 
 ## Resources
 - https://itemsapi.readme.io (documentation)
