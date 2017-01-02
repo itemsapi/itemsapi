@@ -152,11 +152,17 @@ exports.reindexAsync = function(data) {
   }
 
   return new Promise(function(resolve, reject) {
-    var command = `${__dirname}/../../node_modules/elasticsearch-reindex/bin/elasticsearch-reindex.js -f ${host}/${old_index}/${old_type} -t ${host}/${new_index}/${new_type}`;
+    var src = `${__dirname}/../../node_modules/elasticsearch-reindex/bin/elasticsearch-reindex.js`
 
-    if (fs.existsSync(command)) {
-      command = `node_modules/elasticsearch-reindex/bin/elasticsearch-reindex.js -f ${host}/${old_index}/${old_type} -t ${host}/${new_index}/${new_type}`;
+    if (!fs.existsSync(src)) {
+      src = `${__dirname}/node_modules/elasticsearch-reindex/bin/elasticsearch-reindex.js`;
     }
+
+    if (!fs.existsSync(src)) {
+      src = `node_modules/elasticsearch-reindex/bin/elasticsearch-reindex.js`;
+    }
+
+    var command = `${src} -f ${host}/${old_index}/${old_type} -t ${host}/${new_index}/${new_type}`;
 
     logger.info('Reindexing started.. Please wait..')
     logger.profile('collection reindexing')
