@@ -127,7 +127,16 @@ exports.generateAggregations = function(aggregations, filters, input) {
     aggregations = _.pick(aggregations, input.load_aggs)
   }
 
+  var count_field = input.facetName || input.fieldName
+  if (count_field && aggregations[count_field]) {
+    aggregations[count_field + '_internal_count'] = {
+      type: 'cardinality',
+      field: aggregations[count_field].field
+    }
+  }
+
   return _.map(aggregations, function(value, key) {
+    //console.log(key, value.field);
     // we considering two different aggregations formatting (object | array)
     key = value.name || key;
     var filterAggregation = ejs.FilterAggregation(key)
@@ -152,18 +161,11 @@ exports.generateAggregations = function(aggregations, filters, input) {
       .size(value.size)
       .order(value.sort, value.order)
 
-      // don't know what it was doing here..
-      // seems aggregation order by most common / mean values
-      /*if (value.order) {
-        var avg_aggregation = ejs.AvgAggregation('visits_avg')
-        .field('visits');
-        aggregation.aggregation(avg_aggregation);
-        aggregation.order('visits_avg', 'desc');
-      }*/
-
       if (value.exclude) {
         aggregation.exclude(value.exclude);
       }
+    } else if (value.type === 'cardinality') {
+      aggregation = ejs.CardinalityAggregation(key).field(value.field);
     } else if (value.type === 'range') {
       aggregation = ejs.RangeAggregation(key).field(value.field);
       _.each(value.ranges, function(v, k) {

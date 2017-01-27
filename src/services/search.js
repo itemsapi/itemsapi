@@ -135,7 +135,8 @@ exports.getProcessedFacetAsync = function(data) {
     facet.pagination = {
       page: data.page,
       per_page: data.per_page,
-      total: facet.doc_count
+      doc_count: facet.doc_count,
+      total: facet.total
     }
 
     facet.meta = {

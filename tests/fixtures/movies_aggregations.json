@@ -16,5 +16,9 @@
     {
       "name": "movie1",
       "tags": ["b", "c", "d"]
+    },
+    {
+      "name": "movie5",
+      "tags": ["b", "c"]
     }
 ]
