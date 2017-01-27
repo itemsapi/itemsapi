@@ -3,10 +3,41 @@
 var should = require('should');
 var setup = require('./../mocks/setup');
 var assert = require('assert');
+var _ = require('lodash')
 
 setup.makeSuite('search helper', function() {
 
   var searchHelper = require('./../../src/helpers/search')();
+
+
+  it('should merge internal aggregations', function test(done) {
+
+    var aggregations = {
+      tags_internal_count: {
+        doc_count: 5,
+        value: 4,
+        title: 'tags_internal_count',
+        name: 'tags_internal_count',
+        type: 'cardinality'
+      },
+      tags: {
+        doc_count: 5,
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+        buckets: [ [Object], [Object], [Object], [Object] ],
+        title: 'Tags',
+        name: 'tags',
+        size: 10,
+        type: 'terms'
+      }
+    }
+
+    var result = searchHelper.mergeInternalAggregations(aggregations)
+    assert.equal(1, _.keys(result).length)
+    assert.equal(4, aggregations.tags.total)
+    done();
+  });
+
 
   it('should merge collection aggregations (object) with elastic aggregations', function test(done) {
 

@@ -38,6 +38,7 @@ setup.makeSuite('search service', function() {
   it('should get movies aggregations', function(done) {
     searchService.searchAsync({
       collectionName: 'movie',
+      facetName: 'tags',
       index: 'test',
     }).then(function(res) {
       var aggregations = res.data.aggregations
@@ -210,7 +211,7 @@ setup.makeSuite('search service', function() {
       res.pagination.should.have.properties({
         page: 1,
         per_page: 4,
-        total: 4
+        total: 3
       })
 
       _.map(res.data.buckets, 'key').should.eql(

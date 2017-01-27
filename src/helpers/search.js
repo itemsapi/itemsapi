@@ -9,6 +9,22 @@ var slug = require('slug')
  */
 module.exports = function() {
 
+  var mergeInternalAggregations = function(aggregations) {
+    _.forEach(_.keys(aggregations), function(key) {
+      var index = key.indexOf('_internal_count')
+      if (index !== -1) {
+        var found_key = key.split('_internal_count')[0]
+
+        if (aggregations[found_key] && aggregations[key]['value']) {
+          aggregations[found_key]['total'] = aggregations[key]['value']
+        }
+        delete aggregations[key]
+      }
+    })
+
+    return aggregations
+  }
+
   var getAggregationsResponse = function(collection_aggregations, elastic_aggregations) {
     var aggregations;
     if (_.isArray(collection_aggregations)) {
@@ -26,6 +42,8 @@ module.exports = function() {
         return output;
       })
     } else {
+
+
       // object response
       aggregations = _.extend(_.clone(elastic_aggregations), _.mapValues(elastic_aggregations, function(v, k) {
         // supports filters in aggregations
@@ -40,6 +58,8 @@ module.exports = function() {
           type: collection_aggregations[k].type
         });
       }))
+
+      aggregations = mergeInternalAggregations(aggregations)
     }
 
     return aggregations;
@@ -138,6 +158,7 @@ module.exports = function() {
 
   return {
     getAggregationsResponse: getAggregationsResponse,
+    mergeInternalAggregations: mergeInternalAggregations,
     searchConverter: searchConverter,
     facetsConverter: facetsConverter,
     similarConverter: similarConverter

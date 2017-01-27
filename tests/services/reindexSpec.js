@@ -38,6 +38,10 @@ setup.makeSuite('project service', function() {
     .then(function(res) {
       done()
     })
+    .catch(function(err) {
+      console.log('there was nothing to delete');
+      done()
+    })
   })
 
   before(function(done){
@@ -64,6 +68,18 @@ setup.makeSuite('project service', function() {
     done();
   })
 
+
+  it('should check index and type name', function(done) {
+    return collectionService.findCollectionAsync({
+      name: 'reindex'
+    })
+    .then(function(res) {
+      res.should.not.have.property('index', 'reindex');
+      res.should.not.have.property('type', 'reindex');
+      done()
+    })
+  })
+
   it('should reindex index / type', function(done) {
     var data = {
       old_type: 'reindex',
@@ -74,9 +90,8 @@ setup.makeSuite('project service', function() {
 
     projectService.reindexAsync(data)
     .then(function(res) {
-      mapping.getMappingForTypeAsync({
-        index: 'reindex',
-        type: 'reindex'
+      return projectService.getMappingForTypeAsync({
+        collectionName: 'reindex'
       })
       .then(function(res) {
         res.should.not.have.property('name');
@@ -123,9 +138,8 @@ setup.makeSuite('project service', function() {
 
     projectService.reindexCollectionAsync(data)
     .then(function(res) {
-      return mapping.getMappingForTypeAsync({
-        index: 'reindex',
-        type: 'reindex_3'
+      return projectService.getMappingForTypeAsync({
+        collectionName: 'reindex'
       })
     })
     .then(function(res) {
@@ -139,19 +153,26 @@ setup.makeSuite('project service', function() {
     })
     .then(function(res) {
       assert.equal(6, res)
-      done();
+      return collectionService.findCollectionAsync({
+        name: 'reindex'
+      })
+    })
+    .then(function(res) {
+      res.should.have.property('index', 'reindex');
+      res.should.have.property('name');
+      res.should.have.property('type', 'reindex_3');
+      done()
     })
   })
 
   it('should make smart reindexing with old index and random type', function(done) {
-    var data = {
-      collectionName: 'reindex'
-    }
 
-    projectService.reindexCollectionAsync(data)
+    projectService.reindexCollectionAsync({
+      collectionName: 'reindex'
+    })
     .then(function(res) {
       return collectionService.findCollectionAsync({
-        name: data.collectionName
+        name: 'reindex'
       })
     })
     .then(function(res) {
@@ -208,5 +229,6 @@ setup.makeSuite('project service', function() {
       res.permalink.should.have.property('index', 'not_analyzed');
       done()
     })
-  })*/
+  })
+  */
 });

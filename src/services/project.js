@@ -266,6 +266,23 @@ exports.getMappingAsync = function(data) {
 },
 
 /**
+ * get mapping for type
+ * it is an object only with schema / mapping for given collection
+ */
+exports.getMappingForTypeAsync = function(data) {
+  return collectionService.findCollectionAsync({
+    name: data.collectionName
+  })
+  .then(function(collection) {
+    var helper = collectionHelper(collection);
+    return elastic.getMappingForTypeAsync({
+      index: helper.getIndex(),
+      type: helper.getType()
+    })
+  })
+},
+
+/**
  * add collection (type)
  * @the name is deprecated in the future
  */

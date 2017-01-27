@@ -227,6 +227,7 @@ exports.facet = function searchItems(req, res, next) {
 
   return searchService.getProcessedFacetAsync({
     collectionName: req.params.name,
+    // facet name is an aggregation name
     facetName: req.params.facet,
     fieldName: req.params.field_name,
     size: req.query.size,
