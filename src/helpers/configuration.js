@@ -98,10 +98,16 @@ var detectFieldType = function(val, rows) {
 
 exports.detectFieldType = detectFieldType
 
-var generateField = function(val, rows) {
+var generateField = function(key, val, rows) {
   var type = detectFieldType(val, rows)
 
-  if (type === 'float') {
+  if (key === 'permalink') {
+    return {
+      type: 'string',
+      index: 'not_analyzed',
+      store: true
+    }
+  } else if (type === 'float') {
     return {
       type: 'float',
       store: true
@@ -277,7 +283,7 @@ exports.generateConfiguration = function(data, options) {
   var item = _.first(data);
   var schema = _.mapValues(item, function(val, key) {
     var rows = _.map(data, key)
-    return generateField(val, rows);
+    return generateField(key, val, rows);
   })
 
   var aggregations = _.mapValues(item, function(val, key) {

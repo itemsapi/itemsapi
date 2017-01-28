@@ -50,6 +50,7 @@ describe('configuration', function() {
     var data = [{
       name: 'Godfather',
       name2: 'Godfather, godfather the movie',
+      permalink: 'godfather-1972',
       tags: ['Drama', 'Crime fiction'],
       tags2: 'Drama, Crime, Fiction',
       rating: 10,
@@ -70,6 +71,7 @@ describe('configuration', function() {
     var schema = conf.schema;
     conf.schema.should.have.property('name');
     schema.name.should.have.property('type', 'string')
+    schema.name.should.not.have.property('index')
     schema.name.should.have.property('type', 'string')
     schema.image.should.have.property('display', 'image')
     schema.tags.should.have.property('type', 'string')
@@ -84,6 +86,9 @@ describe('configuration', function() {
     schema.location2.should.have.property('type', 'geo_point')
     schema.location3.should.have.property('type', 'geo_point')
     schema.flag.should.have.property('type', 'boolean')
+    conf.schema.should.have.property('permalink');
+    schema.permalink.should.have.property('type', 'string')
+    schema.permalink.should.have.property('index', 'not_analyzed')
 
     var aggregations = conf.aggregations;
     aggregations.should.have.property('rating');
