@@ -118,8 +118,8 @@ module.exports = function() {
         sort: helper.getChosenSortingKey(input.sort) || ''
       },
       pagination: {
-        page: input.page,
-        per_page: input.per_page,
+        page: parseInt(input.page) || 1,
+        per_page: parseInt(input.per_page) || 16,
         total: data.hits.total
       },
       data: {
@@ -141,8 +141,8 @@ module.exports = function() {
         sort: input.sort
       },
       pagination: {
-        page: input.page,
-        per_page: input.per_page,
+        page: parseInt(input.page) || 1,
+        per_page: parseInt(input.per_page) || 16,
         total: data.hits.total
       },
       data: {

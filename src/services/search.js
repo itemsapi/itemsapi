@@ -133,10 +133,10 @@ exports.getProcessedFacetAsync = function(data) {
       ).value()
     }
     facet.pagination = {
-      page: data.page,
-      per_page: data.per_page,
-      doc_count: facet.doc_count,
-      total: facet.total
+      page: parseInt(data.page) || 1,
+      per_page: parseInt(data.per_page) || 16,
+      doc_count: parseInt(facet.doc_count),
+      total: parseInt(facet.total)
     }
 
     facet.meta = {

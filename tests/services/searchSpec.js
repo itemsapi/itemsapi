@@ -51,7 +51,7 @@ setup.makeSuite('search service', function() {
       res.data.aggregations.should.not.be.an.instanceOf(Array);
       res.data.aggregations.should.have.property('tags');
       res.should.have.property('pagination');
-      res.pagination.should.have.property('page');
+      res.pagination.should.have.property('page', 1);
       res.pagination.should.have.property('total');
       res.pagination.should.have.property('per_page');
       res.should.have.property('meta');
