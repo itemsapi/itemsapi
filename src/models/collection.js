@@ -14,6 +14,7 @@ var Collection = new Schema({
   slugs: [String],
   extraSchema: Schema.Types.Mixed,
   aggregations: Schema.Types.Mixed,
+  defaults: Schema.Types.Mixed,
   sortings: Schema.Types.Mixed,
   table: Schema.Types.Mixed,
   created_at: { type: Date, default: Date.now },

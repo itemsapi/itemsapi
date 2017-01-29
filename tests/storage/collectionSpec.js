@@ -51,6 +51,16 @@ setup.makeSuite('collections storage', function() {
       storage.addCollectionAsync({
         name: 'new-collection',
         type: 'type',
+        defaults: {
+          sort: 'most_voted'
+        },
+        aggregations: {
+          director: {
+            type: 'terms',
+            size: 15,
+            field: 'director'
+          }
+        },
         schema: {
           a: 'ok'
         }
@@ -72,6 +82,9 @@ setup.makeSuite('collections storage', function() {
         res.should.not.have.property('id');
         res.should.not.have.property('__v');
         res.should.have.property('type', 'type');
+        res.should.have.property('defaults');
+        res.defaults.should.have.property('sort', 'most_voted');
+        res.should.have.property('aggregations');
         res.should.have.property('created_at');
         res.should.have.property('updated_at');
         done();
@@ -114,7 +127,7 @@ setup.makeSuite('collections storage', function() {
         .then(function(res) {
           res.should.have.property('schema');
           res.should.have.property('type', 'type');
-          res.should.not.have.property('aggregations');
+          //res.should.not.have.property('aggregations');
           res.should.not.have.property('normalSchema');
           res.schema.should.have.property('a', 'ok2');
           res.should.have.property('name');
