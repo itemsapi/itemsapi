@@ -54,6 +54,7 @@ module.exports = function() {
         return _.extend(v, {
           title: collection_aggregations[k].title || k,
           name: k,
+          position: parseInt(collection_aggregations[k].position || 0, 10),
           size: parseInt(collection_aggregations[k].size, 10),
           type: collection_aggregations[k].type
         });

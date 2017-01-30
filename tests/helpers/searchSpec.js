@@ -52,6 +52,7 @@ setup.makeSuite('search helper', function() {
         type: 'terms',
         field: 'actors',
         size: 10,
+        position: 100,
         title: 'Actors'
       }
     }
@@ -78,10 +79,12 @@ setup.makeSuite('search helper', function() {
     result.should.be.an.instanceOf(Object);
     result.should.have.property('tags')
     result.should.have.property('actors_terms')
+    result.tags.should.have.property('position', 0)
     result.actors_terms.should.have.property('name', 'actors_terms')
     result.actors_terms.should.have.property('type', 'terms')
     result.actors_terms.should.have.property('buckets')
     result.actors_terms.should.have.property('title')
+    result.actors_terms.should.have.property('position', 100)
     result.actors_terms.should.have.property('doc_count')
     done();
   });
