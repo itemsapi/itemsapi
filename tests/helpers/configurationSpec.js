@@ -27,6 +27,10 @@ describe('configuration', function() {
     var type = helper.detectFieldType('81.36, 16.40');
     type.should.be.equal('geo')
 
+    var type = helper.detectFieldType('size=1304,1385&ok=true');
+    // should not be but ok..
+    type.should.be.equal('array')
+
     // should be detected as integer finally
     var type = helper.detectFieldType('8.29');
     type.should.be.equal('string')

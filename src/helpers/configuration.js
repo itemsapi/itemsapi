@@ -32,7 +32,12 @@ var detectFieldType = function(val, rows) {
     return 'float'
   } else if (val === false || val === true) {
     return 'boolean'
-  } else if (_.isString(val) && val.match(/([+-]?\d+(\.\d+)?)\s*\,\s*([+-]?\d+(\.\d+)?)/)) {
+  } else if (
+    _.isString(val) &&
+    // we assume we have no more than 3 numbers in a string
+    val.replace(/[0-9\s\.\,]/g,"").length < 3 &&
+    val.match(/([+-]?\d+(\.\d+)?)\s*\,\s*([+-]?\d+(\.\d+)?)/)
+  ) {
     return 'geo'
   } else if (_.isPlainObject(val) && val.latitude && val.longitude) {
     return 'geo'
@@ -101,7 +106,12 @@ exports.detectFieldType = detectFieldType
 var generateField = function(key, val, rows) {
   var type = detectFieldType(val, rows)
 
-  if (key === 'permalink') {
+  if (key === 'image') {
+    return {
+      type: 'string',
+      display: 'image'
+    }
+  } else if (key === 'permalink') {
     return {
       type: 'string',
       index: 'not_analyzed',
