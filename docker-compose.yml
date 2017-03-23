@@ -1,0 +1,27 @@
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+     - "3000:3000"
+    environment:
+     - ELASTICSEARCH_URL=elasticsearch:9200
+     - REDIS_URL=redis:6379
+     - PORT=3000
+    # TODO - cover all relevant js files
+    volumes:
+     - "./src:/app/src"
+     - "./tests:/app/tests"
+    networks:
+     - front
+  elasticsearch:
+    image: "elasticsearch:1.7.6"
+    networks:
+     - front
+  redis:
+    image: "redis:3.2"
+    networks:
+     - front
+networks:
+  front:
+    driver: bridge

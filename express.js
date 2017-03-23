@@ -39,7 +39,7 @@ if (config.server.logger !== false) {
 }
 
 // initialize all routes
-var itemsRoutes = require('./routes/routes')(router);
+var itemsRoutes = require('./src/routes/routes')(router);
 
 app.use(function errorRoute(err, req, res, next) {
   logger.error(err, err.stack)

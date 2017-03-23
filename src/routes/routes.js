@@ -1,18 +1,18 @@
 var Promise = require('bluebird');
 var _ = require('underscore');
-var collectionHelper = require('./../src/helpers/collection');
-var dataService = Promise.promisifyAll(require('./../src/services/data'));
-var projectService = Promise.promisifyAll(require('./../src/services/project'));
-var elasticMapping = Promise.promisifyAll(require('./../src/elastic/mapping'));
-var elastic = Promise.promisifyAll(require('./../src/elastic/search'));
-var searchService = Promise.promisifyAll(require('./../src/services/search'));
-var collectionService = require('./../src/services/collection');
-var items = require('./../src/controllers/items');
-var collections = require('./../src/controllers/collections');
-var slugs = require('./../src/controllers/slugs');
-var mappings = require('./../src/controllers/mappings');
-var projects = require('./../src/controllers/projects');
-var middlewares = require('./../src/controllers/middlewares');
+var collectionHelper = require('./../helpers/collection');
+var dataService = Promise.promisifyAll(require('./../services/data'));
+var projectService = Promise.promisifyAll(require('./../services/project'));
+var elasticMapping = Promise.promisifyAll(require('./../elastic/mapping'));
+var elastic = Promise.promisifyAll(require('./../elastic/search'));
+var searchService = Promise.promisifyAll(require('./../services/search'));
+var collectionService = require('./../services/collection');
+var items = require('./../controllers/items');
+var collections = require('./../controllers/collections');
+var slugs = require('./../controllers/slugs');
+var mappings = require('./../controllers/mappings');
+var projects = require('./../controllers/projects');
+var middlewares = require('./../controllers/middlewares');
 
 /**
  * the order of routes matter

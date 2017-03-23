@@ -1,6 +1,6 @@
 {
   "name": "itemsapi",
-  "version": "1.0.73",
+  "version": "1.0.74",
   "description": "Search API designed for creating marketplaces and vertical search applications",
   "main": "server.js",
   "scripts": {
