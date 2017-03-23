@@ -4,47 +4,35 @@
 
 ![CIRCLECI](https://circleci.com/gh/itemsapi/itemsapi.png?circle-token=935dec2ee54b75370c904d110cbda8b9272860ee&style=shield)
 
-# ItemsAPI - search framework
+# ItemsAPI - search backend
 
-<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> - auto-generated search API in Node.js and Elasticsearch.
+<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> - auto-generated search API in Node.js and Elasticsearch. It was created because Elasticsearch was too difficult. The idea was also create it as a microservice and run easily on different environments.
 
-Best for:
+## Purposes
+
 - lists and catalogs (restaurants, movies, gyms, doctors, places)
-- eCommerce
-- jobs search
-- booking systems
-- classifieds
-- recommendation systems (i.e. users who like this also like)
+- prototyping booking systems and marketplaces
 
-Features:
+## Features 
+
 - full text searching
 - aggregations / faceted search
 - similar items (collaborative filtering algorithm)
 - seo optimized - generating nice urls for fields (permalinks)
 - geo sorting
-- auto generating API based on your data
-
-## Requirement
-- node.js
-- elasticsearch 1.5.x or 1.7.x
+- auto generating API based on your json data
 
 ## Getting started
 
-You can start with full stack package (itemsapi + dashboard) or with manual server installation. 
-More info - <a href="https://www.itemsapi.com/docs/getting-started" target="_blank">getting started</a>.
+- https://www.itemsapi.com/docs/itemsapi/overview/
 
 ## Use cases
+
 - <a href="http://devteams.co/" target="_blank">Catalog of skilled software development companies from Europe</a>
 
-## Resources
-- https://itemsapi.readme.io (documentation)
-- https://www.itemsapi.com/docs/tutorials/search-backend-for-restaurants-itemsapi-elasticsearch-nodejs (May 2016)
-- https://blog.itemsapi.com/visualize-data-with-angular-js-and-itemsapi-like-a-magician-461569670bb3
-- https://www.itemsapi.com/docs/tutorials/how-to-create-search-backend-for-movies (November 2015)
-
-## Contribution rules
+## Contribution recommendations
 - Code evolution is better than code revolution
-- It is good to have tests
+- Tests are very welcome
 - Quality of code is important but developer experience (DX) is a top! 
 - https://www.itemsapi.com/docs/philosophy-and-methodology
 
