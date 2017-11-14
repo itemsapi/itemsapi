@@ -22,6 +22,10 @@
 - geo sorting
 - auto generating API based on your json data
 
+## Compatibility
+
+- Elasticsearch 1.5.x & 1.7.x
+
 ## Getting started
 
 - https://www.itemsapi.com/docs/itemsapi/overview/
