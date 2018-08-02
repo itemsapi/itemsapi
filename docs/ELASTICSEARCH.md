@@ -16,8 +16,9 @@ The most used Elasticsearch version for ItemsAPI is 1.7.x so it is also recommen
 ### Testing
 `curl -X GET 'http://localhost:9200'`
 
+Output of curl:
+
 ```js
-Output of curl
 {
   "status" : 200,
   "name" : "Power Man",
