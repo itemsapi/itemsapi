@@ -33,3 +33,5 @@ config/collections_local.json
 config/local
 config/local/*
 reindex.log
+example.mdb/
+db.mdb/

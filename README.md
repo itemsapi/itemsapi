@@ -1,5 +1,3 @@
-![ItemsAPI logo](http://res.cloudinary.com/abcdefgh123456/image/upload/c_scale,w_150/v1479983228/t2BmYaxc_k705u7.jpg)
-
 # ItemsAPI 2.0 - fast faceted search
 
 Fast faceted search. It has Node.js simplicity and C++ speed.
