@@ -28,6 +28,11 @@ app.post('/configuration', (req, res) => {
   //console.log(req);
   //console.log(req.body);
 
+  itemsjs.set_configuration(req.body);
+
+  console.log(req.body);
+  console.log('configuration added');
+
   res.json({
     status: 'configuration accepted'
   });
@@ -38,51 +43,17 @@ app.post('/configuration', (req, res) => {
 /**
  * indexing data here
  */
-app.post('/index', bodyParser({defer: true}), (req, res) => {
+app.post('/index', (req, res) => {
 
-  var configuration = {
-    "searchableFields": [
-      "couriers"
-    ],
-    "aggregations": {
-      "couriers": {
-        "title": "Couriers",
-        "size": 10,
-        "conjunction": true
-      },
-      "psp_providers": {
-        "title": "PSP",
-        "size": 10,
-        "conjunction": true
-      },
-      "country": {
-        "title": "Country",
-        "size": 10,
-        "conjunction": false
-      },
-      "tech": {
-        "title": "Tech",
-        "size": 10,
-        "conjunction": true
-      }
-    }
-  }
+  var data = {};
 
   if (req.body.json_path) {
-
-    itemsjs.index({
-      json_path: req.body.json_path,
-      configuration: configuration
-    });
-
+    data.json_path = req.body.json_path;
   } else {
-
-    itemsjs.index({
-      json_string: req.body,
-      configuration: configuration
-    });
+    data.json_string = req.body;
   }
 
+  itemsjs.index(data);
 
   res.json({
     status: 'indexed'

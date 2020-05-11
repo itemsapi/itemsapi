@@ -1,6 +1,7 @@
 # docker build . -t itemsapi -f Dockerfile
 # docker run --privileged -it -p 3000:3000 itemsapi
 # docker run --privileged -it -p 3000:3000 itemsapi /bin/bash
+# docker run --privileged -it -p 3000:3000 itemsapi/itemsapi
 FROM node:12-alpine
 
 RUN apk update && apk upgrade && \
