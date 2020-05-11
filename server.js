@@ -8,25 +8,16 @@ const port = process.env.PORT || 3000;
 const itemsjs = require('itemsjs-server-optimized')();
 const bodyParser = require('body-parser');
 
+app.disable('x-powered-by');
 app.use(bodyParser.json({limit: '2000mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.use(bodyParser.raw({limit: '2000mb'}))
 app.use(bodyParser.text({limit: '5000mb', extended: true}))
 
 /**
- * at this stage this is just a js variable
- */
-var configuration;
-
-/**
  *
  */
 app.post('/configuration', (req, res) => {
-
-  configuration = req.body;
-
-  //console.log(req);
-  //console.log(req.body);
 
   itemsjs.set_configuration(req.body);
 
@@ -37,8 +28,6 @@ app.post('/configuration', (req, res) => {
     status: 'configuration accepted'
   });
 });
-
-
 
 /**
  * indexing data here
@@ -60,24 +49,19 @@ app.post('/index', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
+app.all('/search', (req, res) => {
 
-  var couriers = req.query.couriers || '';
-  var country = req.query.country || '';
-  var psp_providers = req.query.psp_providers || '';
-  var tech = req.query.tech || '';
+  //console.log(req.query);
+  //console.log(req.body);
+  //console.log(req.body[0]);
+  //console.log(JSON.parse(req.body));
+
+  var filters = req.body.filters;
 
   var result = itemsjs.search({
     per_page: req.query.per_page || 10,
     page: req.query.page || 1,
-    searchableFields: ['couriers', 'psp_providers', 'tech', 'country'],
-    //query: req.query.query,
-    filters: {
-      couriers: couriers.split(',').filter(v => !!v),
-      psp_providers: psp_providers.split(',').filter(v => !!v),
-      country: country.split(',').filter(v => !!v),
-      tech: tech.split(',').filter(v => !!v),
-    }
+    filters: filters
   });
   res.json(result);
 })

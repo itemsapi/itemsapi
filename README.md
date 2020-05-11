@@ -1,6 +1,6 @@
 # ItemsAPI 2.0 - fast faceted search
 
-Fast faceted search. It has Node.js simplicity and C++ speed.
+Blazingly fast faceted search. It has Node.js simplicity and C++ speed.
 
 ## Features
 
@@ -8,6 +8,10 @@ Fast faceted search. It has Node.js simplicity and C++ speed.
 - fast data indexing
 - pagination
 - simple JSON API
+
+## Getting started
+
+Please look into full example here - [index and search movies](/examples/movies.md)
 
 ## Licence
 

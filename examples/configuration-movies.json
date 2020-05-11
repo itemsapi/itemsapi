@@ -1,0 +1,20 @@
+{
+  "aggregations": {
+    "year": {
+      "size": 10,
+      "conjunction": true
+    },
+    "genres": {
+      "size": 10,
+      "conjunction": false
+    },
+    "tags": {
+      "size": 10,
+      "conjunction": true
+    },
+    "country": {
+      "size": 10,
+      "conjunction": true
+    }
+  }
+}
