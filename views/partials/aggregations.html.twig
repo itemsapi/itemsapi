@@ -1,0 +1,53 @@
+{% for val in (aggregations | sortObject('position', 'asc')) %}
+
+{% set field = aggregations[val.key].name %}
+{% set title = aggregations[val.key].title %}
+{% set field = val.key %}
+
+{% if true %}
+<div class="">
+
+  {% if true %}
+
+  <h5 class="facet-name" style="margin-bottom: 5px; text-decoration: none;"><a href="#"><strong style="">
+    {{ field }} <i class="fa fa-angle-down" aria-hidden="true"></i></strong></a></h5>
+
+  <ul class="browse-list list-unstyled long-list facet-content" style="margin-bottom: 0; {% if in_array(aggregations[val.key].name, facets_open) %} display: block;{% endif %}">
+
+    {% if true %}
+
+      {% if 0 or in_array(aggregations[val.key].name, filters_conf.autocomplete_fields) %}
+      <div class="input-group" style="margin: 5px 0 5px 0;">
+        <input id="aggregation_autocomplete_{{ aggregations[val.key].name }}" type="text" style="height: 25px;" value="" class="form-control aggregation_autocomplete" placeholder="Search.." name="srch-term">
+      </div>
+      {% endif %}
+
+      {% for term in aggregations[val.key].buckets %}
+      <li>
+      <div class="checkbox block" style="margin-top: 0; margin-bottom: 0;">
+        <label>
+          <input class="checkbox aggregation-box" type="checkbox" {% if (filter and filter.val == term.key and filter.key == val.key) or in_array(term.key, filters[val.key]) %}checked="checked"{% endif %} onclick="onAggregationClick(this, '{{ field }}', '{{ term.key }}');">
+          {{ term.key }} ({{ term.doc_count }}) {% if false %}<a href="#" onclick="addNotFilter('{{ field }}', '{{ term.key }}'); return false;"><span class="text-muted">x</span></a>{% endif %}
+        </label>
+      </div>
+      </li>
+      {% endfor %}
+
+      {% if 0 and in_array(val.key, filters_conf.modal_fields) %}
+        <li>
+        <div class="checkbox block text-muted" style="margin-top: 0; margin-bottom: 0;">
+          <a href="/modal-facet/{{ row.id }}/{{ val.key }}" onclick="showModalFacet('{{ row.id }}', '{{ val.key }}'); return false;"><span style="margin-left: 20px;">Show all</span></a>
+        </div>
+        </li>
+      {% endif %}
+
+    {% endif %}
+
+  </ul>
+
+  <div class="clearfix"></div>
+
+  {% endif %}
+</div>
+{% endif %}
+{% endfor %}
