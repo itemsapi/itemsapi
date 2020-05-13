@@ -61,6 +61,7 @@ app.all('/search', (req, res) => {
   var result = itemsjs.search({
     per_page: req.query.per_page || 10,
     page: req.query.page || 1,
+    query: req.query.query,
     filters: filters
   });
   res.json(result);
