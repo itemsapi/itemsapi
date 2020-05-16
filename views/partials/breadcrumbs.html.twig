@@ -1,0 +1,46 @@
+{% set temp = 0 %}
+
+{% for key, val in filters %}
+{% for term in val %}
+{% set temp = 1 %}
+<span class="label label-default">{{ term }}
+  <span onclick="removeFilter('{{ key }}', '{{ term }}');" style="cursor: pointer" class="glyphicon glyphicon-remove"></span>
+</span>
+{% endfor %}
+{% endfor %}
+
+{% for key, val in not_filters %}
+{% for term in val %}
+{% set temp = 1 %}
+<span class="label label-default" style="background-color: #C0392B;">{{ term }}
+  <span onclick="removeNotFilter('{{ key }}', '{{ term }}');" style="cursor: pointer" class="glyphicon glyphicon-remove"></span>
+</span>
+{% endfor %}
+{% endfor %}
+
+{% if (query) %}
+{% set temp = 1 %}
+<span class="label label-default" style="">{{ query }}
+  <span onclick="removeQuery();" style="cursor: pointer" class="glyphicon glyphicon-remove"></span>
+</span>
+{% endif %}
+
+{% if (deleted) %}
+{% set temp = 1 %}
+<span class="label label-default" style="background-color: purple;">Deleted
+  <span onclick="removeDeleted();" style="cursor: pointer" class="glyphicon glyphicon-remove"></span>
+</span>
+{% endif %}
+
+{% if (filter) %}
+{% set temp = 1 %}
+<span class="label label-default">{{ filter.val }}
+  <span onclick="removeFilter('{{ filter.key }}', '{{ filter.val }}');" style="cursor: pointer" class="glyphicon glyphicon-remove"></span>
+</span>
+{% endif %}
+
+{% if temp == 1 %}
+<span class="label label-default pull-right" onclick="clearFilters();" style="cursor: pointer; margin-right: 0;">Clear filters
+  <span class="glyphicon glyphicon-remove"></span>
+</span>
+{% endif %}

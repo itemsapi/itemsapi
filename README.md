@@ -1,44 +1,35 @@
-![ItemsAPI logo](http://res.cloudinary.com/abcdefgh123456/image/upload/c_scale,w_150/v1479983228/t2BmYaxc_k705u7.jpg)
+# ItemsAPI 2.0 - fast faceted search
 
-[![NPM](https://nodei.co/npm/itemsapi.png?downloads=true&downloadRank=true)](https://nodei.co/npm/itemsapi/) [![NPM](https://nodei.co/npm-dl/itemsapi.png?months=6&height=3)](https://nodei.co/npm/itemsapi/)
+Blazingly fast faceted search. It has Node.js simplicity and C++ speed.
 
-![CIRCLECI](https://circleci.com/gh/itemsapi/itemsapi.png?circle-token=935dec2ee54b75370c904d110cbda8b9272860ee&style=shield)
+## Features
 
-# ItemsAPI - search backend
+- fast faceted search
+- full text search
+- fast data indexing
+- pagination
+- simple JSON API
+- web ui for exploring / managing index
 
-<a href="https://www.itemsapi.com" target="_blank">ItemsAPI</a> - auto-generated search API in Node.js and Elasticsearch. It was created because Elasticsearch was too difficult. The idea was also create it as a microservice and run easily on different environments.
+## Performance
 
-## Purposes
+ItemsAPI has a great indexing performance. It can index 2M documents in less than 2 minutes on local computer.
+Searching seems to be 10x faster than Elasticsearch for similar use cases
 
-- lists and catalogs (restaurants, movies, gyms, doctors, places)
-- prototyping booking systems and marketplaces
+### Docker
 
-## Features 
-
-- full text searching
-- aggregations / faceted search
-- similar items (collaborative filtering algorithm)
-- seo optimized - generating nice urls for fields (permalinks)
-- geo sorting
-- auto generating API based on your json data
-
-## Compatibility
-
-- Elasticsearch 1.5.x & 1.7.x
+```bash
+docker pull itemsapi/itemsapi:latest
+docker run --privileged -it -p 3000:3000 itemsapi/itemsapi
+```
 
 ## Getting started
 
-- https://www.itemsapi.com/docs/itemsapi/overview/
+Please look into full example here - [index and search movies](/examples/movies.md)
 
-## Use cases
 
-- <a href="http://devteams.co/" target="_blank">Catalog of skilled software development companies from Europe</a>
 
-## Contribution recommendations
-- Code evolution is better than code revolution
-- Tests are very welcome
-- Quality of code is important but developer experience (DX) is a top! 
-- https://www.itemsapi.com/docs/philosophy-and-methodology
+## Licence
 
-## License
-ItemsAPI is created by Mateusz Rzepa and licensed under the Apache 2.0. For more information, see the LICENSE file in this repository.
+ItemsAPI 2.x is created by Mateusz Rzepa. You can use ItemsAPI for free, if your project is Open Source. If you want to use ItemsAPI in to build commercial software, you need to buy a commercial license.
+Commercial editions can be used in closed source environment. More info soon

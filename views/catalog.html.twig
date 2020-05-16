@@ -1,0 +1,39 @@
+{% if is_ajax == false %}
+  {% extends "views/layout.html.twig" %}
+{% endif %}
+
+{% block content %}
+
+<div class="page-header" style="margin-top: 0; padding-bottom: 15px;">
+  {% if true %}
+  <div class="btn-toolbar pull-right">
+    <div class="btn-group">
+    </div>
+  </div>
+  {% endif %}
+  <h1 style="font-size: 24px; margin-top: 0px; margin-bottom: 0px;">Found ({{pagination.total}}) items</h1>
+  <h4 class="text-left text-muted">Searched in {{ timings.search }}ms, faceted in {{ timings.facets }}ms</h4>
+</div>
+
+
+<div class="container">
+  <div class="row">
+
+    {% include "views/catalog_results.html.twig" ignore missing %}
+
+  </div>
+</div>
+{% endblock %}
+
+{% block before_head_end %}
+{#<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/start/jquery-ui.css" />#}
+{% endblock %}
+
+{% block before_body_end %}
+{#<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js'></script>
+{% include "general/autocomplete.html.twig" ignore missing %}#}
+
+<script>
+</script>
+
+{% endblock %}

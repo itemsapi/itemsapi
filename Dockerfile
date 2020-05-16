@@ -1,16 +1,25 @@
-FROM node:6.9
-MAINTAINER Mateusz Rzepa @cigolpl
-RUN apt-get update
-RUN npm install yarn -g 
+# docker build . -t itemsapi -f Dockerfile
+# docker run --privileged -it -p 3000:3000 itemsapi
+# docker run --privileged -it -p 3000:3000 itemsapi /bin/bash
+# docker run --privileged -it -p 3000:3000 itemsapi/itemsapi
+FROM node:12-alpine
 
-RUN mkdir /app
-WORKDIR /app
+RUN apk update && apk upgrade && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
+    apk add --no-cache bash lmdb-dev lmdb-tools boost boost-dev libc6-compat gcompat build-base git 
 
-COPY package.json /app/
-ADD . /app
+COPY . /app/
+RUN rm -Rf /app/node_modules
+RUN rm -Rf /app/example.mdb
+RUN mkdir -p /app/example.mdb
+WORKDIR app
 
-RUN yarn install 
+RUN npm install
 
+RUN npm install pm2 -g
+
+ENV PORT 3000
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["pm2-runtime", "pm2.yaml"]
