@@ -66,6 +66,45 @@ app.post('/index', (req, res) => {
   });
 });
 
+/**
+ * this is for API
+ */
+app.get('/facet', (req, res) => {
+
+  var filters = req.body.filters;
+
+  var result = itemsjs.aggregation({
+    per_page: req.query.per_page || 10,
+    page: req.query.page || 1,
+    name: req.query.name
+  });
+
+  res.json(result);
+})
+
+app.get('/modal-facet/:name', async function(req, res) {
+
+  var filters = req.query.filters;
+  var not_filters = req.query.not_filters;
+
+  var facet = itemsjs.aggregation({
+    name: req.params.name,
+    filters: filters,
+    page: req.query.page || 1,
+    per_page: 100,
+  });
+
+  return res.render('views/modals-content/facet', {
+    facet: facet,
+    pagination: facet.pagination,
+    filters: filters,
+    not_filters: not_filters,
+    name: req.params.name
+  });
+})
+
+
+
 app.all('/search', (req, res) => {
 
   var filters = req.body.filters;

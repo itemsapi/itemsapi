@@ -117,3 +117,30 @@ var getDocument = function(dataset, id) {
 
   return false;
 }
+
+var showModalFacet = function(name, page) {
+
+  var uri = new URI();
+  var qs = uri.search(true);
+  var filters = JSON.parse(qs.filters || '{}');
+  var query = qs.query || '';
+  var not_filters = JSON.parse(qs.not_filters || '{}');
+  var page = page || 1;
+
+  $.ajax({
+    url: '/modal-facet/' + name,
+    method: 'GET',
+    data: {
+      filters: filters,
+      query: query,
+      not_filters: not_filters,
+      page: page
+    },
+    success: function(data) {
+      $('#modalContent').html(data);
+      $('#generalModal').modal({})
+    }
+  });
+
+  return false;
+}

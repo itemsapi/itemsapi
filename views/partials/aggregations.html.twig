@@ -33,12 +33,12 @@
       </li>
       {% endfor %}
 
-      {% if 0 and in_array(val.key, filters_conf.modal_fields) %}
-        <li>
+      {% if 1 %}
+      <li>
         <div class="checkbox block text-muted" style="margin-top: 0; margin-bottom: 0;">
-          <a href="/modal-facet/{{ row.id }}/{{ val.key }}" onclick="showModalFacet('{{ row.id }}', '{{ val.key }}'); return false;"><span style="margin-left: 20px;">Show all</span></a>
+          <a href="/modal-facet/{{ val.key }}" onclick="showModalFacet('{{ field }}'); return false;"><span style="margin-left: 20px;">Show all</span></a>
         </div>
-        </li>
+      </li>
       {% endif %}
 
     {% endif %}
