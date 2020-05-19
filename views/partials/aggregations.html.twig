@@ -10,7 +10,7 @@
   {% if true %}
 
   <h5 class="facet-name" style="margin-bottom: 5px; text-decoration: none;"><a href="#"><strong style="">
-    {{ field }} <i class="fa fa-angle-down" aria-hidden="true"></i></strong></a></h5>
+    {{ field | humanize }} <i class="fa fa-angle-down" aria-hidden="true"></i></strong></a></h5>
 
   <ul class="browse-list list-unstyled long-list facet-content" style="margin-bottom: 0; {% if in_array(aggregations[val.key].name, facets_open) %} display: block;{% endif %}">
 

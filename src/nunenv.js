@@ -21,6 +21,15 @@ module.exports = function(app, path, options) {
     return parseInt(obj || 0, 10);
   })
 
+  .addFilter('humanize', function(input) {
+    input = input.toLowerCase().replace(/[_-]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+    input = input.charAt(0).toUpperCase() + input.slice(1);
+
+    return input;
+  })
+
+
+
   .addGlobal('in_array', function(element, array) {
     array = array || [];
     return array.indexOf(element) !== -1;

@@ -209,15 +209,30 @@ jQuery(document).ready(function() {
   })
 })
 
+$(document).on('submit', '#search_form', function(event) {
+  event.preventDefault();
+  var query = $(this).find('#main_query').val()
+  //console.log(query);
+
+  var uri = URI();
+
+  uri.removeSearch('query');
+  uri.removeSearch('page');
+  uri.addSearch('query', query);
+
+  requestCatalog({
+    url: uri.href()
+  });
+})
 
 /**
  * main query autocomplete
  */
 jQuery(document).ready(function() {
 
+  return false;
 
-  // turn off auto search because it's distracting me
-  if ([].indexOf(URI().path()) !== -1) {
+  if (1 || [].indexOf(URI().path()) !== -1) {
 
     console.log('autocomplete enabled')
 
@@ -240,14 +255,14 @@ jQuery(document).ready(function() {
         requestCatalog({
           url: uri.href()
         });
-      }, 500);
+      }, 100);
     });
 
-    $('#main_query').keypress(function (e) {
+    /*$('#main_query').keypress(function (e) {
       if (e.which == 13) {
         e.preventDefault();
       }
-    });
+    });*/
 
   }
 })
