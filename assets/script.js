@@ -289,3 +289,13 @@ $(document).on('change', '#select_sorting', function(event) {
   });
 })
 
+$(document).on('change', '#select_order', function(event) {
+
+  var uri = URI();
+  uri.removeSearch('order');
+  uri.addSearch('order', $(this).val());
+
+  requestCatalog({
+    url: uri.href()
+  });
+})

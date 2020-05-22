@@ -24,6 +24,14 @@
     </select>
   </div>
 
+  <div class="pull-right" style="margin-bottom: 10px; margin-right: 10px;">
+    <select id="select_order" name="select_order" class="form-control pull-left" style="width: auto; margin-top: 0px;">
+      <option value="">Order</option>
+      {% for v in ['desc', 'asc'] %}
+      <option {% if order == v %}selected{% endif %} value="{{ v }}">{{ v }}</option>
+      {% endfor %}
+    </select>
+  </div>
 
 </div>
 

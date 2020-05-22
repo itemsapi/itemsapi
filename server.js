@@ -113,6 +113,7 @@ app.all('/search', (req, res) => {
     per_page: req.query.per_page || 10,
     page: req.query.page || 1,
     query: req.query.query,
+    order: req.query.order,
     filters: filters
   });
   res.json(result);
@@ -121,8 +122,9 @@ app.all('/search', (req, res) => {
 app.get('/', (req, res) => {
 
   var page = parseInt(req.query.page) || 1;
-  var per_page = parseInt(req.query.per_page) || 25;
+  var per_page = parseInt(req.query.per_page) || 30;
   var query = req.query.query;
+  var order = req.query.order || 'desc';
 
   var pages_count_limit;
 
@@ -133,6 +135,7 @@ app.get('/', (req, res) => {
     per_page: per_page,
     page: page,
     query: query,
+    order: order,
     filters: filters
   });
 
@@ -144,6 +147,7 @@ app.get('/', (req, res) => {
     timings: result.timings,
     page: page,
     per_page: per_page,
+    order: order,
     query: query,
     is_ajax: false,
     url: req.url,
