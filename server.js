@@ -108,12 +108,14 @@ app.get('/modal-facet/:name', async function(req, res) {
 app.all('/search', (req, res) => {
 
   var filters = req.body.filters;
+  var not_filters = req.body.not_filters;
 
   var result = itemsjs.search({
     per_page: req.query.per_page || 10,
     page: req.query.page || 1,
     query: req.query.query,
     order: req.query.order,
+    not_filters: not_filters,
     filters: filters
   });
   res.json(result);
@@ -136,6 +138,7 @@ app.get('/', (req, res) => {
     page: page,
     query: query,
     order: order,
+    not_filters: not_filters,
     filters: filters
   });
 
@@ -153,6 +156,7 @@ app.get('/', (req, res) => {
     url: req.url,
     aggregations: result.data.aggregations,
     filters: filters,
+    not_filters: not_filters,
     is_ajax: is_ajax,
   });
 

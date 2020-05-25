@@ -27,7 +27,7 @@
       <div class="checkbox block" style="margin-top: 0; margin-bottom: 0;">
         <label>
           <input class="checkbox aggregation-box" type="checkbox" {% if (filter and filter.val == term.key and filter.key == val.key) or in_array(term.key, filters[val.key]) %}checked="checked"{% endif %} onclick="onAggregationClick(this, '{{ field }}', '{{ term.key }}');">
-          {{ term.key }} ({{ term.doc_count }}) {% if false %}<a href="#" onclick="addNotFilter('{{ field }}', '{{ term.key }}'); return false;"><span class="text-muted">x</span></a>{% endif %}
+          {{ term.key }} ({{ term.doc_count }}) {% if true %}<a href="#" onclick="addNotFilter('{{ field }}', '{{ term.key }}'); return false;"><span class="text-muted">x</span></a>{% endif %}
         </label>
       </div>
       </li>
