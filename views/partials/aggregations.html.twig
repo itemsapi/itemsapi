@@ -10,7 +10,7 @@
   {% if true %}
 
   <h5 class="facet-name" style="margin-bottom: 5px; text-decoration: none;"><a href="#"><strong style="">
-    {{ field }} <i class="fa fa-angle-down" aria-hidden="true"></i></strong></a></h5>
+    {{ field | humanize }} <i class="fa fa-angle-down" aria-hidden="true"></i></strong></a></h5>
 
   <ul class="browse-list list-unstyled long-list facet-content" style="margin-bottom: 0; {% if in_array(aggregations[val.key].name, facets_open) %} display: block;{% endif %}">
 
@@ -27,18 +27,18 @@
       <div class="checkbox block" style="margin-top: 0; margin-bottom: 0;">
         <label>
           <input class="checkbox aggregation-box" type="checkbox" {% if (filter and filter.val == term.key and filter.key == val.key) or in_array(term.key, filters[val.key]) %}checked="checked"{% endif %} onclick="onAggregationClick(this, '{{ field }}', '{{ term.key }}');">
-          {{ term.key }} ({{ term.doc_count }}) {% if false %}<a href="#" onclick="addNotFilter('{{ field }}', '{{ term.key }}'); return false;"><span class="text-muted">x</span></a>{% endif %}
+          {{ term.key }} ({{ term.doc_count }}) {% if true %}<a href="#" onclick="addNotFilter('{{ field }}', '{{ term.key }}'); return false;"><span class="text-muted">x</span></a>{% endif %}
         </label>
       </div>
       </li>
       {% endfor %}
 
-      {% if 0 and in_array(val.key, filters_conf.modal_fields) %}
-        <li>
+      {% if 1 %}
+      <li>
         <div class="checkbox block text-muted" style="margin-top: 0; margin-bottom: 0;">
-          <a href="/modal-facet/{{ row.id }}/{{ val.key }}" onclick="showModalFacet('{{ row.id }}', '{{ val.key }}'); return false;"><span style="margin-left: 20px;">Show all</span></a>
+          <a href="/modal-facet/{{ val.key }}" onclick="showModalFacet('{{ field }}'); return false;"><span style="margin-left: 20px;">Show all</span></a>
         </div>
-        </li>
+      </li>
       {% endif %}
 
     {% endif %}

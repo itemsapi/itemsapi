@@ -2,7 +2,7 @@
 # docker run --privileged -it -p 3000:3000 itemsapi
 # docker run --privileged -it -p 3000:3000 itemsapi /bin/bash
 # docker run --privileged -it -p 3000:3000 itemsapi/itemsapi
-FROM node:12-alpine
+FROM node:14-alpine
 
 RUN apk update && apk upgrade && \
     echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \

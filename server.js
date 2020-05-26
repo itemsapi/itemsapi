@@ -66,14 +66,56 @@ app.post('/index', (req, res) => {
   });
 });
 
+/**
+ * this is for API
+ */
+app.get('/facet', (req, res) => {
+
+  var filters = req.body.filters;
+
+  var result = itemsjs.aggregation({
+    per_page: req.query.per_page || 10,
+    page: req.query.page || 1,
+    name: req.query.name
+  });
+
+  res.json(result);
+})
+
+app.get('/modal-facet/:name', async function(req, res) {
+
+  var filters = req.query.filters;
+  var not_filters = req.query.not_filters;
+
+  var facet = itemsjs.aggregation({
+    name: req.params.name,
+    filters: filters,
+    page: req.query.page || 1,
+    per_page: 100,
+  });
+
+  return res.render('views/modals-content/facet', {
+    facet: facet,
+    pagination: facet.pagination,
+    filters: filters,
+    not_filters: not_filters,
+    name: req.params.name
+  });
+})
+
+
+
 app.all('/search', (req, res) => {
 
   var filters = req.body.filters;
+  var not_filters = req.body.not_filters;
 
   var result = itemsjs.search({
     per_page: req.query.per_page || 10,
     page: req.query.page || 1,
     query: req.query.query,
+    order: req.query.order,
+    not_filters: not_filters,
     filters: filters
   });
   res.json(result);
@@ -82,8 +124,9 @@ app.all('/search', (req, res) => {
 app.get('/', (req, res) => {
 
   var page = parseInt(req.query.page) || 1;
-  var per_page = parseInt(req.query.per_page) || 25;
+  var per_page = parseInt(req.query.per_page) || 30;
   var query = req.query.query;
+  var order = req.query.order || 'desc';
 
   var pages_count_limit;
 
@@ -94,6 +137,8 @@ app.get('/', (req, res) => {
     per_page: per_page,
     page: page,
     query: query,
+    order: order,
+    not_filters: not_filters,
     filters: filters
   });
 
@@ -105,11 +150,13 @@ app.get('/', (req, res) => {
     timings: result.timings,
     page: page,
     per_page: per_page,
+    order: order,
     query: query,
     is_ajax: false,
     url: req.url,
     aggregations: result.data.aggregations,
     filters: filters,
+    not_filters: not_filters,
     is_ajax: is_ajax,
   });
 

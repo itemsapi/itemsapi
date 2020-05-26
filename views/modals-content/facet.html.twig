@@ -1,0 +1,78 @@
+{#{% import "views/macros/pagination.html.twig" as pag %}
+
+{% block content %}#}
+
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4 class="modal-title" id="myModalLabel">List of filters for {{ name }} (total: {{ pagination.total }})</h4>
+</div>
+<div class="modal-body item-view">
+
+  <div class="row">
+
+  {% set columns = 4 %}
+
+  {% for nb in range(0, columns) %}
+  <div class="col-md-3 col-sm-3">
+    <ul class="list-unstyled list-underlined">
+
+      {% set size = (facet.data.buckets.length / columns) | ceil %}
+      {% set start = (nb) * size %}
+      {% set end = start + size %}
+
+        {% for row in facet.data.buckets.slice(start, end) %}
+        <li>
+        <div class="checkbox block" style="margin-top: 0; margin-bottom: 0;">
+          <label>
+            {#checked #}
+            {#{% if in_array(row.key , filters[name]) %}checked="checked"{% endif %}{% if in_array(row.key , filters[name]) %}checked="checked"{% endif %}#}
+            <input class="checkbox aggregation-box" {% if in_array(row.key , filters[name]) %}checked="checked"{% endif %}  type="checkbox" onclick="onAggregationClick(this, '{{ name }}', '{{ row.key }}');">
+            {#{% if in_array(row.key , not_filters[name]) %}{{ row.key }} ({{ row.doc_count }}) <a href="#" onclick="addNotFilter('{{ name }}', '{{ row.key }}'); return false;"><span class="text-muted">x</span></a>{% endif %}#}
+            {#<span style="{% if in_array(row.key , not_filters[name]) %}color: red;{% endif %}">{{ row.key }} ({{ row.doc_count }}) <a href="#" onclick="addNotFilter('{{ name }}', '{{ row.key }}'); return false;"><span class="text-muted">x</span></a></span>#}
+            {#<span style="">{{ row.key }} ({{ row.doc_count }}) <a href="#" onclick="addNotFilter('{{ name }}', '{{ row.key }}'); return false;"></a></span>#}
+            <span style="">{{ row.key }} ({{ row.doc_count }}) <a href="#" onclick="addNotFilter('{{ name }}', '{{ row.key }}'); return false;"><span class="text-muted">x</span></a></span>
+          </label>
+        </div>
+        </li>
+        {% endfor %}
+
+      {#{% for row in facet.data.buckets.slice(start, end) %}
+      <li>
+      <a href='/?filters={"{{ name }}":["{{ row.key }}"]}'>{{ row.key }} ({{ row.doc_count }})</a><br />
+      </li>
+      {% endfor %}#}
+    </ul>
+
+
+
+
+
+
+  </div>
+  {% endfor %}
+
+  <div class="clearfix"></div>
+
+  {% if 0 and pagination.per_page < pagination.total %}
+  <div class="col-md-12 pagination-bar text-center" style="margin-top: 10px;">
+    {{ pag.pagination_render(pagination, {
+    pages_count: 8,
+    element_class: 'facet-modal-pagination facet-modal-name-' + id + '-' + name
+    }) }}
+  </div>
+  {% endif %}
+
+</div>
+</div>
+
+
+<script>
+  $('.show-info').popover({
+    delay: 300,
+    placement: 'bottom',
+    trigger: 'hover'
+  })
+</script>
+
+
+{#{% endblock %}#}
