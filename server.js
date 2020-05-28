@@ -126,7 +126,9 @@ app.get('/', (req, res) => {
   var page = parseInt(req.query.page) || 1;
   var per_page = parseInt(req.query.per_page) || 30;
   var query = req.query.query;
-  var search_native = req.query.search_native;
+  //var search_native = req.query.search_native;
+  var facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
+
   var order = req.query.order || 'desc';
 
   var pages_count_limit;
@@ -139,7 +141,8 @@ app.get('/', (req, res) => {
     page: page,
     query: query,
     order: order,
-    search_native: search_native,
+    facets_fields: facets_fields,
+    search_native: true,
     not_filters: not_filters,
     filters: filters
   });
