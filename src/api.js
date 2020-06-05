@@ -34,6 +34,44 @@ module.exports = function(app) {
     });
   });
 
+  /**
+   * @TODO
+   * add 404
+   */
+  app.get('/items/:id', (req, res) => {
+
+    var result = itemsjs.get_item(parseInt(req.params.id, 10));
+    res.json(result);
+  });
+
+  /**
+   */
+  app.delete('/items/:id', (req, res) => {
+
+    var result = itemsjs.delete_item(parseInt(req.params.id, 10));
+    res.json(result);
+  });
+
+  /**
+   * @TODO
+   * add 404
+   */
+  app.post('/items/:id/update', (req, res) => {
+
+    var result = itemsjs.update_item(req.body);
+    res.json(result);
+  });
+
+  /**
+   * @TODO
+   * add 404
+   */
+  app.post('/items/:id/partial', (req, res) => {
+
+    var result = itemsjs.partial_update_item(parseInt(req.params.id, 10), req.body);
+    res.json(result);
+  });
+
 
   /**
    * indexing data here
