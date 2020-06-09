@@ -11,8 +11,8 @@ RUN apk update && apk upgrade && \
 
 COPY . /app/
 RUN rm -Rf /app/node_modules
-RUN rm -Rf /app/example.mdb
-RUN mkdir -p /app/example.mdb
+RUN rm -Rf /app/db.mdb
+RUN mkdir -p /app/db.mdb
 WORKDIR app
 
 RUN npm install

@@ -48,7 +48,15 @@ module.exports = function(app) {
     //var search_native = req.query.search_native;
     var facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
 
+    var sorting_fields = [];
+    if (req.configuration) {
+      sorting_fields = req.configuration.sorting_fields;
+    }
+
+    //console.log(req.configuration);
+
     var order = req.query.order || 'desc';
+    var sort_field = req.query.sort_field;
 
     var filters = JSON.parse(req.query.filters || '{}');
     var not_filters = JSON.parse(req.query.not_filters || '{}');
@@ -58,6 +66,7 @@ module.exports = function(app) {
       page: page,
       query: query,
       order: order,
+      sort_field: sort_field,
       facets_fields: facets_fields,
       search_native: true,
       not_filters: not_filters,
@@ -73,6 +82,8 @@ module.exports = function(app) {
       page: page,
       per_page: per_page,
       order: order,
+      sorting_fields: sorting_fields,
+      sort_field: sort_field,
       query: query,
       is_ajax: false,
       url: req.url,

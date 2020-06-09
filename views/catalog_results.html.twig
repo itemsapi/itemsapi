@@ -33,6 +33,15 @@
     </select>
   </div>
 
+  <div class="pull-right" style="margin-bottom: 10px; margin-right: 10px;">
+    <select id="select_sorting" name="select_sorting" class="form-control pull-left" style="width: auto; margin-top: 0px;">
+      <option value="">Sorting field</option>
+      {% for v in sorting_fields %}
+      <option {% if sort_field == v %}selected{% endif %} value="{{ v }}">{{ v }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
 </div>
 
 

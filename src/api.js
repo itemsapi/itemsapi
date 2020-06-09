@@ -24,6 +24,19 @@ module.exports = function(app) {
   });
 
   /**
+   * manually load sort indexes
+   */
+  app.post('/load-sort-index', (req, res) => {
+
+    console.log('loading sort index');
+    itemsjs.load_sort_index();
+
+    res.json({
+      status: 'loaded sort index'
+    });
+  });
+
+  /**
    * reset full index
    */
   app.post('/reset', (req, res) => {
@@ -134,6 +147,7 @@ module.exports = function(app) {
       page: req.query.page || 1,
       query: req.query.query,
       order: req.query.order,
+      sort_field: req.query.sort_field,
       not_filters: not_filters,
       facets_fields: facets_fields,
       filters: filters
