@@ -4,7 +4,8 @@
   "description": "Fast faceted search",
   "main": "server.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "mocha -b --exit tests/*"
   },
   "author": "Mateusz Rzepa",
   "repository": "itemsapi/itemsapi",
@@ -28,5 +29,7 @@
     "nunjucks": "^3.2.1",
     "urijs": "^1.18.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^7.2.0"
+  }
 }
