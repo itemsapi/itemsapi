@@ -281,8 +281,8 @@ $(document).on('change', '#select_per_page', function(event) {
 $(document).on('change', '#select_sorting', function(event) {
 
   var uri = URI();
-  uri.removeSearch('sort');
-  uri.addSearch('sort', $(this).val());
+  uri.removeSearch('sort_field');
+  uri.addSearch('sort_field', $(this).val());
 
   requestCatalog({
     url: uri.href()

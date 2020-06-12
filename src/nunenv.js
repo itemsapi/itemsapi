@@ -28,7 +28,32 @@ module.exports = function(app, path, options) {
     return input;
   })
 
+  .addFilter('highlight', function(input, words) {
 
+    if (!words.length) {
+      return input;
+    }
+
+    if (_.isString(input)) {
+
+      words.forEach(word => {
+        var regex = new RegExp('(\\b' + word + '\\b)', 'gi');
+        input = input.replace(regex, '<em>$1</em>');
+      })
+    } else if (_.isArray(input)) {
+
+      input = input.map(term => {
+        words.forEach(word => {
+          var regex = new RegExp('(\\b' + word + '\\b)', 'gi');
+          term = term.replace(regex, '<em>$1</em>');
+        })
+
+        return term;
+      })
+    }
+
+    return input;
+  })
 
   .addGlobal('in_array', function(element, array) {
     array = array || [];

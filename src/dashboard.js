@@ -44,7 +44,10 @@ module.exports = function(app) {
 
     var page = parseInt(req.query.page) || 1;
     var per_page = parseInt(req.query.per_page) || 30;
-    var query = req.query.query;
+    var query = req.query.query ? req.query.query : '';
+    var query_tokens = query.split(' ').filter(v => !!v).map(v => {
+      return v.trim().toLowerCase();
+    });
     //var search_native = req.query.search_native;
     var facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
 
@@ -85,6 +88,7 @@ module.exports = function(app) {
       sorting_fields: sorting_fields,
       sort_field: sort_field,
       query: query,
+      query_tokens: query_tokens,
       is_ajax: false,
       url: req.url,
       aggregations: result.data.aggregations,

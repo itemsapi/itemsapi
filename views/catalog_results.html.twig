@@ -67,7 +67,18 @@
 
         <tr>
           <td>
-            {{ item | dump  }}
+
+            <table class="table" style="background-color: transparent;">
+              <tbody>
+                {% for name, val in item %}
+                <tr>
+                  <td width="150" style="background-color: transparent; border: 0;"><b>{{ name }}</b></td>
+                  <td class="td-pretty" style="background-color: transparent; border: 0;">{{ val | highlight(query_tokens) | safe }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
           </td>
         </tr>
 
