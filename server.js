@@ -36,7 +36,4 @@ app.all('/', (req, res, next) => {
 require('./src/dashboard')(app);
 require('./src/api')(app);
 
-
-
 app.listen(port, () => console.log(`ItemsAPI listening at http://localhost:${port}`))
-
