@@ -89,9 +89,9 @@ module.exports = function(app) {
   /**
    * indexing data here
    */
-  app.post('/items', (req, res) => {
+  app.post('/items', async (req, res) => {
 
-    itemsjs.index({
+    await itemsjs.index({
       json_object: req.body
     });
 
@@ -103,7 +103,7 @@ module.exports = function(app) {
   /**
    * indexing data here
    */
-  app.post('/index', (req, res) => {
+  app.post('/index', async (req, res) => {
 
     var data = {};
 
@@ -113,7 +113,7 @@ module.exports = function(app) {
       data.json_string = req.body;
     }
 
-    itemsjs.index(data);
+    await itemsjs.index(data);
 
     res.json({
       status: 'indexed'
