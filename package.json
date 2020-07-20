@@ -25,7 +25,7 @@
     "express": "^4.17.1",
     "history.js": "github:browserstate/history.js",
     "itemsjs-server-optimized": "^0.4.68",
-    "lodash": "^4.17.2",
+    "lodash": "^4.17.19",
     "nunjucks": "^3.2.1",
     "urijs": "^1.18.2"
   },
