@@ -3,11 +3,27 @@ const itemsjs = require('itemsjs-server-optimized')();
 
 module.exports = function(app) {
 
+  app.get('/status', (req, res) => {
+    res.json({status: 'ok'});
+  });
+
+  app.use( function(req, res, next) {
+
+    if (process.env.API_KEY && process.env.API_KEY !== req.query.api_key) {
+      return res.status(401).json({
+        message: 'correct api_key is required'
+      });
+    }
+
+    return next();
+  });
+
   app.get('/configuration', (req, res) => {
 
     var result = itemsjs.get_configuration();
     res.json(result);
   });
+
   /**
    * update configuration
    */
