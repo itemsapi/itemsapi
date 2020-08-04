@@ -10,7 +10,7 @@ docker run --privileged -it -p 3000:3000 itemsapi/itemsapi
 ### Create configuration
 
 ```bash
-wget https://raw.githubusercontent.com/itemsapi/itemsapi/2.0-branch/examples/configuration-movies.json -O configuration.json
+curl https://raw.githubusercontent.com/itemsapi/itemsapi/2.0-branch/examples/configuration-movies.json -o configuration.json
 
 curl -i -X POST 'http://127.0.0.1:3000/configuration' \
   --header 'content-type: application/json' \
@@ -20,7 +20,7 @@ curl -i -X POST 'http://127.0.0.1:3000/configuration' \
 ### Index data
 
 ```bash
-wget https://github.com/itemsapi/itemsapi-example-data/blob/master/items/imdb.json\?raw\=true -O movies.json
+curl https://raw.githubusercontent.com/itemsapi/itemsapi-example-data/master/items/imdb.json -o movies.json
 
 curl -i -X POST 'http://127.0.0.1:3000/index' \
   --header 'content-type: text/plain' \
