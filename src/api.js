@@ -1,5 +1,5 @@
-//const itemsjs = require('../../itemsjs-server-optimized')();
-const itemsjs = require('itemsjs-server-optimized')();
+const itemsjs = require('../../itemsjs-server-optimized')();
+//const itemsjs = require('itemsjs-server-optimized')();
 
 module.exports = function(app) {
 
@@ -154,16 +154,34 @@ module.exports = function(app) {
 
   app.all('/search', (req, res) => {
 
-    var filters = req.body.filters;
-    var not_filters = req.body.not_filters;
-    var facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
+    var filters;
+    var not_filters;
+    var facets_fields;
+
+    if (req.body.filters) {
+      filters = req.body.filters;
+    } else {
+      filters = JSON.parse(req.query.filters || '{}');
+    }
+
+    if (req.body.not_filters) {
+      not_filters = req.body.not_filters;
+    } else {
+      not_filters = JSON.parse(req.query.not_filters || '{}');
+    }
+
+    if (req.body.facets_fields) {
+      facets_fields = req.body.facets_fields ? req.body.facets_fields.split(',').filter(x => !!x) : null;
+    } else {
+      facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
+    }
 
     var result = itemsjs.search({
-      per_page: req.query.per_page || 10,
-      page: req.query.page || 1,
-      query: req.query.query,
-      order: req.query.order,
-      sort_field: req.query.sort_field,
+      per_page: parseInt(req.body.per_page || req.query.per_page || 10),
+      page: parseInt(req.body.page || req.query.page || 1),
+      query: req.body.query || req.query.query,
+      order: req.body.order || req.query.order,
+      sort_field: req.body.sort_field || req.query.sort_field,
       not_filters: not_filters,
       facets_fields: facets_fields,
       filters: filters
