@@ -1,5 +1,5 @@
-const itemsjs = require('../../itemsjs-server-optimized')();
-//const itemsjs = require('itemsjs-server-optimized')();
+//const itemsjs = require('../../itemsjs-server-optimized')();
+const itemsjs = require('itemsjs-server-optimized')();
 
 module.exports = function(app) {
 
