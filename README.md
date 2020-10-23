@@ -10,6 +10,7 @@ Blazingly fast faceted search. It has Node.js simplicity and C++ speed.
 - pagination
 - simple JSON API
 - web ui for exploring / managing index
+- dockerized with alpine
 
 ## Performance
 
