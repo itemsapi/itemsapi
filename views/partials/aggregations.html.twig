@@ -36,7 +36,7 @@
       {% if 1 %}
       <li>
         <div class="checkbox block text-muted" style="margin-top: 0; margin-bottom: 0;">
-          <a href="/modal-facet/{{ val.key }}" onclick="showModalFacet('{{ field }}'); return false;"><span style="margin-left: 20px;">Show all</span></a>
+          <a href="/dashboard/{{ index_name }}/modal-facet/{{ val.key }}" onclick="showModalFacet('{{ index_name }}', '{{ field }}'); return false;"><span style="margin-left: 20px;">Show all</span></a>
         </div>
       </li>
       {% endif %}

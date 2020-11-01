@@ -1,0 +1,31 @@
+{% if is_ajax != true %}
+  {% extends "views/layout.html.twig" %}
+{% endif %}
+
+{% block content %}
+
+<div class="page-header" style="margin-top: 0;">
+  <h1 style="margin-top: 0;">ItemsAPI</h1>
+  <h4 class="text-left text-muted">List of indices</h4>
+</div>
+
+{% if indices.data.length %}
+<table class="table table-striped">
+   <thead>
+      <tr>
+         <th>Index name</th>
+      </tr>
+   </thead>
+   <tbody>
+      {% for row in indices.data %}
+      <tr>
+        <td><a href="/dashboard/{{ row }}">{{ row }}</a></td>
+      </tr>
+      {% endfor %}
+   </tbody>
+</table>
+{% else %}
+There is no index right now. Please read <a href="https://docs.itemsapi.com">https://docs.itemsapi.com</a> about how to create your first index
+{% endif %}
+
+{% endblock %}

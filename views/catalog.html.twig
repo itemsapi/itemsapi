@@ -11,8 +11,10 @@
     </div>
   </div>
   {% endif %}
-  <h1 style="font-size: 24px; margin-top: 0px; margin-bottom: 0px;">Found ({{pagination.total}}) items</h1>
-  <h4 class="text-left text-muted">Searched in {{ timings.search }}ms, faceted in {{ timings.facets }}ms, total in {{ timings.total }}ms</h4>
+  {#<h1 style="font-size: 24px; margin-top: 0px; margin-bottom: 0px;">Found ({{pagination.total}}) items</h1>#}
+  <h1 style="font-size: 24px; margin-top: 0px; margin-bottom: 0px;"><a href="/">Indices</a> / {{ index_name }}</h1>
+  {#<h4 class="text-left text-muted">No. records {{pagination.total}}</h4>#}
+  <h4 class="text-left text-muted">No. of items <span style="color: black;">{{pagination.total}}</span>, searched in {{ timings.search }}ms, faceted in {{ timings.facets }}ms, total in {{ timings.total }}ms</h4>
 </div>
 
 

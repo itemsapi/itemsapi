@@ -118,7 +118,7 @@ var getDocument = function(dataset, id) {
   return false;
 }
 
-var showModalFacet = function(name, page) {
+var showModalFacet = function(index_name, name, page) {
 
   var uri = new URI();
   var qs = uri.search(true);
@@ -128,7 +128,7 @@ var showModalFacet = function(name, page) {
   var page = page || 1;
 
   $.ajax({
-    url: '/modal-facet/' + name,
+    url: '/dashboard/' + index_name + '/modal-facet/' + name,
     method: 'GET',
     data: {
       filters: filters,

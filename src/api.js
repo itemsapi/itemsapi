@@ -1,182 +1,196 @@
 //const itemsjs = require('../../itemsjs-server-optimized')();
 const itemsjs = require('itemsjs-server-optimized')();
 
-module.exports = function(app) {
+const express = require('express');
+const router = express.Router()
 
-  app.get('/status', (req, res) => {
-    res.json({status: 'ok'});
-  });
+router.get('/:index_name/status', (req, res) => {
+  res.json({status: 'ok'});
+});
 
-  app.use( function(req, res, next) {
+router.use(function(req, res, next) {
 
-    if (process.env.API_KEY && process.env.API_KEY !== req.query.api_key) {
-      return res.status(401).json({
-        message: 'correct api_key is required'
-      });
-    }
+  console.log(req.query);
 
-    return next();
-  });
-
-  app.get('/configuration', (req, res) => {
-
-    var result = itemsjs.get_configuration();
-    res.json(result);
-  });
-
-  /**
-   * update configuration
-   */
-  app.post('/configuration', (req, res) => {
-
-    itemsjs.set_configuration(req.body);
-
-    console.log(req.body);
-    console.log('configuration added');
-
-    res.json({
-      status: 'configuration accepted'
+  if (process.env.API_KEY && process.env.API_KEY !== req.query.api_key) {
+    return res.status(401).json({
+      message: 'correct api_key is required'
     });
+  }
+
+  return next();
+});
+
+router.get('/:index_name/configuration', (req, res) => {
+
+  var result = itemsjs.get_configuration(req.params.index_name);
+  res.json(result);
+});
+
+/**
+ * update configuration
+ */
+router.post('/:index_name/configuration', (req, res) => {
+
+  itemsjs.set_configuration(req.params.index_name, req.body);
+
+  console.log(req.body);
+  console.log('configuration added');
+
+  res.json({
+    status: 'configuration accepted'
+  });
+});
+
+/**
+ * manually load sort indexes
+ */
+router.post('/:index_name/load-sort-index', (req, res) => {
+
+  console.log('loading sort index');
+  itemsjs.load_sort_index(req.params.index_name);
+
+  res.json({
+    status: 'loaded sort index'
+  });
+});
+
+/**
+ * reset full index
+ */
+router.post('/:index_name/reset', (req, res) => {
+
+  itemsjs.reset(req.params.index_name);
+
+  res.json({
+  });
+});
+
+/**
+ * @TODO
+ * add 404
+ */
+router.get('/:index_name/items/:id', (req, res) => {
+
+  var result = itemsjs.get_item(req.params.index_name, parseInt(req.params.id, 10));
+  res.json(result);
+});
+
+/**
+*/
+router.delete('/:index_name/items/:id', async (req, res) => {
+
+  var result = await itemsjs.delete_item(req.params.index_name, parseInt(req.params.id, 10));
+  res.json(result);
+});
+
+/**
+ * @TODO
+ * add 404
+ */
+router.post('/:index_name/items/:id/update', (req, res) => {
+
+  var result = itemsjs.update_item(req.params.index_name, req.body);
+  res.json(result);
+});
+
+/**
+ * @TODO
+ * add 404
+ */
+router.post('/:index_name/items/:id/partial', (req, res) => {
+
+  var result = itemsjs.partial_update_item(req.params.index_name, parseInt(req.params.id, 10), req.body);
+  res.json(result);
+});
+
+
+/**
+ * indexing data here
+ */
+router.post('/:index_name/items', async (req, res) => {
+
+  console.log(req.body)
+  //console.log(req.query)
+
+  await itemsjs.index(req.params.index_name, {
+    json_object: req.body
   });
 
-  /**
-   * manually load sort indexes
-   */
-  app.post('/load-sort-index', (req, res) => {
+  res.json({
+    status: 'indexed'
+  });
+});
 
-    console.log('loading sort index');
-    itemsjs.load_sort_index();
+/**
+ * indexing data here
+ */
+router.post('/:index_name/index', async (req, res) => {
 
-    res.json({
-      status: 'loaded sort index'
+  var data = {};
+
+  if (req.body.json_path) {
+    data.json_path = req.body.json_path;
+  } else {
+    data.json_string = req.body;
+  }
+
+  try {
+    await itemsjs.index(req.params.index_name, data);
+  } catch (err) {
+
+    return res.status(400).json({
+      message: err.message
     });
+  }
+
+  res.json({
+    status: 'indexed'
+  });
+});
+
+/**
+ * this is for API
+ */
+router.get('/:index_name/facet', async (req, res) => {
+
+  var filters = req.body.filters;
+
+  var result = await itemsjs.aggregation(req.params.index_name, {
+    per_page: req.query.per_page || 10,
+    page: req.query.page || 1,
+    name: req.query.name
   });
 
-  /**
-   * reset full index
-   */
-  app.post('/reset', (req, res) => {
+  res.json(result);
+})
 
-    itemsjs.reset();
+router.all('/:index_name/search', async (req, res) => {
 
-    res.json({
-    });
-  });
+  var filters;
+  var not_filters;
+  var facets_fields;
 
-  /**
-   * @TODO
-   * add 404
-   */
-  app.get('/items/:id', (req, res) => {
+  if (req.body.filters) {
+    filters = req.body.filters;
+  } else {
+    filters = JSON.parse(req.query.filters || '{}');
+  }
 
-    var result = itemsjs.get_item(parseInt(req.params.id, 10));
-    res.json(result);
-  });
+  if (req.body.not_filters) {
+    not_filters = req.body.not_filters;
+  } else {
+    not_filters = JSON.parse(req.query.not_filters || '{}');
+  }
 
-  /**
-   */
-  app.delete('/items/:id', (req, res) => {
+  if (req.body.facets_fields) {
+    facets_fields = req.body.facets_fields ? req.body.facets_fields.split(',').filter(x => !!x) : null;
+  } else {
+    facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
+  }
 
-    var result = itemsjs.delete_item(parseInt(req.params.id, 10));
-    res.json(result);
-  });
-
-  /**
-   * @TODO
-   * add 404
-   */
-  app.post('/items/:id/update', (req, res) => {
-
-    var result = itemsjs.update_item(req.body);
-    res.json(result);
-  });
-
-  /**
-   * @TODO
-   * add 404
-   */
-  app.post('/items/:id/partial', (req, res) => {
-
-    var result = itemsjs.partial_update_item(parseInt(req.params.id, 10), req.body);
-    res.json(result);
-  });
-
-
-  /**
-   * indexing data here
-   */
-  app.post('/items', async (req, res) => {
-
-    await itemsjs.index({
-      json_object: req.body
-    });
-
-    res.json({
-      status: 'indexed'
-    });
-  });
-
-  /**
-   * indexing data here
-   */
-  app.post('/index', async (req, res) => {
-
-    var data = {};
-
-    if (req.body.json_path) {
-      data.json_path = req.body.json_path;
-    } else {
-      data.json_string = req.body;
-    }
-
-    await itemsjs.index(data);
-
-    res.json({
-      status: 'indexed'
-    });
-  });
-
-  /**
-   * this is for API
-   */
-  app.get('/facet', (req, res) => {
-
-    var filters = req.body.filters;
-
-    var result = itemsjs.aggregation({
-      per_page: req.query.per_page || 10,
-      page: req.query.page || 1,
-      name: req.query.name
-    });
-
-    res.json(result);
-  })
-
-  app.all('/search', (req, res) => {
-
-    var filters;
-    var not_filters;
-    var facets_fields;
-
-    if (req.body.filters) {
-      filters = req.body.filters;
-    } else {
-      filters = JSON.parse(req.query.filters || '{}');
-    }
-
-    if (req.body.not_filters) {
-      not_filters = req.body.not_filters;
-    } else {
-      not_filters = JSON.parse(req.query.not_filters || '{}');
-    }
-
-    if (req.body.facets_fields) {
-      facets_fields = req.body.facets_fields ? req.body.facets_fields.split(',').filter(x => !!x) : null;
-    } else {
-      facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
-    }
-
-    var result = itemsjs.search({
+  try {
+    var result = await itemsjs.search(req.params.index_name, {
       per_page: parseInt(req.body.per_page || req.query.per_page || 10),
       page: parseInt(req.body.page || req.query.page || 1),
       query: req.body.query || req.query.query,
@@ -186,6 +200,14 @@ module.exports = function(app) {
       facets_fields: facets_fields,
       filters: filters
     });
-    res.json(result);
-  })
-}
+  } catch (err) {
+
+    return res.status(400).json({
+      message: err.message
+    });
+  }
+
+  return res.json(result);
+})
+
+module.exports = router;
