@@ -1,4 +1,4 @@
-# ItemsAPI 2.0 - fast faceted search
+# ItemsAPI 2.x - fast faceted search
 
 Blazingly fast faceted search. It has Node.js simplicity and C++ speed.
 
