@@ -34,3 +34,6 @@ config/local
 config/local/*
 reindex.log
 db.mdb/
+temp.json
+temp2.json
+data/*.mdb

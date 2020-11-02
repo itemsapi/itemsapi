@@ -141,11 +141,11 @@ var getUpdatedAggregationsUrl = function(options) {
 
   //if (uri.path() !== '/catalog' && uri.path() !== '/' && uri.path().indexOf('/catalog/category') === -1) {
   //if (uri.path() !== '/catalog' && uri.path() !== '/') {
-  if (uri.path().indexOf('/changelog') !== -1) {
+  /*if (uri.path().indexOf('/changelog') !== -1) {
     uri.path('/changelog');
   } else if (uri.path().indexOf('/catalog') === -1 && uri.path() !== '/') {
     uri.path('/catalog');
-  }
+  }*/
 
   // add filter
   if (checked === true) {
