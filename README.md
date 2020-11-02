@@ -6,7 +6,8 @@ Blazingly fast faceted search. It has Node.js simplicity and C++ speed.
 
 - fast faceted search
 - full text search
-- fast data indexing
+- multi-tenancy
+- data indexing
 - pagination
 - simple JSON API
 - web ui for exploring / managing index
