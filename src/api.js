@@ -10,8 +10,6 @@ router.get('/:index_name/status', (req, res) => {
 
 router.use(function(req, res, next) {
 
-  console.log(req.query);
-
   if (process.env.API_KEY && process.env.API_KEY !== req.query.api_key) {
     return res.status(401).json({
       message: 'correct api_key is required'
