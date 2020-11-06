@@ -1,4 +1,4 @@
-# ItemsAPI 2.0 - fast faceted search
+# ItemsAPI 2.x - fast faceted search
 
 Blazingly fast faceted search. It has Node.js simplicity and C++ speed.
 
@@ -27,9 +27,7 @@ docker run --privileged -it -p 3000:3000 itemsapi/itemsapi
 
 ## Getting started
 
-Please look into full example here - [index and search movies](/examples/movies.md)
-
-
+Please look into full example here - [index and search movies](https://docs.itemsapi.com/guide/movies.html)
 
 ## Licence
 
