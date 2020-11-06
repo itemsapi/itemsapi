@@ -108,9 +108,6 @@ router.post('/:index_name/items/:id/partial', (req, res) => {
  */
 router.post('/:index_name/items', async (req, res) => {
 
-  console.log(req.body)
-  //console.log(req.query)
-
   await itemsjs.index(req.params.index_name, {
     json_object: req.body
   });
