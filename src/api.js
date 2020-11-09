@@ -1,5 +1,6 @@
 //const itemsjs = require('../../itemsjs-server-optimized')();
 const itemsjs = require('itemsjs-server-optimized')();
+const itemsjs_pool = require('./pool/itemsjs');
 
 const express = require('express');
 const router = express.Router()
@@ -185,7 +186,7 @@ router.all('/:index_name/search', async (req, res) => {
   }
 
   try {
-    var result = await itemsjs.search(req.params.index_name, {
+    var result = await itemsjs_pool.search(req.params.index_name, {
       per_page: parseInt(req.body.per_page || req.query.per_page || 10),
       page: parseInt(req.body.page || req.query.page || 1),
       query: req.body.query || req.query.query,

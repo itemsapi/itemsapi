@@ -70,17 +70,24 @@ router.get('/:index_name', async (req, res) => {
   var filters = JSON.parse(req.query.filters || '{}');
   var not_filters = JSON.parse(req.query.not_filters || '{}');
 
-  var result = await itemsjs.search(req.params.index_name, {
-    per_page: per_page,
-    page: page,
-    query: query,
-    order: order,
-    sort_field: sort_field,
-    facets_fields: facets_fields,
-    search_native: true,
-    not_filters: not_filters,
-    filters: filters
-  });
+  try {
+    var result = await itemsjs.search(req.params.index_name, {
+      per_page: per_page,
+      page: page,
+      query: query,
+      order: order,
+      sort_field: sort_field,
+      facets_fields: facets_fields,
+      search_native: true,
+      not_filters: not_filters,
+      filters: filters
+    });
+  } catch (err) {
+
+    return res.status(400).json({
+      message: err.message
+    });
+  }
 
   var is_ajax = req.query.is_ajax || req.xhr;
 
