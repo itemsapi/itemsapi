@@ -39,6 +39,9 @@ app.all('*', (req, res, next) => {
     return res.redirect('/dashboard');
   }
 
+  //console.log(req.url)
+  //return res.json({status: 'ok'});
+
   next();
 });
 

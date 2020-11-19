@@ -4,9 +4,9 @@
 
 {% block content %}
 
-<div class="page-header" style="margin-top: 0;">
-  <h1 style="margin-top: 0;">ItemsAPI</h1>
-  <h4 class="text-left text-muted">List of indices</h4>
+<div class="page-header" style="margin-top: 0; padding-bottom: 15px;">
+  <h1 style="font-size: 24px; margin-top: 0px; margin-bottom: 0px;">Indices list</h1>
+  <h4 class="text-left text-muted">No. of indices <span style="color: black;">{{pagination.total}}</span></h4>
 </div>
 
 {% if indices.data.length %}
@@ -14,16 +14,21 @@
    <thead>
       <tr>
          <th>Index name</th>
+         <th>Items</th>
       </tr>
    </thead>
    <tbody>
-      {% for row in indices.data %}
+      {% for row in rows %}
       <tr>
-        <td><a href="/dashboard/{{ row }}">{{ row }}</a></td>
+        <td><a href="/dashboard/{{ row.index_name }}">{{ row.index_name }}</a></td>
+        <td>{{ row.total }}</td>
       </tr>
       {% endfor %}
    </tbody>
 </table>
+
+{% include "views/partials/pagination.html.twig" ignore missing %}
+
 {% else %}
 There is no index right now. Please read <a href="https://docs.itemsapi.com">https://docs.itemsapi.com</a> about how to create your first index
 {% endif %}

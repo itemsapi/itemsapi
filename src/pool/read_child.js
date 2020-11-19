@@ -1,4 +1,4 @@
-const itemsjs = require('itemsjs-server-optimized')();
+const itemsjs = require('./../clients/itemsjs');
 
 module.exports.search_cb = function (index_name, data, callback) {
 
