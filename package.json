@@ -21,13 +21,15 @@
     "api"
   ],
   "dependencies": {
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "history.js": "github:browserstate/history.js",
-    "itemsjs-server-optimized": "^2.1.2",
+    "itemsjs-server-optimized": "^2.1.6",
     "lodash": "^4.17.20",
-    "nunjucks": "^3.2.1",
-    "urijs": "^1.18.2"
+    "nunjucks": "^3.2.2",
+    "urijs": "^1.18.2",
+    "worker-farm": "^1.7.0"
   },
   "devDependencies": {
     "mocha": "^7.2.0"

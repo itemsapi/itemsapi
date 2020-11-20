@@ -1,0 +1,94 @@
+{% macro pagination_render(pagination, options) %}
+
+  <ul class="pagination">
+
+    {% set total_pages_count = ((pagination.total | int) / (pagination.per_page | int)) | ceil  %}
+
+    {% if total_pages_count > pages_count_limit %}
+      {% set total_pages_count = pages_count_limit %}
+    {% endif %}
+
+    {% set pages_count = total_pages_count %}
+
+    {% if options.pages_count and pages_count > options.pages_count %}
+      {% set pages_count = options.pages_count %}
+    {% elseif pages_count > 8 %}
+      {% set pages_count = 8 %}
+    {% endif %}
+
+    {% set page = pagination.page | int %}
+
+    {% if 1 or pages_count > 1 %}
+
+      {% set min_page = 1 %}
+
+      {% if page - (pages_count / 2) >= 1 %}
+      {% set min_page = page - (pages_count / 2) | int %}
+      {% endif %}
+
+      {% set max_page = total_pages_count %}
+
+      {% if page + (pages_count / 2) <= total_pages_count %}
+      {% set max_page = page + (pages_count / 2) | int %}
+      {% endif %}
+
+
+      {% if pages_count % 2 == 0 %}
+      {% set max_page = max_page - 1 %}
+      {% endif %}
+
+      {#we need to extend#}
+      {% if max_page - min_page + 1 < pages_count %}
+        {% set diff = pages_count - max_page + min_page - 1 %}
+        {#diff: {{ diff }}
+        <br />#}
+        {% if min_page > 1 %}
+        {% set min_page = min_page - diff %}
+        {% endif %}
+
+        {% if max_page < total_pages_count %}
+        {% set max_page = max_page + diff %}
+        {% endif %}
+
+      {% endif %}
+
+      {% if min_page < 1 %}
+      {% set min_page = 1 %}
+      {% endif %}
+
+      {% if max_page > total_pages_count %}
+      {% set max_page = total_pages_count %}
+      {% endif %}
+
+      {% set numbers = range(min_page, max_page + 1) %}
+
+      {#{{ numbers | debug }}
+      <br />#}
+
+      {#prev#}
+      {% if pagination.page > 1 %}
+      <li><a class="pagination-btn" href="/dashboard/?page={{ page - 1 }}">&laquo; Prev </a></li>
+      {% endif %}
+
+      {% if total_pages_count > 1 %}
+      {% for number in numbers %}
+        {% set number = number | ceil %}
+        <li {% if (not page and number == 1) or number == pagination.page %}class="active"{% endif %}><a href="/dashboard/?page={{ number }}">{{ number }}</a></li>
+      {% endfor %}
+      {% endif %}
+
+      {#next#}
+      {% if page < total_pages_count %}
+      <li><a class="pagination-btn" href="/dashboard/?page={{ page + 1 }}">Next &raquo;</a></li>
+      {% endif %}
+
+    {% endif %}
+
+  </ul>
+{% endmacro %}
+
+<div class="clearfix"></div>
+
+<div class="pagination-bar text-center">
+  {{ pagination_render(pagination, {pages_count: 7}) }}
+</div>

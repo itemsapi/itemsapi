@@ -1,6 +1,7 @@
 const express = require('express');
-//const itemsjs = require('../../itemsjs-server-optimized')();
-const itemsjs = require('itemsjs-server-optimized')();
+const itemsjs = require('./clients/itemsjs');
+const itemsjs_pool = require('./pool/itemsjs');
+const Promise = require('bluebird');
 
 const router = express.Router();
 
@@ -20,10 +21,30 @@ router.param('index_name', function (req, res, next) {
 
 router.get('/', async function(req, res) {
 
-  var indices = await itemsjs.list_indexes();
+  var indices = await itemsjs.list_indexes({
+    page: req.query.page,
+    per_page: req.query.per_page
+  });
+  var rows = await Promise.all(indices.data)
+  .map(async v => {
+
+    try {
+      var result = await itemsjs_pool.search(v.index_name);
+      v.total = result.pagination.total;
+
+    } catch (err) {
+      //console.log(v)
+      //console.log(err.message)
+    }
+
+    return v;
+
+  }, {concurrency: 4});
 
   return res.render('views/indices', {
-    indices: indices
+    pagination: indices.pagination,
+    indices: indices,
+    rows: rows
   });
 })
 
@@ -54,15 +75,15 @@ router.get('/:index_name', async (req, res) => {
   var per_page = parseInt(req.query.per_page) || 30;
   var query = req.query.query ? req.query.query : '';
   var query_tokens = itemsjs.tokenize(query);
-  //var search_native = req.query.search_native;
   var facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
 
   var sorting_fields = [];
-  if (req.configuration) {
-    sorting_fields = req.configuration.sorting_fields;
-  }
 
-  //console.log(req.configuration);
+  var configuration = itemsjs.get_configuration(req.params.index_name);
+
+  if (configuration) {
+    sorting_fields = configuration.sorting_fields;
+  }
 
   var order = req.query.order || 'desc';
   var sort_field = req.query.sort_field;
@@ -70,17 +91,24 @@ router.get('/:index_name', async (req, res) => {
   var filters = JSON.parse(req.query.filters || '{}');
   var not_filters = JSON.parse(req.query.not_filters || '{}');
 
-  var result = await itemsjs.search(req.params.index_name, {
-    per_page: per_page,
-    page: page,
-    query: query,
-    order: order,
-    sort_field: sort_field,
-    facets_fields: facets_fields,
-    search_native: true,
-    not_filters: not_filters,
-    filters: filters
-  });
+  try {
+    var result = await itemsjs_pool.search(req.params.index_name, {
+      per_page: per_page,
+      page: page,
+      query: query,
+      order: order,
+      sort_field: sort_field,
+      facets_fields: facets_fields,
+      search_native: true,
+      not_filters: not_filters,
+      filters: filters
+    });
+  } catch (err) {
+
+    return res.status(400).json({
+      message: err.message
+    });
+  }
 
   var is_ajax = req.query.is_ajax || req.xhr;
 

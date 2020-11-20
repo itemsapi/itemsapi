@@ -1,5 +1,5 @@
-//const itemsjs = require('../../itemsjs-server-optimized')();
-const itemsjs = require('itemsjs-server-optimized')();
+const itemsjs = require('./clients/itemsjs');
+const itemsjs_pool = require('./pool/itemsjs');
 
 const express = require('express');
 const router = express.Router()
@@ -28,9 +28,9 @@ router.get('/:index_name/configuration', (req, res) => {
 /**
  * update configuration
  */
-router.post('/:index_name/configuration', (req, res) => {
+router.post('/:index_name/configuration', async (req, res) => {
 
-  itemsjs.set_configuration(req.params.index_name, req.body);
+  await itemsjs_pool.set_configuration(req.params.index_name, req.body);
 
   console.log(req.body);
   console.log('configuration added');
@@ -42,6 +42,7 @@ router.post('/:index_name/configuration', (req, res) => {
 
 /**
  * manually load sort indexes
+ * @TODO deprecated
  */
 router.post('/:index_name/load-sort-index', (req, res) => {
 
@@ -55,6 +56,7 @@ router.post('/:index_name/load-sort-index', (req, res) => {
 
 /**
  * reset full index
+ * @TODO move to core c++ and make mutex
  */
 router.post('/:index_name/reset', (req, res) => {
 
@@ -108,7 +110,7 @@ router.post('/:index_name/items/:id/partial', (req, res) => {
  */
 router.post('/:index_name/items', async (req, res) => {
 
-  await itemsjs.index(req.params.index_name, {
+  await itemsjs_pool.index(req.params.index_name, {
     json_object: req.body
   });
 
@@ -131,7 +133,7 @@ router.post('/:index_name/index', async (req, res) => {
   }
 
   try {
-    await itemsjs.index(req.params.index_name, data);
+    await itemsjs_pool.index(req.params.index_name, data);
   } catch (err) {
 
     return res.status(400).json({
@@ -185,7 +187,7 @@ router.all('/:index_name/search', async (req, res) => {
   }
 
   try {
-    var result = await itemsjs.search(req.params.index_name, {
+    var result = await itemsjs_pool.search(req.params.index_name, {
       per_page: parseInt(req.body.per_page || req.query.per_page || 10),
       page: parseInt(req.body.page || req.query.page || 1),
       query: req.body.query || req.query.query,
