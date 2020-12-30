@@ -56,6 +56,7 @@ router.get('/:index_name/modal-facet/:name', async function(req, res) {
   var facet = await itemsjs.aggregation(req.params.index_name, {
     name: req.params.name,
     filters: filters,
+    not_filters: not_filters,
     page: req.query.page || 1,
     per_page: 100,
   });
