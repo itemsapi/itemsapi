@@ -2,7 +2,7 @@ const itemsjs = require('./clients/itemsjs');
 const itemsjs_pool = require('./pool/itemsjs');
 
 const express = require('express');
-const router = express.Router()
+const router = express.Router();
 
 router.get('/:index_name/status', (req, res) => {
   res.json({status: 'ok'});
@@ -21,7 +21,7 @@ router.use(function(req, res, next) {
 
 router.get('/:index_name/configuration', (req, res) => {
 
-  var result = itemsjs.get_configuration(req.params.index_name);
+  const result = itemsjs.get_configuration(req.params.index_name);
   res.json(result);
 });
 
@@ -72,7 +72,7 @@ router.post('/:index_name/reset', (req, res) => {
  */
 router.get('/:index_name/items/:id', (req, res) => {
 
-  var result = itemsjs.get_item(req.params.index_name, parseInt(req.params.id, 10));
+  const result = itemsjs.get_item(req.params.index_name, parseInt(req.params.id, 10));
   res.json(result);
 });
 
@@ -80,7 +80,7 @@ router.get('/:index_name/items/:id', (req, res) => {
 */
 router.delete('/:index_name/items/:id', async (req, res) => {
 
-  var result = await itemsjs.delete_item(req.params.index_name, parseInt(req.params.id, 10));
+  const result = await itemsjs.delete_item(req.params.index_name, parseInt(req.params.id, 10));
   res.json(result);
 });
 
@@ -90,7 +90,7 @@ router.delete('/:index_name/items/:id', async (req, res) => {
  */
 router.post('/:index_name/items/:id/update', (req, res) => {
 
-  var result = itemsjs.update_item(req.params.index_name, req.body);
+  const result = itemsjs.update_item(req.params.index_name, req.body);
   res.json(result);
 });
 
@@ -100,7 +100,7 @@ router.post('/:index_name/items/:id/update', (req, res) => {
  */
 router.post('/:index_name/items/:id/partial', (req, res) => {
 
-  var result = itemsjs.partial_update_item(req.params.index_name, parseInt(req.params.id, 10), req.body);
+  const result = itemsjs.partial_update_item(req.params.index_name, parseInt(req.params.id, 10), req.body);
   res.json(result);
 });
 
@@ -124,7 +124,7 @@ router.post('/:index_name/items', async (req, res) => {
  */
 router.post('/:index_name/index', async (req, res) => {
 
-  var data = {};
+  const data = {};
 
   if (req.body.json_path) {
     data.json_path = req.body.json_path;
@@ -151,22 +151,20 @@ router.post('/:index_name/index', async (req, res) => {
  */
 router.get('/:index_name/facet', async (req, res) => {
 
-  var filters = req.body.filters;
-
-  var result = await itemsjs.aggregation(req.params.index_name, {
+  const result = await itemsjs.aggregation(req.params.index_name, {
     per_page: req.query.per_page || 10,
     page: req.query.page || 1,
     name: req.query.name
   });
 
   res.json(result);
-})
+});
 
 router.all('/:index_name/search', async (req, res) => {
 
-  var filters;
-  var not_filters;
-  var facets_fields;
+  let filters;
+  let not_filters;
+  let facets_fields;
 
   if (req.body.filters) {
     filters = req.body.filters;
@@ -186,8 +184,9 @@ router.all('/:index_name/search', async (req, res) => {
     facets_fields = req.query.facets_fields ? req.query.facets_fields.split(',').filter(x => !!x) : null;
   }
 
+  let result;
   try {
-    var result = await itemsjs_pool.search(req.params.index_name, {
+    result = await itemsjs_pool.search(req.params.index_name, {
       per_page: parseInt(req.body.per_page || req.query.per_page || 10),
       page: parseInt(req.body.page || req.query.page || 1),
       query: req.body.query || req.query.query,
@@ -205,6 +204,6 @@ router.all('/:index_name/search', async (req, res) => {
   }
 
   return res.json(result);
-})
+});
 
 module.exports = router;

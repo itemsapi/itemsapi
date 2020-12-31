@@ -6,98 +6,98 @@ const _ = require('lodash');
  */
 module.exports = function(app, path, options) {
 
-  var nunenv = new nunjucks.Environment(
+  const nunenv = new nunjucks.Environment(
     new nunjucks.FileSystemLoader(path, options)
   );
 
   nunenv.express(app);
 
   nunenv
-  .addFilter('debug', function(obj) {
-    return JSON.stringify(obj, null, 2)
-  })
-
-  .addFilter('intval', function(obj) {
-    return parseInt(obj || 0, 10);
-  })
-
-  .addFilter('humanize', function(input) {
-    input = input.toLowerCase().replace(/[_-]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
-    input = input.charAt(0).toUpperCase() + input.slice(1);
-
-    return input;
-  })
-
-  .addFilter('highlight', function(input, words) {
-
-    if (!words.length) {
-      return input;
-    }
-
-    if (_.isString(input)) {
-
-      words.forEach(word => {
-        var regex = new RegExp('(\\b' + word + '\\b)', 'gi');
-        input = input.replace(regex, '<em>$1</em>');
-      })
-    } else if (_.isArray(input)) {
-
-      input = input.map(term => {
-        words.forEach(word => {
-          var regex = new RegExp('(\\b' + word + '\\b)', 'gi');
-          term = term.replace(regex, '<em>$1</em>');
-        })
-
-        return term;
-      })
-    }
-
-    return input;
-  })
-
-  .addGlobal('in_array', function(element, array) {
-    array = array || [];
-    return array.indexOf(element) !== -1;
-  })
-
-  .addFilter('stringify', function(json) {
-    return JSON.stringify(json, null, 4)
-  })
-
-  .addFilter('sortObject', function(array, field, order) {
-    return _.chain(array)
-    .cloneDeep()
-    .map(function(val, key) {
-      val.key = key
-      return val
+    .addFilter('debug', function(obj) {
+      return JSON.stringify(obj, null, 2);
     })
-    .sortBy([function(o) {
-      if (order === 'asc') {
-        return o[field]
+
+    .addFilter('intval', function(obj) {
+      return parseInt(obj || 0, 10);
+    })
+
+    .addFilter('humanize', function(input) {
+      input = input.toLowerCase().replace(/[_-]+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+      input = input.charAt(0).toUpperCase() + input.slice(1);
+
+      return input;
+    })
+
+    .addFilter('highlight', function(input, words) {
+
+      if (!words.length) {
+        return input;
       }
-      return -o[field]
-    }])
-    .value();
-  })
 
-  .addFilter('slice', function(string, a, b) {
-    if (_.isString(string) || _.isArray(string)) {
-      return string.slice(a, b)
-    }
-    return string
-  })
+      if (_.isString(input)) {
 
-  .addFilter('split', function(string, delimiter) {
-    return string.split(delimiter || ',')
-  })
+        words.forEach(word => {
+          const regex = new RegExp('(\\b' + word + '\\b)', 'gi');
+          input = input.replace(regex, '<em>$1</em>');
+        });
+      } else if (_.isArray(input)) {
 
-  .addFilter('join', function(array, delimiter) {
-    return array.join(delimiter || ',')
-  })
+        input = input.map(term => {
+          words.forEach(word => {
+            const regex = new RegExp('(\\b' + word + '\\b)', 'gi');
+            term = term.replace(regex, '<em>$1</em>');
+          });
 
-  .addFilter('ceil', function(str) {
-    return Math.ceil(str)
-  })
+          return term;
+        });
+      }
+
+      return input;
+    })
+
+    .addGlobal('in_array', function(element, array) {
+      array = array || [];
+      return array.indexOf(element) !== -1;
+    })
+
+    .addFilter('stringify', function(json) {
+      return JSON.stringify(json, null, 4);
+    })
+
+    .addFilter('sortObject', function(array, field, order) {
+      return _.chain(array)
+        .cloneDeep()
+        .map(function(val, key) {
+          val.key = key;
+          return val;
+        })
+        .sortBy([function(o) {
+          if (order === 'asc') {
+            return o[field];
+          }
+          return -o[field];
+        }])
+        .value();
+    })
+
+    .addFilter('slice', function(string, a, b) {
+      if (_.isString(string) || _.isArray(string)) {
+        return string.slice(a, b);
+      }
+      return string;
+    })
+
+    .addFilter('split', function(string, delimiter) {
+      return string.split(delimiter || ',');
+    })
+
+    .addFilter('join', function(array, delimiter) {
+      return array.join(delimiter || ',');
+    })
+
+    .addFilter('ceil', function(str) {
+      return Math.ceil(str);
+    });
 
   return nunenv;
-}
+};
