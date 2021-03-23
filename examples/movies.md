@@ -4,7 +4,7 @@
 
 ```bash
 docker pull itemsapi/itemsapi:latest
-docker run --privileged -it -p 3000:3000 itemsapi/itemsapi
+docker run -it -p 3000:3000 itemsapi/itemsapi
 ```
 
 ### Create configuration
